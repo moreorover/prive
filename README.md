@@ -36,3 +36,17 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Supabase
+
+To start Supabase local development instance
+
+```bash
+npx supabase start
+```
+
+To get local development environment variables
+
+```bash
+npx supabase status -o env
+```
