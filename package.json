@@ -11,9 +11,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"gen:types": "pnpx supabase gen types typescript --local > src/lib/supabase-types.ts && prettier --write src/lib/supabase-types.ts",
-		"seed": "tsx --tsconfig scripts/tsconfig.json scripts/seed.ts"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^7.6.0",
@@ -48,7 +46,6 @@
 		"vite": "^4.3.0",
 		"vitest": "^0.25.3",
 		"zod": "^3.21.4"
-
 	},
 	"type": "module",
 	"dependencies": {
