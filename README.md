@@ -50,3 +50,16 @@ To get local development environment variables
 ```bash
 npx supabase status -o env
 ```
+
+To generate new migration
+
+```bash
+npx supabase migration new profiles
+```
+
+To push migration
+
+```bash
+npx supabase db reset
+```
+
