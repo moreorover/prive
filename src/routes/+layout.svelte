@@ -2,7 +2,7 @@
 	import { invalidate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from "flowbite-svelte";
-	import { onMount } from "svelte/types/runtime/internal/lifecycle";
+	import { onMount } from "svelte";
 	import "../app.css";
 	import type { LayoutData } from "./$types";
 
