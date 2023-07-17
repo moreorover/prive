@@ -1,7 +1,10 @@
 <script lang="ts">
-	import "../app.css";
+	import { invalidate } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { Navbar, NavBrand, NavHamburger, NavUl, NavLi, Button } from "flowbite-svelte";
+	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from "flowbite-svelte";
+	import { onMount } from "svelte/types/runtime/internal/lifecycle";
+	import "../app.css";
+	import type { LayoutData } from "./$types";
 
 	const navigation = [
 		{ label: "Home", href: "/" },
@@ -9,6 +12,22 @@
 		{ label: "Contacts", href: "/contacts" },
 		{ label: "Account", href: "/account" }
 	];
+
+	export let data: LayoutData;
+
+	$: ({ session, supabase } = data);
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate("supabase:auth");
+			}
+		});
+
+		return () => subscription.unsubscribe();
+	});
 </script>
 
 <svelte:head>
