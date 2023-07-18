@@ -1,20 +1,7 @@
+import { registerUserSchema } from "$lib/schemas";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server";
-import { z } from "zod";
 import type { PageServerLoad } from "./$types";
-
-const registerUserSchema = z.object({
-	full_name: z.string().max(140).nullish(),
-	email: z.string().email("Invalid email address"),
-	password: z
-		.string()
-		.min(6, "Password must be at least 6 characters")
-		.max(100, "Password must be 100 characters of less"),
-	passwordConfirm: z
-		.string()
-		.min(6, "Password must be at least 6 characters")
-		.max(100, "Password must be 100 characters of less")
-});
 
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.getSession();
