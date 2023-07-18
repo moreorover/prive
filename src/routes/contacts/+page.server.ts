@@ -1,4 +1,5 @@
 import { createContactSchema } from "$lib/schemas";
+import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types";
@@ -28,7 +29,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const { error: createContactError } = await event.locals.supabase.from("contacts").insert({
+		const { error: createContactError } = await supabaseAdmin.from("contacts").insert({
 			...createContactForm.data,
 			user_id: session.user.id
 		});
