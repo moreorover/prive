@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { invalidate } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { Button, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from "flowbite-svelte";
+	import {
+		Button,
+		Chevron,
+		Dropdown,
+		DropdownItem,
+		NavBrand,
+		NavHamburger,
+		NavLi,
+		NavUl,
+		Navbar
+	} from "flowbite-svelte";
 	import { onMount } from "svelte";
 	import "../app.css";
 	import type { LayoutData } from "./$types";
@@ -9,8 +19,7 @@
 	const navigation = [
 		{ label: "Home", href: "/" },
 		{ label: "Pricing", href: "/pricing" },
-		{ label: "Contacts", href: "/contacts" },
-		{ label: "Account", href: "/account" }
+		{ label: "Contacts", href: "/contacts" }
 	];
 
 	export let data: LayoutData;
@@ -43,10 +52,24 @@
 			</span>
 		</NavBrand>
 		<div class="flex md:order-2">
-			<div class="flex items-center gap-2">
-				<Button href="/login" size="sm">Login</Button>
-				<Button href="/register" size="sm" color="alternative">Register</Button>
-			</div>
+			{#if session}
+				<Button color="light"><Chevron>Account</Chevron></Button>
+				<Dropdown>
+					<div slot="header" class="px-4 py-2">
+						<span class="block truncate text-sm font-medium"> {session.user.email} </span>
+					</div>
+					<DropdownItem href="/account">Settings</DropdownItem>
+					<DropdownItem href="/account">Billing</DropdownItem>
+					<form action="/logout" method="POST">
+						<DropdownItem type="submit" slot="footer">Sign out</DropdownItem>
+					</form>
+				</Dropdown>
+			{:else}
+				<div class="flex items-center gap-2">
+					<Button href="/login" size="sm">Login</Button>
+					<Button href="/register" size="sm" color="alternative">Register</Button>
+				</div>
+			{/if}
 			<NavHamburger on:click={toggle} />
 		</div>
 		<NavUl {hidden}>
