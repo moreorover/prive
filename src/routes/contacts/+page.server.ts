@@ -1,4 +1,4 @@
-import { createContactSchema } from "$lib/schemas";
+import { createContactSchema, deleteContactSchema } from "$lib/schemas";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server";
@@ -23,8 +23,13 @@ export const load: PageServerLoad = async (event) => {
 		return contacts;
 	}
 	return {
-		createContactForm: superValidate(createContactSchema),
-		contacts: getContacts()
+		createContactForm: superValidate(createContactSchema, {
+			id: "create"
+		}),
+		contacts: getContacts(),
+		deleteContactForm: superValidate(deleteContactSchema, {
+			id: "delete"
+		})
 	};
 };
 
@@ -35,7 +40,9 @@ export const actions: Actions = {
 			throw error(401, "Unauthorized");
 		}
 
-		const createContactForm = await superValidate(event, createContactSchema);
+		const createContactForm = await superValidate(event, createContactSchema, {
+			id: "create"
+		});
 
 		if (!createContactForm.valid) {
 			return fail(400, {
@@ -55,6 +62,35 @@ export const actions: Actions = {
 
 		return {
 			createContactForm
+		};
+	},
+	deleteContact: async (event) => {
+		const session = await event.locals.getSession();
+		if (!session) {
+			throw error(401, "Unauthorized");
+		}
+
+		const deleteContactForm = await superValidate(event.url, deleteContactSchema, {
+			id: "delete"
+		});
+
+		if (!deleteContactForm.valid) {
+			return fail(400, {
+				deleteContactForm
+			});
+		}
+
+		const { error: deleteContactError } = await event.locals.supabase
+			.from("contacts")
+			.delete()
+			.eq("id", deleteContactForm.data.id);
+
+		if (deleteContactError) {
+			return setError(deleteContactForm, null, "Error deleting contact");
+		}
+
+		return {
+			deleteContactForm
 		};
 	}
 };
