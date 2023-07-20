@@ -62,3 +62,40 @@ export async function createContact(user_id: string) {
 
 	return data;
 }
+
+function addDays(date: Date, days: number) {
+	const result = new Date(date);
+	result.setDate(result.getDate() + days);
+	return result;
+}
+
+export async function createStock(user_id: string) {
+	const purchased_at = faker.date.between(addDays(new Date(), -30), addDays(new Date(), 30));
+	const lengths = [45, 50, 55, 60];
+	const length_cm = lengths[faker.datatype.number({ min: 0, max: 3 })];
+	const colour = faker.color.human();
+	const weight_expected_grams = faker.datatype.number({ min: 50, max: 200 });
+	const weight_received_grams =
+		weight_expected_grams + faker.datatype.number({ min: -20, max: 15 });
+	const code = faker.random.numeric(6);
+
+	const stock = {
+		purchased_at,
+		length_cm,
+		colour,
+		description: null,
+		weight_expected_grams,
+		weight_received_grams,
+		code,
+		created_by: user_id,
+		updated_by: user_id
+	};
+
+	const { error, data } = await supabaseAdmin.from("stock").insert(stock);
+
+	if (error) {
+		throw error;
+	}
+
+	return data;
+}

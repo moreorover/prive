@@ -27,7 +27,7 @@ export const createContactSchema = z
 		name: z.string().max(140, "Name must be 140 characters or less").nullish(),
 		email: z.string().email("Invalid email address").nullish(),
 		company: z.string().max(140, "Company must be 140 characters or less").nullish(),
-		phone: z.string().max(64, "Phone must be 140 characters or less").nullish()
+		phone: z.string().max(64, "Phone must be 64 characters or less").nullish()
 	})
 	.refine(({ name, email, company, phone }) => {
 		return name || email || company || phone;
@@ -40,3 +40,21 @@ export const deleteContactSchema = z.object({
 });
 
 export type DeleteContactSchema = typeof deleteContactSchema;
+
+export const createStockSchema = z.object({
+	purchased_at: z.string().nullish(),
+	length_cm: z.number().positive(),
+	colour: z.string().max(64, "Colour must be 64 characeters or less").nullish(),
+	description: z.string().max(256, "Description must be 256 characters or less").nullish(),
+	weight_expected_grams: z.number().positive(),
+	weight_received_grams: z.number().positive(),
+	code: z.string().max(28, "Code must be 28 characters of less").nullish()
+});
+
+export type CreateStockSchema = typeof createStockSchema;
+
+export const deleteStockSchema = z.object({
+	id: z.string()
+});
+
+export type DeleteStockSchema = typeof deleteContactSchema;

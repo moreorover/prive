@@ -96,6 +96,64 @@ export interface Database {
 					}
 				];
 			};
+			stock: {
+				Row: {
+					code: string | null;
+					colour: string | null;
+					created_at: string;
+					created_by: string | null;
+					description: string | null;
+					id: string;
+					length_cm: number | null;
+					purchased_at: string | null;
+					updated_at: string;
+					updated_by: string | null;
+					weight_expected_grams: number | null;
+					weight_received_grams: number | null;
+				};
+				Insert: {
+					code?: string | null;
+					colour?: string | null;
+					created_at?: string;
+					created_by?: string | null;
+					description?: string | null;
+					id?: string;
+					length_cm?: number | null;
+					purchased_at?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+					weight_expected_grams?: number | null;
+					weight_received_grams?: number | null;
+				};
+				Update: {
+					code?: string | null;
+					colour?: string | null;
+					created_at?: string;
+					created_by?: string | null;
+					description?: string | null;
+					id?: string;
+					length_cm?: number | null;
+					purchased_at?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+					weight_expected_grams?: number | null;
+					weight_received_grams?: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "stock_created_by_fkey";
+						columns: ["created_by"];
+						referencedRelation: "users";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "stock_updated_by_fkey";
+						columns: ["updated_by"];
+						referencedRelation: "users";
+						referencedColumns: ["id"];
+					}
+				];
+			};
 		};
 		Views: {
 			[_ in never]: never;

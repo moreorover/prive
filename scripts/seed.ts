@@ -1,4 +1,4 @@
-import { clearSupabaseData, createContact, createUser, startSupabase } from "./utils";
+import { clearSupabaseData, createContact, createStock, createUser, startSupabase } from "./utils";
 
 async function seed() {
 	try {
@@ -12,6 +12,10 @@ async function seed() {
 
 		for (let i = 0; i < 5; i++) {
 			await createContact(user.id);
+		}
+
+		for (let i = 0; i < 20; i++) {
+			await createStock(user.id);
 		}
 	} catch (err) {
 		console.error(err);

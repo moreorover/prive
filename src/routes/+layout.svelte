@@ -19,7 +19,8 @@
 	const navigation = [
 		{ label: "Home", href: "/" },
 		{ label: "Pricing", href: "/pricing" },
-		{ label: "Contacts", href: "/contacts" }
+		{ label: "Contacts", href: "/contacts" },
+		{ label: "Stock", href: "/stock" }
 	];
 
 	export let data: LayoutData;
