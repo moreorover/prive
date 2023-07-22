@@ -104,12 +104,12 @@ export interface Database {
 					created_by: string | null;
 					description: string | null;
 					id: string;
-					length_cm: number | null;
+					length_cm: number;
 					purchased_at: string | null;
 					updated_at: string;
 					updated_by: string | null;
-					weight_expected_grams: number | null;
-					weight_received_grams: number | null;
+					weight_expected_grams: number;
+					weight_received_grams: number;
 				};
 				Insert: {
 					code?: string | null;
@@ -118,12 +118,12 @@ export interface Database {
 					created_by?: string | null;
 					description?: string | null;
 					id?: string;
-					length_cm?: number | null;
+					length_cm?: number;
 					purchased_at?: string | null;
 					updated_at?: string;
 					updated_by?: string | null;
-					weight_expected_grams?: number | null;
-					weight_received_grams?: number | null;
+					weight_expected_grams?: number;
+					weight_received_grams?: number;
 				};
 				Update: {
 					code?: string | null;
@@ -132,24 +132,24 @@ export interface Database {
 					created_by?: string | null;
 					description?: string | null;
 					id?: string;
-					length_cm?: number | null;
+					length_cm?: number;
 					purchased_at?: string | null;
 					updated_at?: string;
 					updated_by?: string | null;
-					weight_expected_grams?: number | null;
-					weight_received_grams?: number | null;
+					weight_expected_grams?: number;
+					weight_received_grams?: number;
 				};
 				Relationships: [
 					{
 						foreignKeyName: "stock_created_by_fkey";
 						columns: ["created_by"];
-						referencedRelation: "users";
+						referencedRelation: "profiles";
 						referencedColumns: ["id"];
 					},
 					{
 						foreignKeyName: "stock_updated_by_fkey";
 						columns: ["updated_by"];
-						referencedRelation: "users";
+						referencedRelation: "profiles";
 						referencedColumns: ["id"];
 					}
 				];
