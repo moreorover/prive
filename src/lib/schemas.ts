@@ -43,11 +43,11 @@ export type DeleteContactSchema = typeof deleteContactSchema;
 
 export const createStockSchema = z.object({
 	purchased_at: z.string().nullish(),
-	length_cm: z.number().positive(),
+	length_cm: z.number().positive().default(0),
 	colour: z.string().max(64, "Colour must be 64 characeters or less").nullish(),
 	description: z.string().max(256, "Description must be 256 characters or less").nullish(),
-	weight_expected_grams: z.number().positive(),
-	weight_received_grams: z.number().positive(),
+	weight_expected_grams: z.number().positive().default(0),
+	weight_received_grams: z.number().positive().default(0),
 	code: z.string().max(28, "Code must be 28 characters of less").nullish()
 });
 

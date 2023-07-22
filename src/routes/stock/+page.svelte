@@ -41,6 +41,8 @@
 			<TableHeadCell>Weight Expected</TableHeadCell>
 			<TableHeadCell>Weight Received</TableHeadCell>
 			<TableHeadCell>Code</TableHeadCell>
+			<TableHeadCell>Created By</TableHeadCell>
+			<TableHeadCell>Updated By</TableHeadCell>
 			<TableHeadCell />
 		</TableHead>
 		<TableBody>
@@ -53,6 +55,8 @@
 					<TableBodyCell>{stock.weight_expected_grams + " g" ?? "--"}</TableBodyCell>
 					<TableBodyCell>{stock.weight_received_grams + " g" ?? "--"}</TableBodyCell>
 					<TableBodyCell>{stock.code ?? "--"}</TableBodyCell>
+					<TableBodyCell>{stock.created_by?.full_name ?? "--"}</TableBodyCell>
+					<TableBodyCell>{stock.updated_by?.full_name ?? "--"}</TableBodyCell>
 					<TableBodyCell>
 						<MenuButton class="dots-menu dark:text-white" vertical name="Stock Menu" />
 						<Dropdown placement="left-start">

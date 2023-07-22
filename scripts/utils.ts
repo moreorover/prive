@@ -80,7 +80,7 @@ export async function createStock(user_id: string) {
 	const code = faker.random.numeric(6);
 
 	const stock = {
-		purchased_at,
+		purchased_at: purchased_at.toISOString(),
 		length_cm,
 		colour,
 		description: null,
@@ -88,7 +88,7 @@ export async function createStock(user_id: string) {
 		weight_received_grams,
 		code,
 		created_by: user_id,
-		updated_by: user_id
+		updated_by: faker.datatype.boolean() ? user_id : null
 	};
 
 	const { error, data } = await supabaseAdmin.from("stock").insert(stock);

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 	async function getStock() {
 		const { data: stock, error: stockError } = await event.locals.supabase
 			.from("stock")
-			.select("*");
+			.select(`*,created_by(full_name),updated_by(full_name)`);
 
 		if (stockError) {
 			throw error(500, "Error fetching stock, please try again later.");
