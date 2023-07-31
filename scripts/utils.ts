@@ -1,5 +1,7 @@
 import type { registerUserSchema } from "$lib/schemas";
 import { ENV } from "$lib/server/env";
+import { upsertProductRecord } from "$lib/server/products";
+import { stripe } from "$lib/server/stripe";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { faker } from "@faker-js/faker";
 import { execSync } from "child_process";
@@ -22,6 +24,11 @@ export async function clearSupabaseData() {
 	});
 	await client.connect();
 	await client.query("TRUNCATE auth.users CASCADE");
+	await client.query("TRUNCATE public.billing_customers CASCADE");
+	await client.query("TRUNCATE public.billing_products CASCADE");
+	await client.query("TRUNCATE public.billing_subscriptions CASCADE");
+	await client.query("TRUNCATE public.contacts CASCADE");
+	await client.query("TRUNCATE public.stock CASCADE");
 }
 
 type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
@@ -98,4 +105,11 @@ export async function createStock(user_id: string) {
 	}
 
 	return data;
+}
+
+export async function syncStripeProducts() {
+	const products = await stripe.products.list();
+	for (const product of products.data) {
+		await upsertProductRecord(product);
+	}
 }
