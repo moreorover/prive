@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { lookupKeys, productConfig, productNames } from "./config";
 
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
@@ -58,3 +59,87 @@ export const deleteStockSchema = z.object({
 });
 
 export type DeleteStockSchema = typeof deleteContactSchema;
+
+export const stripeProductSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	active: z.boolean(),
+	description: z.string(),
+	metadata: z.record(z.string())
+});
+
+export const stripeCustomerSchema = z.object({
+	id: z.string(),
+	email: z.string().email(),
+	metadata: z.record(z.string())
+});
+
+export const stripeSubscriptionStatusEnum = z.enum([
+	"trialing",
+	"active",
+	"canceled",
+	"incomplete",
+	"incomplete_expired",
+	"past_due",
+	"unpaid",
+	"paused"
+]);
+
+const stripeSubscriptionItemsSchema = z.object({
+	data: z.array(
+		z.object({
+			price: z.object({
+				product: z.string()
+			})
+		})
+	)
+});
+
+const unixTimestampToISOString = z.number().transform((n) => new Date(n * 1000).toISOString());
+
+export const stripeSubscriptionSchema = z
+	.object({
+		id: z.string(),
+		status: stripeSubscriptionStatusEnum,
+		customer: z.string(),
+		items: stripeSubscriptionItemsSchema,
+		cancel_at_period_end: z.boolean(),
+		created: unixTimestampToISOString,
+		current_period_start: unixTimestampToISOString,
+		current_period_end: unixTimestampToISOString,
+		trial_start: unixTimestampToISOString.nullable(),
+		trial_end: unixTimestampToISOString.nullable(),
+		metadata: z.record(z.string())
+	})
+	.transform((obj) => {
+		const { items, customer, ...rest } = obj;
+		const [{ price }] = items.data;
+		return {
+			...rest,
+			customer_id: customer,
+			product_id: price.product
+		};
+	});
+
+const priceProductSchema = z
+	.object({
+		id: z.string(),
+		name: z.enum([...productNames]),
+		description: z.string()
+	})
+	.transform((product) => {
+		return {
+			...product,
+			features: productConfig[product.name].features,
+			call_to_action: productConfig[product.name].call_to_action
+		};
+	});
+
+const priceSchema = z.object({
+	id: z.string(),
+	lookup_key: z.enum([...lookupKeys]),
+	unit_amount: z.number().transform((amount) => amount / 100),
+	product: priceProductSchema
+});
+
+export const priceListSchema = z.array(priceSchema);
