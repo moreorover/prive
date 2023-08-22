@@ -44,11 +44,17 @@ export async function getCustomerRecord(user_id: string) {
 		throw userError || new Error("user not found");
 	}
 
+	// TODO does it go into PROD?
+	const testClock = await stripe.testHelpers.testClocks.create({
+		frozen_time: Math.floor(Date.now() / 1000)
+	});
+
 	const stripeCustomer = await stripe.customers.create({
 		email: userData.user.email,
 		metadata: {
 			user_id: user_id
-		}
+		},
+		test_clock: testClock.id
 	});
 
 	if (!stripeCustomer) {

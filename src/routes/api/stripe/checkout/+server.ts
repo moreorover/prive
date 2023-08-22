@@ -19,9 +19,7 @@ export const GET: RequestHandler = async (event) => {
 
 	try {
 		const customer = await getCustomerRecord(session.user.id);
-		console.log({ customer });
 		const price = await stripe.prices.retrieve(price_id);
-		console.log({ price });
 
 		if (!price) {
 			throw new Error("Invalid price id");
@@ -43,7 +41,12 @@ export const GET: RequestHandler = async (event) => {
 				metadata: {
 					user_id: session.user.id
 				},
-				trial_period_days: 14
+				trial_period_days: 14,
+				trial_settings: {
+					end_behavior: {
+						missing_payment_method: "cancel"
+					}
+				}
 			},
 			payment_method_collection: "if_required"
 		});
