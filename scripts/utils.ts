@@ -45,6 +45,8 @@ export async function createUser(user: CreateUser) {
 	});
 
 	if (authError || !authData.user) {
+		console.log({ authError });
+		console.log({ authDataUser: authData.user });
 		throw new Error("Error creating user");
 	}
 	return authData.user;
