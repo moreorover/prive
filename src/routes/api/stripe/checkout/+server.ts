@@ -1,4 +1,4 @@
-import { createCheckoutSession } from "$lib/server/subscriptions";
+import { createCheckoutSession, getSubscriptionTier } from "$lib/server/subscriptions";
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
@@ -6,6 +6,12 @@ export const GET: RequestHandler = async (event) => {
 	const session = await event.locals.getSession();
 	if (!session) {
 		throw redirect(302, "/login");
+	}
+
+	const tier = await getSubscriptionTier(session.user.id);
+
+	if (tier !== "Free") {
+		throw redirect(302, "/account/billing");
 	}
 
 	const price_id = event.url.searchParams.get("id");
