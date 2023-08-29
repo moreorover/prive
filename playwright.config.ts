@@ -15,6 +15,7 @@ const config: PlaywrightTestConfig = {
 			use: { ...devices["Desktop Chrome"] }
 		}
 	]
+	// reporter: [["html", { open: "never" }], ["dot"]]
 	// globalSetup: resolve("./tests/globalSetup.ts"),
 	// globalTeardown: resolve("./tests/globalSetup.ts")
 };
