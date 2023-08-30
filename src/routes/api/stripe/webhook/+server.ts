@@ -1,4 +1,5 @@
 import { deleteCustomerRecord, updateCustomerRecord } from "$lib/server/customers";
+import { ENV } from "$lib/server/env";
 import { deleteProductRecord, upsertProductRecord } from "$lib/server/products";
 import { stripe } from "$lib/server/stripe";
 import { insertSubscriptionRecord, updateSubscriptionRecord } from "$lib/server/subscriptions";
@@ -26,7 +27,7 @@ export const POST: RequestHandler = async (event) => {
 		stripeEvent = stripe.webhooks.constructEvent(
 			body,
 			stripeSignature,
-			"whsec_1475a70010cfc44327c11f2aad59501a95198642377911c0bd3b2ba48f8f5cdb"
+			ENV.STRIPE_SIGNING_SECRET
 		) as Stripe.DiscriminatedEvent;
 	} catch (e) {
 		console.error(`Invalid signature: ${e}`);
