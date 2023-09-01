@@ -1,3 +1,4 @@
+import { handleLoginRedirect } from "$lib/helpers";
 import { emailSchema, passwordSchema, profileSchema } from "$lib/schemas";
 import { getSubscriptionTier } from "$lib/server/subscriptions";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -7,7 +8,7 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, "/");
+		throw redirect(302, handleLoginRedirect(event));
 	}
 
 	async function getUserProfile() {

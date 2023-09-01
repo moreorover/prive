@@ -1,3 +1,4 @@
+import { handleLoginRedirect } from "$lib/helpers";
 import { createStockSchema, deleteStockSchema } from "$lib/schemas";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -7,7 +8,7 @@ import type { Actions, PageServerLoad } from "./$types";
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, "/login");
+		throw redirect(302, handleLoginRedirect(event));
 	}
 
 	async function getStock() {
