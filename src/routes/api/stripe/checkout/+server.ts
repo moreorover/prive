@@ -1,3 +1,4 @@
+import { handleLoginRedirect } from "$lib/helpers";
 import { createCheckoutSession, getSubscriptionTier } from "$lib/server/subscriptions";
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
@@ -5,7 +6,7 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async (event) => {
 	const session = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, "/login");
+		throw redirect(302, handleLoginRedirect(event));
 	}
 
 	const tier = await getSubscriptionTier(session.user.id);

@@ -1,3 +1,4 @@
+import { handleLoginRedirect } from "$lib/helpers";
 import { getCustomerRecord } from "$lib/server/customers";
 import { ENV } from "$lib/server/env";
 import { stripe } from "$lib/server/stripe";
@@ -7,7 +8,7 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async (event) => {
 	const session = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, "/login");
+		throw redirect(302, handleLoginRedirect(event));
 	}
 
 	const customer = await getCustomerRecord(session.user.id);
