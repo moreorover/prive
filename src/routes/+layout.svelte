@@ -13,6 +13,7 @@
 		Navbar
 	} from "flowbite-svelte";
 	import { onMount } from "svelte";
+	import { Toaster } from "svelte-french-toast";
 	import "../app.css";
 	import type { LayoutData } from "./$types";
 
@@ -85,3 +86,5 @@
 		</div>
 	</div>
 </div>
+
+<Toaster />

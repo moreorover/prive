@@ -1,12 +1,35 @@
 <script lang="ts">
 	import { Button, Card } from "flowbite-svelte";
+	import toast from "svelte-french-toast";
 	import { superForm } from "sveltekit-superforms/client";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
 	const { form, errors, enhance } = superForm(data.form, {
-		resetForm: true
+		resetForm: true,
+		onResult: ({ result }) => {
+			switch (result.type) {
+				case "success":
+					toast.success("Success! Confirm your email to login.", {
+						position: "bottom-right"
+					});
+					break;
+				case "error":
+					toast.error("Error creating your account!", {
+						position: "bottom-right"
+					});
+					break;
+				case "failure":
+					toast.error("Check your details and try again!", {
+						position: "bottom-right"
+					});
+					break;
+				default:
+					return;
+			}
+			return;
+		}
 	});
 </script>
 
