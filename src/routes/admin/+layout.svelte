@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Navigation from "$lib/components/Navigation.svelte";
+	import Navigation from "$lib/components/AdminDrawer.svelte";
 	import { AppBar, AppShell, Avatar, getDrawerStore } from "@skeletonlabs/skeleton";
 	const drawerStore = getDrawerStore();
 

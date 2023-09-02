@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Navigation from "$lib/components/Navigation.svelte";
+	import Navigation from "$lib/components/AdminDrawer.svelte";
 	import ProfileDrawer from "$lib/components/ProfileDrawer.svelte";
 	import { Drawer, Modal, Toast, getDrawerStore, initializeStores } from "@skeletonlabs/skeleton";
 	import "../app.postcss";
