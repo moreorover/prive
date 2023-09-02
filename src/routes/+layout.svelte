@@ -74,7 +74,6 @@
 					border="border-4 border-surface-300-600-token hover:!border-primary-500"
 					cursor="cursor-pointer"
 					on:click={profileDrawerOpen} />
-				<a class="btn btn-sm variant-ghost-tertiary" href="/logout">Log Out</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
