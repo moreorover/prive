@@ -16,6 +16,10 @@
 	</ul>
 	<hr />
 	<ul>
-		<li><a href="/logout" on:click={drawerClose}>Log Out</a></li>
+		<li>
+			<form action="/logout" method="POST">
+				<button type="submit">Sign out</button>
+			</form>
+		</li>
 	</ul>
 </nav>

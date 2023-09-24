@@ -24,14 +24,6 @@
 
 	export let data: LayoutData;
 
-	let showNavigation: boolean = false;
-
-	$: if ($page.url.pathname.startsWith("/admin")) {
-		showNavigation = true;
-	} else {
-		showNavigation = false;
-	}
-
 	function navigationDrawerOpen(): void {
 		drawerStore.open({
 			id: "navigation",
@@ -103,12 +95,15 @@
 				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<a class="variant-ghost-primary btn btn-sm" href="/login"> Login </a>
-				<a class="variant-ghost-secondary btn btn-sm" href="/register"> Register </a>
-				<Avatar
-					border="border-4 border-surface-300-600-token hover:!border-primary-500"
-					cursor="cursor-pointer"
-					on:click={profileDrawerOpen} />
+				{#if session}
+					<Avatar
+						border="border-4 border-surface-300-600-token hover:!border-primary-500"
+						cursor="cursor-pointer"
+						on:click={profileDrawerOpen} />
+				{:else}
+					<a class="variant-ghost-primary btn btn-sm" href="/login"> Login </a>
+					<a class="variant-ghost-secondary btn btn-sm" href="/register"> Register </a>
+				{/if}
 				<LightSwitch />
 			</svelte:fragment>
 		</AppBar>
