@@ -111,6 +111,5 @@
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
 	</svelte:fragment>
-	{$page.url.pathname}
 	<slot />
 </AppShell>
