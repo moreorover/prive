@@ -4,6 +4,7 @@ import { upsertProductRecord } from "$lib/server/products";
 import { stripe } from "$lib/server/stripe";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { faker } from "@faker-js/faker";
+import type { User } from "@supabase/supabase-js";
 import { execSync } from "child_process";
 import detect from "detect-port";
 import pg from "pg";
@@ -33,7 +34,7 @@ export async function clearSupabaseData() {
 
 type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
 
-export async function createUser(user: CreateUser) {
+export async function createUser(user: CreateUser): Promise<User> {
 	const { data: authData, error: authError } = await supabaseAdmin.auth.signUp({
 		email: user.email,
 		password: user.password,
@@ -50,6 +51,21 @@ export async function createUser(user: CreateUser) {
 		throw new Error("Error creating user");
 	}
 	return authData.user;
+}
+
+export async function assignRoleToUser(user: User, role: "admin" | "moderator" | "user") {
+	const { data: roleData, error: roleError } = await supabaseAdmin
+		.from("user_roles")
+		.insert({ role: role, user_id: user.id })
+		.select();
+
+	if (roleError || !roleData) {
+		console.log({ roleError });
+		console.log({ roleData });
+		throw new Error(`Error assigning role ${role} to user ${user.email}`);
+	}
+
+	return roleData;
 }
 
 export async function createContact(user_id: string) {
