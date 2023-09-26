@@ -1,21 +1,23 @@
+-- PROFILES
 create table public.profiles(
-    id uuid unique references auth.users on delete cascade,
-    full_name text,
-    updated_at timestamp with time zone default now() not null,
-    created_at timestamp with time zone default now() not null,
+    id uuid     unique references auth.users on delete cascade,
+    full_name   text,
+    instagram   text,
+    created_at  timestamp with time zone default now() not null,
+    updated_at  timestamp with time zone default now() not null,
     primary key (id)
 );
 
+-- Row-Level Security and Policies for Profiles
 alter table public.profiles enable row level security;
-
 create policy "Users can view own profile" on profiles
     for select to authenticated
         using (auth.uid() = id);
-
 create policy "Users can update own profile" on profiles
     for update to authenticated
         using (auth.uid() = id);
 
+-- Trigger to handle new users for Profiles
 create or replace function public.handle_new_user()
     returns trigger
     as $$
@@ -25,8 +27,7 @@ begin
     return new;
 end;
 $$
-language plpgsql
-security definer;
+language plpgsql security definer;
 
 create trigger on_auth_user_created
     after insert on auth.users for each row
