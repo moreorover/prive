@@ -3,6 +3,7 @@ import { z } from "zod";
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
 	email: z.string().email("Invalid email address"),
+	instagram: z.string().max(100).nullish(),
 	password: z
 		.string()
 		.min(6, "Password must be at least 6 characters")

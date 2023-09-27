@@ -21,14 +21,15 @@ export const actions: Actions = {
 			password: form.data.password,
 			options: {
 				data: {
-					full_name: form.data.full_name ?? ""
+					full_name: form.data.full_name ?? "",
+					instagram: form.data.instagram ?? ""
 				}
 			}
 		});
 
-		console.log({ authError });
-
 		if (authError) {
+			console.log(`Received authError when trying to register ${form.data.email}`);
+			console.log({ authError });
 			return setError(form, null, "An error occured while registering.");
 		}
 

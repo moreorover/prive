@@ -48,3 +48,14 @@ $$ language plpgsql security definer;
 create policy "Allow authorized create access" on public.contacts for insert with check ( authorize('contacts.create', auth.uid()) );
 create policy "Allow authorized update access" on public.contacts for update using ( authorize('contacts.update', auth.uid()) );
 create policy "Allow authorized delete access" on public.contacts for delete using ( authorize('contacts.delete', auth.uid()) );
+
+-- Function to retrieve all roles from the app_role enum type
+create or replace function get_roles()
+returns setof text language sql as $$
+    select enumlabel 
+    from pg_catalog.pg_enum 
+    where enumtypid = 'public.app_role'::regtype;
+$$;
+
+-- Comment describing the function
+COMMENT ON FUNCTION get_roles() IS 'Function to fetch all roles defined in the app_role enum. Each role is returned as a text string.';

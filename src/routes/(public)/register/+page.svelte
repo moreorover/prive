@@ -75,6 +75,23 @@
 			</div>
 
 			<div>
+				<label for="instagram" class="block text-sm font-medium leading-6">Instagram</label>
+				<div class="mt-2">
+					<input
+						id="instagram"
+						name="instagram"
+						type="text"
+						required
+						bind:value={$form.instagram}
+						class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+						data-testid="instagram" />
+					{#if $errors.instagram}
+						<span class="block text-red-600 dark:text-red-500">{$errors.instagram}</span>
+					{/if}
+				</div>
+			</div>
+
+			<div>
 				<label for="password" class="block text-sm font-medium leading-6">Password</label>
 				<div class="mt-2">
 					<input
