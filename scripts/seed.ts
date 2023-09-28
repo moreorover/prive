@@ -1,3 +1,4 @@
+import type { RolesSchema } from "$lib/schemas";
 import {
 	clearSupabaseData,
 	createStock,
@@ -7,7 +8,9 @@ import {
 	type CreateUser
 } from "./utils";
 
-const testUsers: CreateUser[] = [
+type SeedUser = CreateUser & RolesSchema;
+
+const testUsers: SeedUser[] = [
 	{
 		full_name: "Test User",
 		email: "t@t.com",

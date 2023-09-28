@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 const UserRoles = z.enum(["admin", "moderator", "user"]);
-const rolesSchema = z.array(UserRoles);
+export const rolesSchema = z.object({
+	roles: z.array(UserRoles)
+});
+export type RolesSchema = z.infer<typeof rolesSchema>;
 
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
@@ -14,8 +17,7 @@ export const registerUserSchema = z.object({
 	passwordConfirm: z
 		.string()
 		.min(6, "Password must be at least 6 characters")
-		.max(100, "Password must be 100 characters of less"),
-	roles: rolesSchema
+		.max(100, "Password must be 100 characters of less")
 });
 
 export const profileSchema = registerUserSchema.pick({ full_name: true });
