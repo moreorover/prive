@@ -1,32 +1,36 @@
 import {
 	clearSupabaseData,
-	createContact,
 	createStock,
 	createUser,
 	startSupabase,
-	syncStripeProducts
+	syncStripeProducts,
+	type CreateUser
 } from "./utils";
 
-const testUsers = [
+const testUsers: CreateUser[] = [
 	{
 		full_name: "Test User",
 		email: "t@t.com",
-		password: "password"
+		password: "password",
+		roles: ["admin"]
 	},
 	{
 		full_name: "Test User 1",
 		email: "t1@t.com",
-		password: "password"
+		password: "password",
+		roles: ["moderator"]
 	},
 	{
 		full_name: "Test User 2",
 		email: "t2@t.com",
-		password: "password"
+		password: "password",
+		roles: ["moderator", "user"]
 	},
 	{
 		full_name: "Test User 3",
 		email: "t3@t.com",
-		password: "password"
+		password: "password",
+		roles: []
 	}
 ];
 
@@ -38,9 +42,9 @@ async function seed() {
 
 		for (const testUser of testUsers) {
 			const user = await createUser(testUser);
-			for (let i = 0; i < 4; i++) {
-				await createContact(user.id);
-			}
+			// for (let i = 0; i < 4; i++) {
+			// 	await createContact(user.id);
+			// }
 
 			for (let i = 0; i < 20; i++) {
 				await createStock(user.id);

@@ -32,7 +32,7 @@ export async function clearSupabaseData() {
 	await client.query("TRUNCATE public.stock CASCADE");
 }
 
-type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
+export type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
 
 export async function createUser(user: CreateUser): Promise<User> {
 	const { data: authData, error: authError } = await supabaseAdmin.auth.signUp({
@@ -50,6 +50,16 @@ export async function createUser(user: CreateUser): Promise<User> {
 		console.log({ authDataUser: authData.user });
 		throw new Error("Error creating user");
 	}
+
+	if (!user.roles || user.roles.length === 0) {
+		console.log(`No roles for user ${user.email}`);
+	} else {
+		for (const role of user.roles) {
+			await assignRoleToUser(authData.user, role);
+			console.log(`Role "${role}" applied to user ${user.email}`);
+		}
+	}
+
 	return authData.user;
 }
 
@@ -95,14 +105,16 @@ function addDays(date: Date, days: number) {
 }
 
 export async function createStock(user_id: string) {
-	const purchased_at = faker.date.between(addDays(new Date(), -30), addDays(new Date(), 30));
+	const purchased_at = faker.date.between({
+		from: addDays(new Date(), -30),
+		to: addDays(new Date(), 30)
+	});
 	const lengths = [45, 50, 55, 60];
-	const length_cm = lengths[faker.datatype.number({ min: 0, max: 3 })];
+	const length_cm = lengths[faker.number.int({ min: 0, max: 3 })];
 	const colour = faker.color.human();
-	const weight_expected_grams = faker.datatype.number({ min: 50, max: 200 });
-	const weight_received_grams =
-		weight_expected_grams + faker.datatype.number({ min: -20, max: 15 });
-	const code = faker.random.numeric(6);
+	const weight_expected_grams = faker.number.int({ min: 50, max: 200 });
+	const weight_received_grams = weight_expected_grams + faker.number.int({ min: -20, max: 15 });
+	const code = faker.string.numeric(6);
 
 	const stock = {
 		purchased_at: purchased_at.toISOString(),

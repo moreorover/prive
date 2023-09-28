@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const UserRoles = z.enum(["admin", "moderator", "user"]);
+const rolesSchema = z.array(UserRoles);
+
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
 	email: z.string().email("Invalid email address"),
@@ -11,7 +14,8 @@ export const registerUserSchema = z.object({
 	passwordConfirm: z
 		.string()
 		.min(6, "Password must be at least 6 characters")
-		.max(100, "Password must be 100 characters of less")
+		.max(100, "Password must be 100 characters of less"),
+	roles: rolesSchema
 });
 
 export const profileSchema = registerUserSchema.pick({ full_name: true });
