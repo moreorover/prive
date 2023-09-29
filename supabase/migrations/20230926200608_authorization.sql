@@ -1,5 +1,5 @@
 -- Custom types for permissions
-create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete');
+create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete', 'profiles.view', 'profiles.update');
 create type public.app_role as enum ('admin', 'moderator', 'user');
 
 -- ROLE PERMISSIONS
@@ -22,7 +22,9 @@ insert into public.role_permissions (role, permission)
 values
     ('admin', 'contacts.create'),
     ('admin', 'contacts.update'),
-    ('admin', 'contacts.delete');
+    ('admin', 'contacts.delete'),
+    ('admin', 'profiles.view'),
+    ('admin', 'profiles.update');
 
 -- Function for role-based authorization
 create function public.authorize(
@@ -45,9 +47,13 @@ end;
 $$ language plpgsql security definer;
 
 -- Extend Policies for Contacts with Roles and Authorization
-create policy "Allow authorized create access" on public.contacts for insert with check ( authorize('contacts.create', auth.uid()) );
-create policy "Allow authorized update access" on public.contacts for update using ( authorize('contacts.update', auth.uid()) );
-create policy "Allow authorized delete access" on public.contacts for delete using ( authorize('contacts.delete', auth.uid()) );
+create policy "Allow User With 'contacts.create' Permission To Create Contacts" on public.contacts for insert with check ( authorize('contacts.create', auth.uid()) );
+create policy "Allow User With 'contacts.update' Permission To Update Contacts" on public.contacts for update using ( authorize('contacts.update', auth.uid()) );
+create policy "Allow User With 'contacts.delete' Permission To Delete Contacts" on public.contacts for delete using ( authorize('contacts.delete', auth.uid()) );
+
+-- Extend Policies for Profiles with Roles and Authorization
+create policy "Allow User With 'profiles.view' Permission To View Profiles" on public.profiles for select using ( authorize('profiles.view', auth.uid()) or (auth.uid() = id) );
+create policy "Allow User With 'profiles.update' Permission To Update Profiles" on public.profiles for update using ( authorize('profiles.update', auth.uid()) or (auth.uid() = id) );
 
 -- Function to retrieve all roles from the app_role enum type
 create or replace function get_roles()

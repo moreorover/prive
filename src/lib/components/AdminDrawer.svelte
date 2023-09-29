@@ -6,13 +6,23 @@
 	function drawerClose(): void {
 		drawerStore.close();
 	}
+
+	const pages = [
+		{
+			title: "Admin",
+			href: "/admin"
+		},
+		{
+			title: "Users",
+			href: "/admin/users"
+		}
+	];
 </script>
 
 <nav class="list-nav p-4">
 	<ul>
-		<li><a href="/admin" on:click={drawerClose}>Admin</a></li>
-		<li><a href="/admin?test=1" on:click={drawerClose}>Other Page 1</a></li>
-		<li><a href="/admin?test=2" on:click={drawerClose}>Other Page 2</a></li>
-		<li><a href="/admin?test=3" on:click={drawerClose}>Other Page 3</a></li>
+		{#each pages as page}
+			<li><a href={page.href} on:click={drawerClose}>{page.title}</a></li>
+		{/each}
 	</ul>
 </nav>
