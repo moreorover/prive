@@ -55,6 +55,7 @@
 	$: classesSidebar = $page.url.pathname.startsWith("/admin")
 		? "bg-surface-500/5 w-0 lg:w-64"
 		: "w-0";
+	$: username = session?.user.email ? session.user.email : "";
 </script>
 
 <svelte:head
@@ -66,7 +67,7 @@
 	{#if $drawerStore.id === "navigation"}
 		<Navigation />
 	{:else if $drawerStore.id === "profile"}
-		<ProfileDrawer />
+		<ProfileDrawer {username} />
 	{/if}
 </Drawer>
 
@@ -99,6 +100,7 @@
 					<Avatar
 						border="border-4 border-surface-300-600-token hover:!border-primary-500"
 						cursor="cursor-pointer"
+						initials={session.user.email}
 						on:click={profileDrawerOpen} />
 				{:else}
 					<a class="variant-ghost-primary btn btn-sm" href="/login"> Login </a>
@@ -111,5 +113,7 @@
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
 	</svelte:fragment>
-	<slot />
+	<div class="container mx-auto">
+		<slot />
+	</div>
 </AppShell>
