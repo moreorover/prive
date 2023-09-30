@@ -1,5 +1,5 @@
 -- Custom types for permissions
-create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete', 'profiles.view', 'profiles.update');
+create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete', 'profiles.view', 'profiles.update', 'user.roles.view', 'user.roles.create', 'user.roles.delete', 'role.permissions.view', 'role.permissions.create', 'role.permissions.delete');
 create type public.app_role as enum ('admin', 'moderator', 'user');
 
 -- ROLE PERMISSIONS
@@ -24,7 +24,13 @@ values
     ('admin', 'contacts.update'),
     ('admin', 'contacts.delete'),
     ('admin', 'profiles.view'),
-    ('admin', 'profiles.update');
+    ('admin', 'profiles.update'),
+    ('admin', 'user.roles.view'),
+    ('admin', 'user.roles.create'),
+    ('admin', 'user.roles.delete'),
+    ('admin', 'role.permissions.view'),
+    ('admin', 'role.permissions.create'),
+    ('admin', 'role.permissions.delete');
 
 -- Function for role-based authorization
 create function public.authorize(
@@ -37,7 +43,7 @@ declare
 begin
   select count(*)
   from public.role_permissions
-  join public.user_roles on role_permissions.role = user_roles.role
+  inner join public.user_roles on role_permissions.role = user_roles.role
   where role_permissions.permission = authorize.requested_permission
     and user_roles.user_id = authorize.user_id
   into bind_permissions;
@@ -55,6 +61,61 @@ create policy "Allow User With 'contacts.delete' Permission To Delete Contacts" 
 create policy "Allow User With 'profiles.view' Permission To View Profiles" on public.profiles for select using ( authorize('profiles.view', auth.uid()) or (auth.uid() = id) );
 create policy "Allow User With 'profiles.update' Permission To Update Profiles" on public.profiles for update using ( authorize('profiles.update', auth.uid()) or (auth.uid() = id) );
 
+-- enable row-level security on the roles table
+alter table public.role_permissions enable row level security;
+
+-- policy to allow users with 'roles.view' permission to view roles
+create policy "Allow User With 'role.permissions.view' Permission To View Role Permissions" 
+on public.role_permissions 
+for select 
+using ( 
+    authorize('role.permissions.view', auth.uid()) 
+);
+
+-- policy to allow users with 'role.permissions.create' permission to create role permissions
+create policy "Allow User With 'role.permissions.create' Permission To Create Role Permissions" 
+on public.role_permissions 
+for insert with check
+( 
+    authorize('role.permissions.create', auth.uid()) 
+);
+
+-- policy to allow users with 'roles.delete' permission to delete roles
+create policy "Allow User With 'role.permissions.delete' Permission To Delete Role Permissions" 
+on public.role_permissions 
+for delete 
+using ( 
+    authorize('role.permissions.delete', auth.uid()) 
+);
+
+-- enable row-level security on the roles table
+alter table public.user_roles enable row level security;
+
+-- policy to allow users with 'roles.view' permission to view roles
+create policy "Allow User With 'user.roles.view' Permission To View User Roles" 
+on public.user_roles 
+for select 
+using ( 
+    authorize('user.roles.view', auth.uid()) 
+);
+
+-- policy to allow users with 'user.roles.create' permission to create roles
+create policy "Allow User With 'user.roles.create' Permission To Create User Roles" 
+on public.user_roles 
+for insert 
+with check
+( 
+    authorize('user.roles.create', auth.uid()) 
+);
+
+-- -- policy to allow users with 'user.roles.delete' permission to delete roles
+create policy "Allow User With 'user.roles.delete' Permission To Delete User Roles" 
+on public.user_roles 
+for delete 
+using ( 
+    authorize('user.roles.delete', auth.uid()) 
+);
+
 -- Function to retrieve all roles from the app_role enum type
 create or replace function get_roles()
 returns setof text language sql as $$
@@ -64,4 +125,4 @@ returns setof text language sql as $$
 $$;
 
 -- Comment describing the function
-COMMENT ON FUNCTION get_roles() IS 'Function to fetch all roles defined in the app_role enum. Each role is returned as a text string.';
+comment on function get_roles() is 'Function to fetch all roles defined in the app_role enum. Each role is returned as a text string.';

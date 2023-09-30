@@ -343,7 +343,18 @@ export interface Database {
 			};
 		};
 		Enums: {
-			app_permission: "contacts.create" | "contacts.update" | "contacts.delete";
+			app_permission:
+				| "contacts.create"
+				| "contacts.update"
+				| "contacts.delete"
+				| "profiles.view"
+				| "profiles.update"
+				| "user.roles.view"
+				| "user.roles.create"
+				| "user.roles.delete"
+				| "role.permissions.view"
+				| "role.permissions.create"
+				| "role.permissions.delete";
 			app_role: "admin" | "moderator" | "user";
 			subscription_status:
 				| "trialing"

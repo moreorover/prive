@@ -1,4 +1,3 @@
-import type { registerUserSchema } from "$lib/schemas";
 import { ENV } from "$lib/server/env";
 import { upsertProductRecord } from "$lib/server/products";
 import { stripe } from "$lib/server/stripe";
@@ -8,7 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import { execSync } from "child_process";
 import detect from "detect-port";
 import pg from "pg";
-import type { z } from "zod";
+import type { SeedUser } from "./seed";
 
 export async function startSupabase() {
 	const port = await detect(54322);
@@ -30,11 +29,12 @@ export async function clearSupabaseData() {
 	await client.query("TRUNCATE public.billing_subscriptions CASCADE");
 	await client.query("TRUNCATE public.contacts CASCADE");
 	await client.query("TRUNCATE public.stock CASCADE");
+	await client.query("TRUNCATE public.user_roles CASCADE");
+	// 	DO NOT TRUNCATE role_permissions TABLE AS IT IS POPULATED BY MIGRATION
+	// await client.query("TRUNCATE public.role_permissions CASCADE");
 }
 
-export type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
-
-export async function createUser(user: CreateUser): Promise<User> {
+export async function createUser(user: SeedUser): Promise<User> {
 	const { data: authData, error: authError } = await supabaseAdmin.auth.signUp({
 		email: user.email,
 		password: user.password,
@@ -55,6 +55,7 @@ export async function createUser(user: CreateUser): Promise<User> {
 		console.log(`No roles for user ${user.email}`);
 	} else {
 		for (const role of user.roles) {
+			await supabaseAdmin.auth.signOut();
 			await assignRoleToUser(authData.user, role);
 			console.log(`Role "${role}" applied to user ${user.email}`);
 		}

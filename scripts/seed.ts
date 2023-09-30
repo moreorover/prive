@@ -1,14 +1,15 @@
-import type { RolesSchema } from "$lib/schemas";
+import type { RolesSchema, registerUserSchema } from "$lib/schemas";
+import type { z } from "zod";
 import {
 	clearSupabaseData,
 	createStock,
 	createUser,
 	startSupabase,
-	syncStripeProducts,
-	type CreateUser
+	syncStripeProducts
 } from "./utils";
 
-type SeedUser = CreateUser & RolesSchema;
+export type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
+export type SeedUser = CreateUser & RolesSchema;
 
 const testUsers: SeedUser[] = [
 	{
