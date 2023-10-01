@@ -7,6 +7,7 @@
 
 	type User = {
 		id: string;
+		email: string;
 		full_name: string;
 		searchTerms: string;
 	};
@@ -32,10 +33,27 @@
 		<span>Search Users</span>
 		<input class="input" type="search" placeholder="Search..." bind:value={$searchStore.search} />
 	</label>
-	<!-- <div class="flex flex-wrap justify-center" /> -->
-	<div class="-mx-1 flex flex-wrap lg:-mx-4">
+	<div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
 		{#each $searchStore.filtered as user}
-			<a class="card card-hover m-4 block p-4" href="/admin/users/{user.id}">{user.full_name}</a>
+			<a class="card card-hover m-2 p-2 shadow-lg" href="/admin/users/{user.id}">
+				<div class="text-center">
+					<span class="block text-lg font-semibold">{user.full_name}</span>
+					<div class="mt-2 flex items-center justify-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1"
+							stroke="currentColor"
+							class="h-6 w-6 text-gray-600">
+							<path
+								stroke-linecap="round"
+								d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+						</svg>
+						<span class="ml-2 text-gray-600">{user.email}</span>
+					</div>
+				</div>
+			</a>
 		{/each}
 	</div>
 </div>
