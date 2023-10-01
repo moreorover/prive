@@ -341,6 +341,12 @@ export interface Database {
 				Args: Record<PropertyKey, never>;
 				Returns: string[];
 			};
+			get_roles_and_permissions: {
+				Args: {
+					user_id: string;
+				};
+				Returns: Json;
+			};
 		};
 		Enums: {
 			app_permission:

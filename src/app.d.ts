@@ -1,3 +1,4 @@
+import type { UserRolesPermissions } from "$lib/server/authorization";
 import type { Database } from "$lib/supabase-types";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
@@ -8,7 +9,7 @@ declare global {
 		interface Locals {
 			supabase: SupabaseClient<Database>;
 			getSession(): Promise<Session | null>;
-			getRoles(): Promise<Database.Enums.app_role | null>;
+			getRoles(user_id: string): Promise<UserRolesPermissions | null>;
 		}
 		interface PageData {
 			session: Session | null;

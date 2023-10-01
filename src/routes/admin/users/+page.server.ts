@@ -10,12 +10,7 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		console.error(`Got error when trying to fetch profiles -> ${allUsersError}`);
 	}
 
-	const {
-		data: { users },
-		error: usersError
-	} = await supabaseAdmin.auth.admin.listUsers();
-
-	const x = await Promise.all(
+	const joinedProfilesWithAuth = await Promise.all(
 		allUsers.map(async (user) => {
 			const {
 				data: { user: authUser },
@@ -29,9 +24,7 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		})
 	);
 
-	console.log({ x });
-
 	return {
-		allUsers: x
+		allUsers: joinedProfilesWithAuth
 	};
 };

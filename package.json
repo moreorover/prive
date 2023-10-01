@@ -15,7 +15,8 @@
 		"gen:types": "npx supabase gen types typescript --local > src/lib/supabase-types.ts && prettier --write src/lib/supabase-types.ts",
 		"seed": "tsx --tsconfig scripts/tsconfig.json scripts/seed.ts",
 		"stripe:webhooks": "stripe listen --forward-to localhost:5173/api/stripe/webhook",
-		"supabase:status": "npx supabase status -o env"
+		"supabase:status": "npx supabase status -o env",
+		"reset:local": "npx supabase db reset --debug && npm run seed && npm run gen:types"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.0.2",

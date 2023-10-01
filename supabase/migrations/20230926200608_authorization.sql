@@ -126,3 +126,37 @@ $$;
 
 -- Comment describing the function
 comment on function get_roles() is 'Function to fetch all roles defined in the app_role enum. Each role is returned as a text string.';
+
+create or replace function get_roles_and_permissions(user_id uuid)
+returns jsonb as $$
+declare
+    _roles jsonb;
+    _permissions jsonb;
+begin
+    -- Get roles
+    select jsonb_agg(distinct r.role::text)
+    into _roles
+    from public.user_roles r
+    where r.user_id = get_roles_and_permissions.user_id;
+    
+    -- Get permissions
+    with role_permissions as (
+        select 
+            r.role::text as role, 
+            jsonb_agg(rp.permission::text) as permissions
+        from public.user_roles r 
+        join public.role_permissions rp on r.role = rp.role 
+        where r.user_id = get_roles_and_permissions.user_id
+        group by r.role
+    )
+    select jsonb_object_agg(role, jsonb_build_object('permissions', permissions))
+    into _permissions
+    from role_permissions;
+    
+    -- Return combined JSONB
+    return jsonb_build_object(
+        'userRoles', _roles,
+        'roles', _permissions
+    );
+end;
+$$ language plpgsql;

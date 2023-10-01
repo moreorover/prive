@@ -1,5 +1,6 @@
-import { userHasRole } from "$lib/server/authorization";
+import { registerUserSchema } from "$lib/schemas";
 import { redirect } from "@sveltejs/kit";
+import { superValidate } from "sveltekit-superforms/server";
 import type { PageServerLoad, PageServerLoadEvent } from "./$types";
 
 export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
@@ -8,15 +9,13 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		throw redirect(302, "/");
 	}
 
-	const userRoles = await event.locals.getRoles(session.user.id);
-	if (!userHasRole(userRoles, "admin")) {
-		console.warn(
-			`User ${session.user.email} is trying to access /admin portal without admin role.`
-		);
+	const currentUserRoles = await event.locals.getRoles();
+
+	if (!currentUserRoles.includes("admin")) {
 		throw redirect(302, "/");
 	}
 
 	return {
-		userRoles
+		form: superValidate(registerUserSchema)
 	};
 };

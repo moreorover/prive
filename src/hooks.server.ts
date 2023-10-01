@@ -1,4 +1,6 @@
+import type { UserRolesPermissions } from "$lib/server/authorization";
 import { ENV } from "$lib/server/env";
+import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
 import type { Handle } from "@sveltejs/kit";
 
@@ -17,27 +19,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
-	event.locals.getRoles = async () => {
-		const {
-			data: { user }
-		} = await event.locals.supabase.auth.getUser();
+	event.locals.getRoles = async (user_id: string): Promise<UserRolesPermissions | null> => {
+		const { data: userRolesWithPermissions, error: userRolesWithPermissionsError } =
+			await supabaseAdmin
+				.rpc("get_roles_and_permissions", { user_id })
+				.returns<UserRolesPermissions>();
 
-		if (!user) {
-			return null;
+		if (userRolesWithPermissionsError) {
+			console.error(`Failed to get User roles for ${user_id}`);
 		}
 
-		const { data } = await event.locals.supabase
-			.from("user_roles")
-			.select("role")
-			.eq("user_id", user?.id);
-
-		if (!data) {
-			return null;
-		}
-
-		const roles = data.map((item) => item.role);
-
-		return roles;
+		return userRolesWithPermissions;
 	};
 
 	return resolve(event, {
