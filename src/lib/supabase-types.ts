@@ -337,6 +337,10 @@ export interface Database {
 				};
 				Returns: boolean;
 			};
+			get_permissions: {
+				Args: Record<PropertyKey, never>;
+				Returns: string[];
+			};
 			get_roles: {
 				Args: Record<PropertyKey, never>;
 				Returns: string[];

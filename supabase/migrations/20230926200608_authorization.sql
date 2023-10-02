@@ -127,6 +127,17 @@ $$;
 -- Comment describing the function
 comment on function get_roles() is 'Function to fetch all roles defined in the app_role enum. Each role is returned as a text string.';
 
+-- Function to retrieve all permissions from the app_role enum type
+create or replace function get_permissions()
+returns setof text language sql as $$
+    select enumlabel 
+    from pg_catalog.pg_enum 
+    where enumtypid = 'public.app_permission'::regtype;
+$$;
+
+-- Comment describing the function
+comment on function get_permissions() is 'Function to fetch all roles defined in the app_permission enum. Each role is returned as a text string.';
+
 create or replace function get_roles_and_permissions(user_id uuid)
 returns jsonb as $$
 declare
