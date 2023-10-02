@@ -19,7 +19,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
-	event.locals.getRoles = async (user_id: string): Promise<UserRolesPermissions | null> => {
+	event.locals.getUserRolesWithPermissions = async (
+		user_id: string
+	): Promise<UserRolesPermissions | null> => {
 		const { data: userRolesWithPermissions, error: userRolesWithPermissionsError } =
 			await supabaseAdmin
 				.rpc("get_roles_and_permissions", { user_id })

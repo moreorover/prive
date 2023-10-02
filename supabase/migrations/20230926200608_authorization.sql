@@ -160,3 +160,5 @@ begin
     );
 end;
 $$ language plpgsql;
+
+comment on function get_roles_and_permissions(user_id uuid) is 'Function to fetch all riles and permissions for the user_id'

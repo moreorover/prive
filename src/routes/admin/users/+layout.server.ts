@@ -1,4 +1,5 @@
 import { registerUserSchema } from "$lib/schemas";
+import { userHasRole } from "$lib/server/authorization";
 import { redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import type { PageServerLoad, PageServerLoadEvent } from "./$types";
@@ -9,9 +10,9 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		throw redirect(302, "/");
 	}
 
-	const currentUserRoles = await event.locals.getRoles();
+	const currentUserRoles = await event.locals.getUserRolesWithPermissions(session.user.id);
 
-	if (!currentUserRoles.includes("admin")) {
+	if (!userHasRole(currentUserRoles, "admin")) {
 		throw redirect(302, "/");
 	}
 
