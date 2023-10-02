@@ -355,12 +355,12 @@ export interface Database {
 				| "contacts.delete"
 				| "profiles.view"
 				| "profiles.update"
-				| "user.roles.view"
-				| "user.roles.create"
-				| "user.roles.delete"
-				| "role.permissions.view"
-				| "role.permissions.create"
-				| "role.permissions.delete";
+				| "user_roles.view"
+				| "user_roles.create"
+				| "user_roles.delete"
+				| "role_permissions.view"
+				| "role_permissions.create"
+				| "role_permissions.delete";
 			app_role: "admin" | "moderator" | "user";
 			subscription_status:
 				| "trialing"

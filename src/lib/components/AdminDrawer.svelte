@@ -8,14 +8,9 @@
 	}
 
 	const pages = [
-		{
-			title: "Admin",
-			href: "/admin"
-		},
-		{
-			title: "Users",
-			href: "/admin/users"
-		}
+		{ title: "Admin", href: "/admin" },
+		{ title: "Role Permissions", href: "/admin/roles-permissions" },
+		{ title: "Users", href: "/admin/users" }
 	];
 </script>
 

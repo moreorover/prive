@@ -1,5 +1,5 @@
 -- Custom types for permissions
-create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete', 'profiles.view', 'profiles.update', 'user.roles.view', 'user.roles.create', 'user.roles.delete', 'role.permissions.view', 'role.permissions.create', 'role.permissions.delete');
+create type public.app_permission as enum ('contacts.create', 'contacts.update', 'contacts.delete', 'profiles.view', 'profiles.update', 'user_roles.view', 'user_roles.create', 'user_roles.delete', 'role_permissions.view', 'role_permissions.create', 'role_permissions.delete');
 create type public.app_role as enum ('admin', 'moderator', 'user');
 
 -- ROLE PERMISSIONS
@@ -25,12 +25,12 @@ values
     ('admin', 'contacts.delete'),
     ('admin', 'profiles.view'),
     ('admin', 'profiles.update'),
-    ('admin', 'user.roles.view'),
-    ('admin', 'user.roles.create'),
-    ('admin', 'user.roles.delete'),
-    ('admin', 'role.permissions.view'),
-    ('admin', 'role.permissions.create'),
-    ('admin', 'role.permissions.delete');
+    ('admin', 'user_roles.view'),
+    ('admin', 'user_roles.create'),
+    ('admin', 'user_roles.delete'),
+    ('admin', 'role_permissions.view'),
+    ('admin', 'role_permissions.create'),
+    ('admin', 'role_permissions.delete');
 
 -- Function for role-based authorization
 create function public.authorize(
@@ -65,55 +65,55 @@ create policy "Allow User With 'profiles.update' Permission To Update Profiles" 
 alter table public.role_permissions enable row level security;
 
 -- policy to allow users with 'roles.view' permission to view roles
-create policy "Allow User With 'role.permissions.view' Permission To View Role Permissions" 
+create policy "Allow User With 'role_permissions.view' Permission To View Role Permissions" 
 on public.role_permissions 
 for select 
 using ( 
-    authorize('role.permissions.view', auth.uid()) 
+    authorize('role_permissions.view', auth.uid()) 
 );
 
--- policy to allow users with 'role.permissions.create' permission to create role permissions
-create policy "Allow User With 'role.permissions.create' Permission To Create Role Permissions" 
+-- policy to allow users with 'role_permissions.create' permission to create role permissions
+create policy "Allow User With 'role_permissions.create' Permission To Create Role Permissions" 
 on public.role_permissions 
 for insert with check
 ( 
-    authorize('role.permissions.create', auth.uid()) 
+    authorize('role_permissions.create', auth.uid()) 
 );
 
 -- policy to allow users with 'roles.delete' permission to delete roles
-create policy "Allow User With 'role.permissions.delete' Permission To Delete Role Permissions" 
+create policy "Allow User With 'role_permissions.delete' Permission To Delete Role Permissions" 
 on public.role_permissions 
 for delete 
 using ( 
-    authorize('role.permissions.delete', auth.uid()) 
+    authorize('role_permissions.delete', auth.uid()) 
 );
 
 -- enable row-level security on the roles table
 alter table public.user_roles enable row level security;
 
 -- policy to allow users with 'roles.view' permission to view roles
-create policy "Allow User With 'user.roles.view' Permission To View User Roles" 
+create policy "Allow User With 'user_roles.view' Permission To View User Roles" 
 on public.user_roles 
 for select 
 using ( 
-    authorize('user.roles.view', auth.uid()) 
+    authorize('user_roles.view', auth.uid()) 
 );
 
--- policy to allow users with 'user.roles.create' permission to create roles
-create policy "Allow User With 'user.roles.create' Permission To Create User Roles" 
+-- policy to allow users with 'user_roles.create' permission to create roles
+create policy "Allow User With 'user_roles.create' Permission To Create User Roles" 
 on public.user_roles 
 for insert 
 with check
 ( 
-    authorize('user.roles.create', auth.uid()) 
+    authorize('user_roles.create', auth.uid()) 
 );
 
--- -- policy to allow users with 'user.roles.delete' permission to delete roles
-create policy "Allow User With 'user.roles.delete' Permission To Delete User Roles" 
+-- -- policy to allow users with 'user_roles.delete' permission to delete roles
+create policy "Allow User With 'user_roles.delete' Permission To Delete User Roles" 
 on public.user_roles 
 for delete 
 using ( 
-    authorize('user.roles.delete', auth.uid()) 
+    authorize('user_roles.delete', auth.uid()) 
 );
 
 -- Function to retrieve all roles from the app_role enum type
