@@ -1,4 +1,5 @@
-import type { PageServerLoad, PageServerLoadEvent } from "./$types";
+import { error } from "@sveltejs/kit";
+import type { Actions, PageServerLoad, PageServerLoadEvent } from "./$types";
 
 interface Permission {
 	title: string;
@@ -94,4 +95,15 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 	return {
 		rolePermissionStructure
 	};
+};
+
+export const actions: Actions = {
+	updateRolePermissions: async (event) => {
+		const session = await event.locals.getSession();
+		if (!session) {
+			throw error(403, "Unauthorized");
+		}
+
+		
+	}
 };
