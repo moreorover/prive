@@ -360,11 +360,9 @@ export interface Database {
 				| "profiles.view"
 				| "profiles.update"
 				| "user_roles.view"
-				| "user_roles.create"
-				| "user_roles.delete"
+				| "user_roles.update"
 				| "role_permissions.view"
-				| "role_permissions.create"
-				| "role_permissions.delete";
+				| "role_permissions.update";
 			app_role: "admin" | "moderator" | "user";
 			subscription_status:
 				| "trialing"

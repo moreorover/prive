@@ -29,6 +29,6 @@
 				</label>
 			{/each}
 		</div>
-		<button type="submit" class="variant-filled variant-filled-tertiary btn btn-sm">Save</button>
+		<a class="variant-filled variant-filled-tertiary btn btn-sm">Save</a>
 	</div>
 </form>

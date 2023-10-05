@@ -1,4 +1,4 @@
-import { userHasPermission, userHasRoleAndPermission } from "$lib/server/authorization";
+import { userHasRoleAndPermission } from "$lib/server/authorization";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad, PageServerLoadEvent } from "./$types";
 
@@ -16,10 +16,7 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		throw redirect(302, "/");
 	}
 
-	const userCanUpdate: boolean = userHasPermission(userRoles, "user_roles.update");
-
 	return {
-		userRoles,
-		userCanUpdate
+		userRoles
 	};
 };

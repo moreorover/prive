@@ -6,6 +6,30 @@ export const rolesSchema = z.object({
 });
 export type RolesSchema = z.infer<typeof rolesSchema>;
 
+const RolePermissions = z.enum([
+	"contacts.create",
+	"contacts.update",
+	"contacts.delete",
+	"profiles.view",
+	"profiles.update",
+	"user_roles.view",
+	"user_roles.update",
+	"role_permissions.view",
+	"role_permissions.update"
+]);
+
+export const rolePermissionsSchema = z.object({
+	role: UserRoles,
+	rolePermissions: z
+		.object({
+			permissions: RolePermissions,
+			status: z.boolean()
+		})
+		.array()
+});
+
+export type RolePermisssionsSchema = z.infer<typeof rolePermissionsSchema>;
+
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
 	email: z.string().email("Invalid email address"),
