@@ -23,7 +23,8 @@
 									<input
 										type="checkbox"
 										class="checkbox text-blue-500"
-										checked={permission.state} />
+										checked={permission.state}
+										disabled />
 									<span class="ml-2">{permission.title}</span>
 								</label>
 							{/each}

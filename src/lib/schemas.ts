@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const UserRoles = z.enum(["admin", "moderator", "user"]);
+export const UserRoles = z.enum(["admin", "moderator", "user"]);
 export const rolesSchema = z.object({
 	roles: z.array(UserRoles)
 });
@@ -19,11 +19,11 @@ const RolePermissions = z.enum([
 ]);
 
 export const rolePermissionsSchema = z.object({
-	role: UserRoles,
 	rolePermissions: z
 		.object({
-			permissions: RolePermissions,
-			status: z.boolean()
+			permission: RolePermissions,
+			status: z.boolean(),
+			title: z.string()
 		})
 		.array()
 });

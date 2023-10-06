@@ -86,6 +86,14 @@ using (
     authorize('role_permissions.update', auth.uid()) 
 );
 
+-- policy to allow users with 'roles.update' permission to delete roles
+create policy "Allow User With 'role_permissions.update' Permission To Update Role Permissions" 
+on public.role_permissions 
+for update 
+using ( 
+    authorize('role_permissions.update', auth.uid()) 
+);
+
 -- enable row-level security on the roles table
 alter table public.user_roles enable row level security;
 

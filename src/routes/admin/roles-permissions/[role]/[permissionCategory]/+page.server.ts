@@ -2,6 +2,7 @@ import { rolePermissionsSchema } from "$lib/schemas";
 import { error } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad, PageServerLoadEvent } from "./$types";
+
 export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 	const role: string = event.params["role"];
 	const permissionCategory: string = event.params["permissionCategory"];
@@ -38,20 +39,23 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 	const rp = filteredAvailablePermissions.map((rolePermission) => {
 		return {
 			permission: rolePermission,
-			status: !!filteredRolePermissions.find((frp) => frp.permission === rolePermission)
+			status: !!filteredRolePermissions.find((frp) => frp.permission === rolePermission),
+			title: rolePermission.split(".")[1]
 		};
 	});
 
-	// console.log({ role: role, rolePermissions: rp });
+	console.log({ rolePermissions: rp });
 
 	return {
-		form: superValidate({ role: role, rolePermissions: rp }, rolePermissionsSchema),
-		role
+		form: superValidate({ rolePermissions: rp }, rolePermissionsSchema),
+		role,
+		permissionCategory
 	};
 };
 
 export const actions: Actions = {
 	updateRolePermissions: async (event) => {
+		const role = event.params["role"];
 		const session = await event.locals.getSession();
 		if (!session) {
 			throw error(403, "Unauthorized");
@@ -61,6 +65,27 @@ export const actions: Actions = {
 
 		console.log({ formValid: updateRolePermissionsForm.valid });
 
-		console.log(JSON.stringify(updateRolePermissionsForm.data, null, 2));
+		console.log(JSON.stringify(updateRolePermissionsForm.data.rolePermissions, null, 2));
+
+		for (const rp of updateRolePermissionsForm.data.rolePermissions) {
+			const { permission, status } = rp;
+
+			if (status) {
+				const { data, error } = await event.locals.supabase
+					.from("role_permissions")
+					.upsert({ role, permission }, { onConflict: ["role", "permission"] });
+
+				if (error) console.error("Error inserting/updating:", error);
+				else console.log("Insert/Update Result:", data);
+			} else {
+				const { data, error } = await event.locals.supabase
+					.from("role_permissions")
+					.delete()
+					.match({ role, permission });
+
+				if (error) console.error("Error deleting:", error);
+				else console.log("Delete Result:", data);
+			}
+		}
 	}
 };
