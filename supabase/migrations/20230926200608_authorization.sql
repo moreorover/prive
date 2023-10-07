@@ -122,6 +122,14 @@ using (
     authorize('user_roles.update', auth.uid()) 
 );
 
+-- -- policy to allow users with 'user_roles.update' permission to delete roles
+create policy "Allow User With 'user_roles.update' Permission To Update User Roles" 
+on public.user_roles 
+for update 
+using ( 
+    authorize('user_roles.update', auth.uid()) 
+);
+
 -- Function to retrieve all roles from the app_role enum type
 create or replace function get_roles()
 returns setof text language sql as $$

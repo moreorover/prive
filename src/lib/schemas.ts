@@ -2,6 +2,10 @@ import { z } from "zod";
 
 export const UserRoles = z.enum(["admin", "moderator", "user"]);
 export type UserRoles = z.infer<typeof UserRoles>;
+export const updateUserRolesSchema = z.object({
+	roles: z.object({ role: UserRoles, status: z.boolean() }).array()
+});
+export type UpdateUserRolesSchema = z.infer<typeof updateUserRolesSchema>;
 export const rolesSchema = z.object({
 	roles: z.array(UserRoles)
 });

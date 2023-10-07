@@ -1,4 +1,6 @@
 <script lang="ts">
 </script>
 
-<slot />
+<div class="container mx-auto mt-4">
+	<slot />
+</div>

@@ -52,6 +52,13 @@
 						</svg>
 						<span class="ml-2 text-gray-600">{user.email}</span>
 					</div>
+					<div class="mt-2 flex">
+						{#if user.user_roles.length != 0}
+							{#each user.user_roles as role}
+								<span class="variant-filled chip mr-2">{role.role}</span>
+							{/each}
+						{/if}
+					</div>
 				</div>
 			</a>
 		{/each}
