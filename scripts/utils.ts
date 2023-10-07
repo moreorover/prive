@@ -1,13 +1,13 @@
-import type { registerUserSchema } from "$lib/schemas";
 import { ENV } from "$lib/server/env";
 import { upsertProductRecord } from "$lib/server/products";
 import { stripe } from "$lib/server/stripe";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { faker } from "@faker-js/faker";
+import type { User } from "@supabase/supabase-js";
 import { execSync } from "child_process";
 import detect from "detect-port";
 import pg from "pg";
-import type { z } from "zod";
+import type { SeedUser } from "./seed";
 
 export async function startSupabase() {
 	const port = await detect(54322);
@@ -29,11 +29,12 @@ export async function clearSupabaseData() {
 	await client.query("TRUNCATE public.billing_subscriptions CASCADE");
 	await client.query("TRUNCATE public.contacts CASCADE");
 	await client.query("TRUNCATE public.stock CASCADE");
+	await client.query("TRUNCATE public.user_roles CASCADE");
+	// 	DO NOT TRUNCATE role_permissions TABLE AS IT IS POPULATED BY MIGRATION
+	// await client.query("TRUNCATE public.role_permissions CASCADE");
 }
 
-type CreateUser = Omit<z.infer<typeof registerUserSchema>, "passwordConfirm">;
-
-export async function createUser(user: CreateUser) {
+export async function createUser(user: SeedUser): Promise<User> {
 	const { data: authData, error: authError } = await supabaseAdmin.auth.signUp({
 		email: user.email,
 		password: user.password,
@@ -49,7 +50,33 @@ export async function createUser(user: CreateUser) {
 		console.log({ authDataUser: authData.user });
 		throw new Error("Error creating user");
 	}
+
+	if (!user.roles || user.roles.length === 0) {
+		console.log(`No roles for user ${user.email}`);
+	} else {
+		for (const role of user.roles) {
+			await supabaseAdmin.auth.signOut();
+			await assignRoleToUser(authData.user, role);
+			console.log(`Role "${role}" applied to user ${user.email}`);
+		}
+	}
+
 	return authData.user;
+}
+
+export async function assignRoleToUser(user: User, role: "admin" | "moderator" | "user") {
+	const { data: roleData, error: roleError } = await supabaseAdmin
+		.from("user_roles")
+		.insert({ role: role, user_id: user.id })
+		.select();
+
+	if (roleError || !roleData) {
+		console.log({ roleError });
+		console.log({ roleData });
+		throw new Error(`Error assigning role ${role} to user ${user.email}`);
+	}
+
+	return roleData;
 }
 
 export async function createContact(user_id: string) {
@@ -79,14 +106,16 @@ function addDays(date: Date, days: number) {
 }
 
 export async function createStock(user_id: string) {
-	const purchased_at = faker.date.between(addDays(new Date(), -30), addDays(new Date(), 30));
+	const purchased_at = faker.date.between({
+		from: addDays(new Date(), -30),
+		to: addDays(new Date(), 30)
+	});
 	const lengths = [45, 50, 55, 60];
-	const length_cm = lengths[faker.datatype.number({ min: 0, max: 3 })];
+	const length_cm = lengths[faker.number.int({ min: 0, max: 3 })];
 	const colour = faker.color.human();
-	const weight_expected_grams = faker.datatype.number({ min: 50, max: 200 });
-	const weight_received_grams =
-		weight_expected_grams + faker.datatype.number({ min: -20, max: 15 });
-	const code = faker.random.numeric(6);
+	const weight_expected_grams = faker.number.int({ min: 50, max: 200 });
+	const weight_received_grams = weight_expected_grams + faker.number.int({ min: -20, max: 15 });
+	const code = faker.string.numeric(6);
 
 	const stock = {
 		purchased_at: purchased_at.toISOString(),

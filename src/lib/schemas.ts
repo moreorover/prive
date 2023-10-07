@@ -1,9 +1,40 @@
 import { z } from "zod";
-import { lookupKeys, productConfig, productNames } from "./config";
+
+export const UserRoles = z.enum(["admin", "moderator", "user"]);
+export type UserRoles = z.infer<typeof UserRoles>;
+export const rolesSchema = z.object({
+	roles: z.array(UserRoles)
+});
+export type RolesSchema = z.infer<typeof rolesSchema>;
+
+const RolePermissions = z.enum([
+	"contacts.create",
+	"contacts.update",
+	"contacts.delete",
+	"profiles.view",
+	"profiles.update",
+	"user_roles.view",
+	"user_roles.update",
+	"role_permissions.view",
+	"role_permissions.update"
+]);
+
+export const rolePermissionsSchema = z.object({
+	rolePermissions: z
+		.object({
+			permission: RolePermissions,
+			status: z.boolean(),
+			title: z.string()
+		})
+		.array()
+});
+
+export type RolePermisssionsSchema = z.infer<typeof rolePermissionsSchema>;
 
 export const registerUserSchema = z.object({
 	full_name: z.string().max(140).nullish(),
 	email: z.string().email("Invalid email address"),
+	instagram: z.string().max(100).nullish(),
 	password: z
 		.string()
 		.min(6, "Password must be at least 6 characters")
@@ -120,35 +151,3 @@ export const stripeSubscriptionSchema = z
 			product_id: price.product
 		};
 	});
-
-const priceProductSchema = z
-	.object({
-		id: z.string(),
-		name: z.enum([...productNames]),
-		description: z.string()
-	})
-	.transform((product) => {
-		return {
-			...product,
-			features: productConfig[product.name].features,
-			call_to_action: productConfig[product.name].call_to_action
-		};
-	});
-
-const priceSchema = z.object({
-	id: z.string(),
-	lookup_key: z.enum([...lookupKeys]),
-	unit_amount: z.number().transform((amount) => amount / 100),
-	product: priceProductSchema
-});
-
-export const priceListSchema = z.array(priceSchema);
-
-export const subscriptionTierSchema = z.enum(productNames);
-export type SubscriptionTier = z.infer<typeof subscriptionTierSchema>;
-
-export const subscriptionProductSchema = z.object({
-	product: z.object({
-		name: subscriptionTierSchema
-	})
-});

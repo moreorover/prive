@@ -1,30 +1,42 @@
 <script lang="ts">
 	import { invalidate } from "$app/navigation";
-	import { page } from "$app/stores";
+	import Navigation from "$lib/components/AdminDrawer.svelte";
+	import ProfileDrawer from "$lib/components/ProfileDrawer.svelte";
 	import {
-		Button,
-		Chevron,
-		Dropdown,
-		DropdownItem,
-		NavBrand,
-		NavHamburger,
-		NavLi,
-		NavUl,
-		Navbar
-	} from "flowbite-svelte";
+		AppBar,
+		AppShell,
+		Avatar,
+		Drawer,
+		LightSwitch,
+		Modal,
+		Toast,
+		autoModeWatcher,
+		getDrawerStore,
+		initializeStores
+	} from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
-	import { Toaster } from "svelte-french-toast";
-	import "../app.css";
+	import "../app.postcss";
 	import type { LayoutData } from "./$types";
+	initializeStores();
+	const drawerStore = getDrawerStore();
 
-	const navigation = [
-		{ label: "Home", href: "/" },
-		{ label: "Pricing", href: "/pricing" },
-		{ label: "Contacts", href: "/contacts" },
-		{ label: "Stock", href: "/stock" }
-	];
+	import { page } from "$app/stores";
 
 	export let data: LayoutData;
+
+	function navigationDrawerOpen(): void {
+		drawerStore.open({
+			id: "navigation",
+			position: "left"
+		});
+	}
+
+	function profileDrawerOpen(): void {
+		drawerStore.open({
+			id: "profile",
+			position: "right"
+		});
+	}
 
 	$: ({ session, supabase } = data);
 
@@ -39,52 +51,69 @@
 
 		return () => subscription.unsubscribe();
 	});
+
+	$: classesSidebar = $page.url.pathname.startsWith("/admin")
+		? "bg-surface-500/5 w-0 lg:w-64"
+		: "w-0";
+	$: username = session?.user.email ? session.user.email : "";
 </script>
 
-<svelte:head>
-	<title>Contactly</title>
-</svelte:head>
+<svelte:head
+	>{@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}</svelte:head>
 
-<div class="flex h-full flex-col">
-	<Navbar let:hidden let:toggle>
-		<NavBrand href="/">
-			<img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="Contactly Logo" />
-			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				Contactly
-			</span>
-		</NavBrand>
-		<div class="flex md:order-2">
-			{#if session}
-				<Button color="light"><Chevron>Account</Chevron></Button>
-				<Dropdown>
-					<div slot="header" class="px-4 py-2">
-						<span class="block truncate text-sm font-medium"> {session.user.email} </span>
-					</div>
-					<DropdownItem href="/account">Settings</DropdownItem>
-					<DropdownItem href="/account/billing">Billing</DropdownItem>
-					<form action="/logout" method="POST">
-						<DropdownItem type="submit" slot="footer">Sign out</DropdownItem>
-					</form>
-				</Dropdown>
-			{:else}
-				<div class="flex items-center gap-2">
-					<Button href="/login" size="sm">Login</Button>
-					<Button href="/register" size="sm" color="alternative">Register</Button>
+<Drawer>
+	<h2 class="p-4">Prive</h2>
+	<hr />
+	{#if $drawerStore.id === "navigation"}
+		<Navigation />
+	{:else if $drawerStore.id === "profile"}
+		<ProfileDrawer {username} />
+	{/if}
+</Drawer>
+
+<Toast position="br" />
+
+<Modal />
+
+<AppShell slotSidebarLeft={classesSidebar}>
+	<svelte:fragment slot="header">
+		<!-- App Bar -->
+		<AppBar>
+			<svelte:fragment slot="lead">
+				<div class="flex items-center">
+					<button class="btn btn-sm mr-4 lg:hidden" on:click={navigationDrawerOpen}>
+						<span>
+							<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
+								<rect width="100" height="20" />
+								<rect y="30" width="100" height="20" />
+								<rect y="60" width="100" height="20" />
+							</svg>
+						</span>
+					</button>
+					<a href="/">
+						<strong class="text-xl uppercase">Prive</strong>
+					</a>
 				</div>
-			{/if}
-			<NavHamburger on:click={toggle} />
-		</div>
-		<NavUl {hidden}>
-			{#each navigation as nav}
-				<NavLi href={nav.href} active={$page.url.pathname === nav.href}>{nav.label}</NavLi>
-			{/each}
-		</NavUl>
-	</Navbar>
-	<div class="w-full flex-grow px-2 sm:px-4">
-		<div class="container mx-auto">
-			<slot />
-		</div>
+			</svelte:fragment>
+			<svelte:fragment slot="trail">
+				{#if session}
+					<Avatar
+						border="border-4 border-surface-300-600-token hover:!border-primary-500"
+						cursor="cursor-pointer"
+						initials={session.user.email}
+						on:click={profileDrawerOpen} />
+				{:else}
+					<a class="variant-ghost-primary btn btn-sm" href="/login"> Login </a>
+					<a class="variant-ghost-secondary btn btn-sm" href="/register"> Register </a>
+				{/if}
+				<LightSwitch />
+			</svelte:fragment>
+		</AppBar>
+	</svelte:fragment>
+	<svelte:fragment slot="sidebarLeft">
+		<Navigation />
+	</svelte:fragment>
+	<div class="container mx-auto">
+		<slot />
 	</div>
-</div>
-
-<Toaster />
+</AppShell>
