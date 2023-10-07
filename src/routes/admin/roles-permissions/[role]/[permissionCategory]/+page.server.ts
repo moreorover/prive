@@ -1,5 +1,5 @@
 import { rolePermissionsSchema } from "$lib/schemas";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad, PageServerLoadEvent } from "./$types";
 
@@ -44,8 +44,6 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		};
 	});
 
-	console.log({ rolePermissions: rp });
-
 	return {
 		form: superValidate({ rolePermissions: rp }, rolePermissionsSchema),
 		role,
@@ -63,29 +61,33 @@ export const actions: Actions = {
 
 		const updateRolePermissionsForm = await superValidate(event, rolePermissionsSchema);
 
-		console.log({ formValid: updateRolePermissionsForm.valid });
-
-		console.log(JSON.stringify(updateRolePermissionsForm.data.rolePermissions, null, 2));
-
 		for (const rp of updateRolePermissionsForm.data.rolePermissions) {
 			const { permission, status } = rp;
 
 			if (status) {
-				const { data, error } = await event.locals.supabase
+				const { error } = await event.locals.supabase
 					.from("role_permissions")
 					.upsert({ role, permission }, { onConflict: ["role", "permission"] });
 
-				if (error) console.error("Error inserting/updating:", error);
-				else console.log("Insert/Update Result:", data);
+				if (error) {
+					console.error(
+						`Error inserting/updating permission: ${permission} on role: ${role}`,
+						error
+					);
+					throw redirect(307, "/admin/roles-permissions");
+				}
 			} else {
-				const { data, error } = await event.locals.supabase
+				const { error } = await event.locals.supabase
 					.from("role_permissions")
 					.delete()
 					.match({ role, permission });
 
-				if (error) console.error("Error deleting:", error);
-				else console.log("Delete Result:", data);
+				if (error) {
+					console.error(`Error deleting permission: ${permission} on role: ${role}`, error);
+					throw redirect(307, "/admin/roles-permissions");
+				}
 			}
 		}
+		throw redirect(302, "/admin/roles-permissions");
 	}
 };

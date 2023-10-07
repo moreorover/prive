@@ -3,10 +3,11 @@
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
-	// const { form, errors, enhance } = superForm(data.form, RolePermisssionsSchema);
 
-	// Client API:
-	const { form, errors, enhance } = superForm(data.form, { dataType: "json" });
+	const { form, errors, enhance } = superForm(data.form, {
+		dataType: "json",
+		resetForm: true
+	});
 </script>
 
 <form method="POST" action="?/updateRolePermissions" use:enhance>
