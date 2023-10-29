@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { getDrawerStore } from "@skeletonlabs/skeleton";
 
 	const drawerStore = getDrawerStore();
@@ -16,8 +17,14 @@
 
 <nav class="list-nav p-4">
 	<ul>
-		{#each pages as page}
-			<li><a href={page.href} on:click={drawerClose}>{page.title}</a></li>
+		{#each pages as p}
+			<!-- <AppRailAnchor href={p.href} selected={$page.url.pathname === {p.href}}>{p.title}</AppRailAnchor> -->
+			<li>
+				<a
+					href={p.href}
+					on:click={drawerClose}
+					class:!bg-primary-400={$page.url.pathname === p.href}>{p.title}</a>
+			</li>
 		{/each}
 	</ul>
 </nav>
