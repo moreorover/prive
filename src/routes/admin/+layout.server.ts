@@ -8,8 +8,9 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		throw redirect(302, "/");
 	}
 
-	const userRoles = await event.locals.getUserRolesWithPermissions(session.user.id);
-	if (!userHasRole(userRoles, "admin")) {
+	const userRoles = await event.locals.getRoles();
+
+	if (!userHasRole(userRoles, "Admin")) {
 		console.warn(
 			`User ${session.user.email} is trying to access /admin portal without admin role.`
 		);

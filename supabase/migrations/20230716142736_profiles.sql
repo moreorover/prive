@@ -10,12 +10,6 @@ create table public.profiles(
 
 -- Row-Level Security and Policies for Profiles
 alter table public.profiles enable row level security;
-create policy "Users can view own profile" on profiles
-    for select to authenticated
-        using (auth.uid() = id);
-create policy "Users can update own profile" on profiles
-    for update to authenticated
-        using (auth.uid() = id);
 
 -- Trigger to handle new users for Profiles
 create or replace function public.handle_new_user()

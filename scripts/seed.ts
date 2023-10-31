@@ -16,19 +16,19 @@ const testUsers: SeedUser[] = [
 		full_name: "Test User",
 		email: "t@t.com",
 		password: "password",
-		roles: ["admin"]
+		roles: ["Admin"]
 	},
 	{
 		full_name: "Test User 1",
 		email: "t1@t.com",
 		password: "password",
-		roles: ["moderator"]
+		roles: ["Moderator"]
 	},
 	{
 		full_name: "Test User 2",
 		email: "t2@t.com",
 		password: "password",
-		roles: ["moderator", "user"]
+		roles: ["Admin", "Moderator"]
 	},
 	{
 		full_name: "Test User 3",

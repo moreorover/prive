@@ -1,6 +1,5 @@
-import type { UserRolesPermissions } from "$lib/server/authorization";
+import type { UserRole } from "$lib/server/authorization";
 import { ENV } from "$lib/server/env";
-import { supabaseAdmin } from "$lib/server/supabase-admin";
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
 import type { Handle } from "@sveltejs/kit";
 
@@ -19,19 +18,43 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
-	event.locals.getUserRolesWithPermissions = async (
-		user_id: string
-	): Promise<UserRolesPermissions | null> => {
-		const { data: userRolesWithPermissions, error: userRolesWithPermissionsError } =
-			await supabaseAdmin
-				.rpc("get_roles_and_permissions", { user_id })
-				.returns<UserRolesPermissions>();
+	event.locals.getRoles = async (): Promise<UserRole[]> => {
+		const {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession();
 
-		if (userRolesWithPermissionsError) {
+		if (!session) {
+			return [];
+		}
+
+		const { data: userRoles, error: userRolesError } = await event.locals.supabase
+			.from("user_roles_mapping")
+			.select("role_name")
+			.eq("user_id", session.user.id);
+
+		if (userRolesError) {
+			console.log({ userRolesError });
+			console.error(`Failed to get User roles for ${session.user.id}`);
+		}
+
+		const roles: UserRole[] | undefined = userRoles?.map((role) => role.role_name as UserRole);
+
+		return roles || [];
+	};
+
+	event.locals.getUserRolesWithPermissions = async (user_id: string): Promise<UserRole[]> => {
+		const { data: userRoles, error: userRolesError } = await event.locals.supabase
+			.from("user_roles_mapping")
+			.select("*")
+			.eq("user_id", user_id);
+
+		if (userRolesError) {
 			console.error(`Failed to get User roles for ${user_id}`);
 		}
 
-		return userRolesWithPermissions;
+		const roles: UserRole[] | undefined = userRoles?.map((role) => role.role_name as UserRole);
+
+		return roles || [];
 	};
 
 	return resolve(event, {

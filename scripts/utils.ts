@@ -1,3 +1,4 @@
+import type { UserRole } from "$lib/server/authorization";
 import { ENV } from "$lib/server/env";
 import { upsertProductRecord } from "$lib/server/products";
 import { stripe } from "$lib/server/stripe";
@@ -29,9 +30,8 @@ export async function clearSupabaseData() {
 	await client.query("TRUNCATE public.billing_subscriptions CASCADE");
 	await client.query("TRUNCATE public.contacts CASCADE");
 	await client.query("TRUNCATE public.stock CASCADE");
-	await client.query("TRUNCATE public.user_roles CASCADE");
-	// 	DO NOT TRUNCATE role_permissions TABLE AS IT IS POPULATED BY MIGRATION
-	// await client.query("TRUNCATE public.role_permissions CASCADE");
+	await client.query("TRUNCATE public.user_roles_mapping CASCADE");
+	// 	DO NOT TRUNCATE user_roles TABLE AS IT IS POPULATED BY MIGRATION
 }
 
 export async function createUser(user: SeedUser): Promise<User> {
@@ -64,10 +64,10 @@ export async function createUser(user: SeedUser): Promise<User> {
 	return authData.user;
 }
 
-export async function assignRoleToUser(user: User, role: "admin" | "moderator" | "user") {
+export async function assignRoleToUser(user: User, role: UserRole) {
 	const { data: roleData, error: roleError } = await supabaseAdmin
-		.from("user_roles")
-		.insert({ role: role, user_id: user.id })
+		.from("user_roles_mapping")
+		.insert({ role_name: role, user_id: user.id })
 		.select();
 
 	if (roleError || !roleData) {
