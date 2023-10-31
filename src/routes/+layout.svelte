@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidate } from "$app/navigation";
-	import Navigation from "$lib/components/AdminDrawer.svelte";
+	import AdminDrawer from "$lib/components/AdminDrawer.svelte";
 	import ProfileDrawer from "$lib/components/ProfileDrawer.svelte";
 	import {
 		AppBar,
@@ -65,7 +65,7 @@
 	<h2 class="p-4">Prive</h2>
 	<hr />
 	{#if $drawerStore.id === "navigation"}
-		<Navigation />
+		<AdminDrawer />
 	{:else if $drawerStore.id === "profile"}
 		<ProfileDrawer {username} />
 	{/if}
@@ -111,7 +111,7 @@
 		</AppBar>
 	</svelte:fragment>
 	<svelte:fragment slot="sidebarLeft">
-		<Navigation />
+		<AdminDrawer />
 	</svelte:fragment>
 	<div class="container mx-auto">
 		<slot />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { getDrawerStore } from "@skeletonlabs/skeleton";
 
 	const drawerStore = getDrawerStore();
@@ -15,10 +16,17 @@
 		{username}
 	</div>
 	<ul class="space-y-2">
-		<li><a href="/" class="rounded p-2 hover:underline" on:click={drawerClose}>Home</a></li>
-		<li><a href="/admin" class="rounded p-2 hover:underline" on:click={drawerClose}>Admin</a></li>
 		<li>
-			<a href="/?test=2" class="rounded p-2 hover:underline" on:click={drawerClose}>Other Page 2</a>
+			<a
+				href="/"
+				class="rounded p-2 hover:underline"
+				on:click={drawerClose}
+				class:!bg-primary-400={$page.url.pathname === "/"}>Home</a>
+			<a
+				href="/admin"
+				class="rounded p-2 hover:underline"
+				on:click={drawerClose}
+				class:!bg-primary-400={$page.url.pathname === "/admin"}>Admin</a>
 		</li>
 	</ul>
 	<hr class="my-2" />

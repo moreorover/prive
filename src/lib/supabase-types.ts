@@ -227,24 +227,6 @@ export interface Database {
 					}
 				];
 			};
-			role_permissions: {
-				Row: {
-					id: number;
-					permission: Database["public"]["Enums"]["app_permission"];
-					role: Database["public"]["Enums"]["app_role"];
-				};
-				Insert: {
-					id?: number;
-					permission: Database["public"]["Enums"]["app_permission"];
-					role: Database["public"]["Enums"]["app_role"];
-				};
-				Update: {
-					id?: number;
-					permission?: Database["public"]["Enums"]["app_permission"];
-					role?: Database["public"]["Enums"]["app_role"];
-				};
-				Relationships: [];
-			};
 			stock: {
 				Row: {
 					code: string | null;
@@ -305,20 +287,41 @@ export interface Database {
 			};
 			user_roles: {
 				Row: {
-					role: Database["public"]["Enums"]["app_role"];
+					description: string | null;
+					name: string;
+				};
+				Insert: {
+					description?: string | null;
+					name: string;
+				};
+				Update: {
+					description?: string | null;
+					name?: string;
+				};
+				Relationships: [];
+			};
+			user_roles_mapping: {
+				Row: {
+					role_name: string;
 					user_id: string;
 				};
 				Insert: {
-					role: Database["public"]["Enums"]["app_role"];
+					role_name: string;
 					user_id: string;
 				};
 				Update: {
-					role?: Database["public"]["Enums"]["app_role"];
+					role_name?: string;
 					user_id?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: "user_roles_user_id_fkey";
+						foreignKeyName: "user_roles_mapping_role_name_fkey";
+						columns: ["role_name"];
+						referencedRelation: "user_roles";
+						referencedColumns: ["name"];
+					},
+					{
+						foreignKeyName: "user_roles_mapping_user_id_fkey";
 						columns: ["user_id"];
 						referencedRelation: "profiles";
 						referencedColumns: ["id"];
@@ -332,38 +335,13 @@ export interface Database {
 		Functions: {
 			authorize: {
 				Args: {
-					requested_permission: Database["public"]["Enums"]["app_permission"];
+					target_role_name: string;
 					user_id: string;
 				};
 				Returns: boolean;
 			};
-			get_permissions: {
-				Args: Record<PropertyKey, never>;
-				Returns: string[];
-			};
-			get_roles: {
-				Args: Record<PropertyKey, never>;
-				Returns: string[];
-			};
-			get_roles_and_permissions: {
-				Args: {
-					user_id: string;
-				};
-				Returns: Json;
-			};
 		};
 		Enums: {
-			app_permission:
-				| "contacts.create"
-				| "contacts.update"
-				| "contacts.delete"
-				| "profiles.view"
-				| "profiles.update"
-				| "user_roles.view"
-				| "user_roles.update"
-				| "role_permissions.view"
-				| "role_permissions.update";
-			app_role: "admin" | "moderator" | "user";
 			subscription_status:
 				| "trialing"
 				| "active"

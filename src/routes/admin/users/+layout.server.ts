@@ -10,9 +10,9 @@ export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 		throw redirect(302, "/");
 	}
 
-	const currentUserRoles = await event.locals.getUserRolesWithPermissions(session.user.id);
+	const currentUserRoles = await event.locals.getRoles();
 
-	if (!userHasRole(currentUserRoles, "admin")) {
+	if (!userHasRole(currentUserRoles, "Admin")) {
 		throw redirect(302, "/");
 	}
 
