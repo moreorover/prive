@@ -3,15 +3,23 @@
 	import * as Form from '$lib/components/ui/form';
 	import { loginSchema, type LoginSchema } from '$lib/schema/loginSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
+	import { type FormOptions } from 'formsnap';
 
 	export let data: PageData;
+
+	const options: FormOptions<typeof loginSchema> = {
+		validators: loginSchema,
+		onResult: (result) => {
+			console.log(result);
+		}
+	};
 
 	let form: SuperValidated<LoginSchema> = data.form;
 </script>
 
 <div class="container">
 	<h1>Login</h1>
-	<Form.Root method="POST" {form} schema={loginSchema} let:config>
+	<Form.Root method="POST" {options} {form} schema={loginSchema} let:config>
 		<Form.Field {config} name="email">
 			<Form.Item>
 				<Form.Label>Email</Form.Label>
