@@ -7,9 +7,8 @@
 
 <Navigation
 	class="mx-6"
-	authenticated={data.session}
-	fullName={data.session.user.user_metadata.full_name}
-	email={data.session.user.email}
+	authenticated={!!data.session}
+	user={data.session ? data.session.user : undefined}
 	roles={data.roles}
 />
 

@@ -2,12 +2,12 @@
 	import { cn } from '$lib/utils';
 	import UserNavigation from '$lib/components/UserNavigation.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import type { User } from '@supabase/gotrue-js/src/lib/types';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
 	export let authenticated: boolean = false;
-	export let fullName: string;
-	export let email: string;
+	export let user: User | undefined;
 	export let roles: string[];
 
 	const routes = [{ name: 'Courses', href: '/courses' }];
@@ -31,7 +31,10 @@
 				</a>
 			{/if}
 			{#if authenticated}
-				<UserNavigation {fullName} {email} />
+				<UserNavigation
+					fullName={user?.user_metadata.full_name}
+					email={user?.email ? user?.email : 'undefined'}
+				/>
 			{:else}
 				<Button href="/login">Login</Button>
 				<Button href="/register">Register</Button>
