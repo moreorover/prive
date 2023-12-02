@@ -17,7 +17,7 @@
 		<h2 class="text-3xl font-bold tracking-tight">Courses</h2>
 		<div class="flex items-center space-x-2">
 			{#if data.roles.includes('Admin')}
-				<Button size="sm" href="/courses/add">
+				<Button size="sm" href="#">
 					<Plus class="mr-2 h-4 w-4" />
 					Create
 				</Button>
