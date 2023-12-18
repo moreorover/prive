@@ -59,7 +59,7 @@
 		<aside class="-mx-4 lg:w-1/6">
 			<SideBarNavigation items={sidebarNavItems} />
 		</aside>
-		<div class="flex-1 lg:max-w-2xl">
+		<div class="flex-1 w-full">
 			<slot />
 		</div>
 	</div>
