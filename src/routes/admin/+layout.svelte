@@ -10,8 +10,8 @@
 			href: '/admin'
 		},
 		{
-			title: 'Stock',
-			href: '/admin/stock'
+			title: 'Clients',
+			href: '/admin/clients'
 		},
 		{
 			title: 'Stock',
