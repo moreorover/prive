@@ -144,6 +144,52 @@ export interface Database {
 					}
 				];
 			};
+			clients: {
+				Row: {
+					created_at: string;
+					created_by: string;
+					id: string;
+					instagram: string | null;
+					name: string | null;
+					phone: string | null;
+					updated_at: string;
+					updated_by: string | null;
+				};
+				Insert: {
+					created_at?: string;
+					created_by: string;
+					id?: string;
+					instagram?: string | null;
+					name?: string | null;
+					phone?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Update: {
+					created_at?: string;
+					created_by?: string;
+					id?: string;
+					instagram?: string | null;
+					name?: string | null;
+					phone?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'clients_created_by_fkey';
+						columns: ['created_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'clients_updated_by_fkey';
+						columns: ['updated_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			contacts: {
 				Row: {
 					created_at: string;

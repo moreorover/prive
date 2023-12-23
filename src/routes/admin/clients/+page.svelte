@@ -18,5 +18,4 @@
 			{/if}
 		</div>
 	</div>
-	<div>Form</div>
 </div>
