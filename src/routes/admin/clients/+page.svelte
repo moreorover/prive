@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Button } from '$lib/components/ui/button';
-	import { Plus } from 'lucide-svelte';
+	import ClientFormDialog from '$lib/components/ClientFormDialog.svelte';
 
 	export let data: PageData;
 </script>
@@ -11,10 +10,7 @@
 		<h2 class="text-3xl font-bold tracking-tight">Clients</h2>
 		<div class="flex items-center space-x-2">
 			{#if data.roles.includes('Admin')}
-				<Button size="sm" href="/admin/clients/new">
-					<Plus class="mr-2 h-4 w-4" />
-					Create
-				</Button>
+				<ClientFormDialog form={data.form} />
 			{/if}
 		</div>
 	</div>

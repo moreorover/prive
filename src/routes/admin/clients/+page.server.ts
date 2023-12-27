@@ -1,7 +1,7 @@
 import type { PageServerLoad, Actions } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { clientSchema } from '$lib/schema/clientSchema';
-import { fail, error, redirect } from '@sveltejs/kit';
+import { fail, error } from '@sveltejs/kit';
 export const load: PageServerLoad = () => {
 	return {
 		form: superValidate(clientSchema)
@@ -35,6 +35,6 @@ export const actions: Actions = {
 				form
 			});
 		}
-		throw redirect(302, `/admin/clients/${createClientData[0].id}`);
+		return { form };
 	}
 };
