@@ -26,7 +26,7 @@
 </script>
 
 <Dialog.Root bind:open={openDialog}>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Create Client</Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>Create Client</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Create Client</Dialog.Title>
