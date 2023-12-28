@@ -10,10 +10,7 @@
 
 	export let data: PageData;
 
-	function getAvatarFallBack(name: string | null): string {
-		if (!name) {
-			return '--';
-		}
+	function getAvatarFallBack(name: string): string {
 		let initials = name
 			.split(' ')
 			.map((word) => word[0])
