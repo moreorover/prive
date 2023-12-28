@@ -1,9 +1,29 @@
 import type { PageServerLoad, Actions } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { clientSchema } from '$lib/schema/clientSchema';
-import { fail, error } from '@sveltejs/kit';
-export const load: PageServerLoad = () => {
+import { fail, error, redirect, type RequestEvent } from '@sveltejs/kit';
+import { handleLoginRedirect } from '$lib/helpers';
+import type { Session } from '@supabase/supabase-js';
+
+export const load: PageServerLoad = async (event: RequestEvent) => {
+	const session: Session | null = await event.locals.getSession();
+	if (!session) {
+		throw redirect(302, handleLoginRedirect(event));
+	}
+
+	async function getClients() {
+		const { data: clients, error: clientsError } = await event.locals.supabase
+			.from('clients')
+			.select('*');
+
+		if (clientsError) {
+			throw error(500, 'Error fetching clients, please try again later.');
+		}
+		return clients;
+	}
+
 	return {
+		clients: getClients(),
 		createClientForm: superValidate(clientSchema, {
 			id: 'createClient'
 		})
