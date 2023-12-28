@@ -1,10 +1,12 @@
 import type { PageServerLoad, Actions } from './$types';
-import { superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { clientSchema } from '$lib/schema/clientSchema';
 import { fail, error } from '@sveltejs/kit';
 export const load: PageServerLoad = () => {
 	return {
-		form: superValidate(clientSchema)
+		createClientForm: superValidate(clientSchema, {
+			id: 'createClient'
+		})
 	};
 };
 
@@ -14,27 +16,23 @@ export const actions: Actions = {
 		if (!session) {
 			throw error(403, 'Unauthorized');
 		}
-		const form = await superValidate(event, clientSchema);
-		if (!form.valid) {
+		const createClientForm = await superValidate(event, clientSchema, { id: 'createClient' });
+		if (!createClientForm.valid) {
 			return fail(400, {
-				form
+				form: createClientForm
 			});
 		}
-		const { data: createClientData, error: createClientError } = await event.locals.supabase
+		const { error: createClientError } = await event.locals.supabase
 			.from('clients')
 			.insert({
-				name: form.data.name,
-				email: form.data.email,
-				phone: form.data.phone,
-				instagram: form.data.instagram,
+				...createClientForm.data,
 				created_by: session.user.id
 			})
 			.select();
 		if (createClientError) {
-			return fail(400, {
-				form
-			});
+			console.log(createClientError);
+			return setError(createClientForm, 'Error creating contact.');
 		}
-		return { form };
+		return { createClientForm };
 	}
 };

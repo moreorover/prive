@@ -20,7 +20,7 @@
 			</div>
 			<div class="flex items-center space-x-2">
 				{#if data.roles.includes('Admin')}
-					<ClientFormDialog form={data.form} />
+					<ClientFormDialog form={data.createClientForm} />
 				{/if}
 			</div>
 		</div>
@@ -29,7 +29,7 @@
 		<div class="flex items-center justify-between space-x-4">
 			<div class="flex items-center space-x-4">
 				<Avatar.Root>
-					<Avatar.Image src="/avatars/01.png" alt="Sofia Davis" />
+					<Avatar.Image src="" alt="Sofia Davis" />
 					<Avatar.Fallback>SD</Avatar.Fallback>
 				</Avatar.Root>
 				<div>
@@ -72,7 +72,7 @@
 		<div class="flex items-center justify-between space-x-4">
 			<div class="flex items-center space-x-4">
 				<Avatar.Root>
-					<Avatar.Image src="/avatars/02.png" alt="Jackson Lee" />
+					<Avatar.Image src="" alt="Jackson Lee" />
 					<Avatar.Fallback>JL</Avatar.Fallback>
 				</Avatar.Root>
 				<div>
