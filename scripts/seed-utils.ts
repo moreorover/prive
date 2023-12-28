@@ -9,6 +9,7 @@ import { execSync } from 'child_process';
 import detect from 'detect-port';
 import pg from 'pg';
 import type { SeedUser } from './seed';
+import { faker } from '@faker-js/faker';
 
 export async function startSupabase() {
 	const port = await detect(54322);
@@ -30,6 +31,7 @@ export async function clearSupabaseData() {
 	await client.query('TRUNCATE public.billing_subscriptions CASCADE');
 	await client.query('TRUNCATE public.contacts CASCADE');
 	await client.query('TRUNCATE public.stock CASCADE');
+	await client.query('TRUNCATE public.clients CASCADE');
 	await client.query('TRUNCATE public.user_roles_mapping CASCADE');
 	// 	DO NOT TRUNCATE user_roles TABLE AS IT IS POPULATED BY MIGRATION
 }
@@ -77,6 +79,35 @@ export async function assignRoleToUser(user: User, role: UserRole) {
 	}
 
 	return roleData;
+}
+
+export async function createClient(user_id: string) {
+	const firstName = faker.person.firstName();
+	const lastName = faker.person.lastName();
+	const email: string = faker.internet.email({ firstName, lastName });
+	const phone = faker.phone.number();
+	const instagram = faker.internet.userName({ firstName, lastName });
+
+	const client = {
+		name: `${firstName} ${lastName}`,
+		email,
+		phone,
+		instagram
+	};
+
+	console.log(`Initiating process to create a client for User ID: ${user_id}`);
+
+	const { error, data } = await supabaseAdmin
+		.from('clients')
+		.insert({ ...client, created_by: user_id });
+
+	if (error) {
+		throw error;
+	}
+
+	console.log(`Client has been successfully generated for the User ID: ${user_id}`);
+
+	return data;
 }
 
 // export async function createContact(user_id: string) {

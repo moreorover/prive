@@ -2,6 +2,7 @@ import type { registerSchema } from '$lib/schema/loginSchema';
 import type { z } from 'zod';
 import {
 	clearSupabaseData,
+	createClient,
 	// createStock,
 	createUser,
 	startSupabase
@@ -54,6 +55,12 @@ async function seed() {
 			// for (let i = 0; i < 20; i++) {
 			// 	await createStock(user.id);
 			// }
+
+			if (testUser.roles.includes('Admin')) {
+				for (let i = 0; i < 4; i++) {
+					await createClient(user.id);
+				}
+			}
 		}
 	} catch (err) {
 		console.error(err);
