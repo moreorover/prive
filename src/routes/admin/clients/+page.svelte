@@ -9,6 +9,17 @@
 	import * as Popover from '$lib/components/ui/popover';
 
 	export let data: PageData;
+
+	function getAvatarFallBack(name: string | null): string {
+		if (!name) {
+			return '--';
+		}
+		let initials = name
+			.split(' ')
+			.map((word) => word[0])
+			.join('');
+		return initials.toUpperCase();
+	}
 </script>
 
 <Card.Root>
@@ -26,92 +37,63 @@
 		</div>
 	</Card.Header>
 	<Card.Content class="grid gap-6">
-		<div class="flex items-center justify-between space-x-4">
-			<div class="flex items-center space-x-4">
-				<Avatar.Root>
-					<Avatar.Image src="" alt="Sofia Davis" />
-					<Avatar.Fallback>SD</Avatar.Fallback>
-				</Avatar.Root>
-				<div>
-					<p class="text-sm font-medium leading-none">Sofia Davis</p>
-					<p class="text-sm text-muted-foreground">m@example.com</p>
+		{#each data.clients as client}
+			<div class="flex items-center justify-between space-x-4">
+				<div class="flex items-center space-x-4">
+					<Avatar.Root>
+						<!--						<Avatar.Image src="" alt="Sofia Davis" />-->
+						<Avatar.Fallback>{getAvatarFallBack(client.name)}</Avatar.Fallback>
+					</Avatar.Root>
+					<div>
+						<p class="text-sm font-medium leading-none">{client.name}</p>
+						{#if client.email}
+							<p class="text-sm text-muted-foreground">{client.email}</p>
+						{/if}
+						{#if client.instagram}
+							<p class="text-sm text-muted-foreground">{client.instagram}</p>
+						{/if}
+						{#if client.phone}
+							<p class="text-sm text-muted-foreground">{client.phone}</p>
+						{/if}
+					</div>
 				</div>
+				<!--				<Popover.Root>-->
+				<!--					<Popover.Trigger asChild let:builder>-->
+				<!--						<Button builders={[builder]} variant="outline" class="ml-auto">Owner</Button>-->
+				<!--					</Popover.Trigger>-->
+				<!--					<Popover.Content class="p-0" align="end">-->
+				<!--						<Command.Root>-->
+				<!--							<Command.Input placeholder="Select new role..." />-->
+				<!--							<Command.List>-->
+				<!--								<Command.Empty>No roles found.</Command.Empty>-->
+				<!--								<Command.Group>-->
+				<!--									<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">-->
+				<!--										<p>Viewer</p>-->
+				<!--										<p class="text-sm text-muted-foreground">Can view and comment.</p>-->
+				<!--									</Command.Item>-->
+				<!--									<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">-->
+				<!--										<p>Developer</p>-->
+				<!--										<p class="text-sm text-muted-foreground">Can view, comment, and edit.</p>-->
+				<!--									</Command.Item>-->
+				<!--									<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">-->
+				<!--										<p>Billing</p>-->
+				<!--										<p class="text-sm text-muted-foreground">-->
+				<!--											Can view, comment and manage billing.-->
+				<!--										</p>-->
+				<!--									</Command.Item>-->
+				<!--									<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">-->
+				<!--										<p>Owner</p>-->
+				<!--										<p class="text-sm text-muted-foreground">-->
+				<!--											Admin-level access to all resources.-->
+				<!--										</p>-->
+				<!--									</Command.Item>-->
+				<!--								</Command.Group>-->
+				<!--							</Command.List>-->
+				<!--						</Command.Root>-->
+				<!--					</Popover.Content>-->
+				<!--				</Popover.Root>-->
 			</div>
-			<Popover.Root>
-				<Popover.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" class="ml-auto">Owner</Button>
-				</Popover.Trigger>
-				<Popover.Content class="p-0" align="end">
-					<Command.Root>
-						<Command.Input placeholder="Select new role..." />
-						<Command.List>
-							<Command.Empty>No roles found.</Command.Empty>
-							<Command.Group>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Viewer</p>
-									<p class="text-sm text-muted-foreground">Can view and comment.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Developer</p>
-									<p class="text-sm text-muted-foreground">Can view, comment, and edit.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Billing</p>
-									<p class="text-sm text-muted-foreground">Can view, comment and manage billing.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Owner</p>
-									<p class="text-sm text-muted-foreground">Admin-level access to all resources.</p>
-								</Command.Item>
-							</Command.Group>
-						</Command.List>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
-		</div>
-		<div class="flex items-center justify-between space-x-4">
-			<div class="flex items-center space-x-4">
-				<Avatar.Root>
-					<Avatar.Image src="" alt="Jackson Lee" />
-					<Avatar.Fallback>JL</Avatar.Fallback>
-				</Avatar.Root>
-				<div>
-					<p class="text-sm font-medium leading-none">Jackson Lee</p>
-					<p class="text-sm text-muted-foreground">p@example.com</p>
-				</div>
-			</div>
-			<Popover.Root>
-				<Popover.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" class="ml-auto">Member</Button>
-				</Popover.Trigger>
-				<Popover.Content class="p-0" align="end">
-					<Command.Root>
-						<Command.Input placeholder="Select new role..." />
-						<Command.List>
-							<Command.Empty>No roles found.</Command.Empty>
-							<Command.Group>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Viewer</p>
-									<p class="text-sm text-muted-foreground">Can view and comment.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Developer</p>
-									<p class="text-sm text-muted-foreground">Can view, comment, and edit.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Billing</p>
-									<p class="text-sm text-muted-foreground">Can view, comment and manage billing.</p>
-								</Command.Item>
-								<Command.Item class="space-y-1 flex flex-col items-start px-4 py-2">
-									<p>Owner</p>
-									<p class="text-sm text-muted-foreground">Admin-level access to all resources.</p>
-								</Command.Item>
-							</Command.Group>
-						</Command.List>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
-		</div>
+		{/each}
 	</Card.Content>
 </Card.Root>
 <!--</div>-->
