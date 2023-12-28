@@ -148,6 +148,7 @@ export interface Database {
 				Row: {
 					created_at: string;
 					created_by: string;
+					email: string | null;
 					id: string;
 					instagram: string | null;
 					name: string | null;
@@ -158,6 +159,7 @@ export interface Database {
 				Insert: {
 					created_at?: string;
 					created_by: string;
+					email?: string | null;
 					id?: string;
 					instagram?: string | null;
 					name?: string | null;
@@ -168,6 +170,7 @@ export interface Database {
 				Update: {
 					created_at?: string;
 					created_by?: string;
+					email?: string | null;
 					id?: string;
 					instagram?: string | null;
 					name?: string | null;
