@@ -3,7 +3,7 @@ create extension if not exists "uuid-ossp";
 -- CLIENTS
 create table public.clients (
   id            uuid not null default uuid_generate_v4(),
-  name          text,
+  name          text not null,
   email         text,
   phone         text,
   instagram     text,

@@ -151,7 +151,7 @@ export interface Database {
 					email: string | null;
 					id: string;
 					instagram: string | null;
-					name: string | null;
+					name: string;
 					phone: string | null;
 					updated_at: string;
 					updated_by: string | null;
@@ -162,7 +162,7 @@ export interface Database {
 					email?: string | null;
 					id?: string;
 					instagram?: string | null;
-					name?: string | null;
+					name: string;
 					phone?: string | null;
 					updated_at?: string;
 					updated_by?: string | null;
@@ -173,7 +173,7 @@ export interface Database {
 					email?: string | null;
 					id?: string;
 					instagram?: string | null;
-					name?: string | null;
+					name?: string;
 					phone?: string | null;
 					updated_at?: string;
 					updated_by?: string | null;
