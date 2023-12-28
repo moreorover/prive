@@ -7,10 +7,11 @@ export const clientSchema = z.object({
 			.string()
 			.min(8)
 			.max(20)
-			.transform((val) => {
-				if (val.trim().length === 0) {
+			.transform((val: string): string | null => {
+				if (!val || val.trim() === '') {
 					return null;
 				}
+				return val;
 			})
 			.nullable()
 	),
@@ -19,10 +20,11 @@ export const clientSchema = z.object({
 			.string()
 			.min(2)
 			.max(25)
-			.transform((val) => {
-				if (val.trim().length === 0) {
+			.transform((val: string): string | null => {
+				if (!val || val.trim() === '') {
 					return null;
 				}
+				return val;
 			})
 			.nullable()
 	)
