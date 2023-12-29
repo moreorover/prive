@@ -3,6 +3,7 @@
 	import UserNavigation from '$lib/components/UserNavigation.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import type { User } from '@supabase/gotrue-js/src/lib/types';
+	import { version } from '$app/environment';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -16,9 +17,12 @@
 <div class="border-b">
 	<div class="flex h-16 items-center justify-between px-4">
 		<!--		<div class="ml-auto flex items-center space-x-4" />-->
-		<a href="/" class="href">
-			<h1 class="text-3xl font-bold tracking-tight">Prive</h1>
-		</a>
+		<div class="flex items-center justify-between gap-2">
+			<a href="/" class="href">
+				<h1 class="text-3xl font-bold tracking-tight">Prive</h1>
+			</a>
+			<span class="self-end text-sm text-gray-500 bg-gray-200 px-2 py-1 rounded">v{version}</span>
+		</div>
 		<nav class={cn('flex items-center space-x-4 lg:space-x-6', className)}>
 			{#each routes as route}
 				<a href={route.href} class="text-sm font-medium transition-colors hover:text-primary">
