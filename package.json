@@ -8,7 +8,7 @@
 		"preview": "vite preview",
 		"test": "pnpm test:integration && pnpm test:unit",
 		"changeset": "changeset",
-		"release": "changeset publish",
+		"release": "changeset version",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
