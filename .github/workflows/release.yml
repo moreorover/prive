@@ -41,8 +41,8 @@ jobs:
         with:
           version: latest
 
-#      - name: Start Local Supabase
-#        run: supabase start -x imgproxy,studio,storage-api,realtime,inbucket,edge-runtime
+      - name: Start Local Supabase
+        run: supabase start -x imgproxy,studio,storage-api,realtime,inbucket,edge-runtime
 
       - name: Get pnpm store directory
         shell: bash
@@ -60,38 +60,41 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-#      - name: Install Playwright Browsers
-#        run: pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
 
-#      - name: Test Unit 🧪
-#        run: pnpm test:unit
-#
-#      - name: Test Integration 🧪
-#        run: pnpm test:integration
-#
-#      - name: Archive test reports 📦
-#        uses: actions/upload-artifact@v4
-#        if: always()
-#        with:
-#          name: playwright-report
-#          path: playwright-report/index.html
+      - name: Test Unit 🧪
+        run: pnpm test:unit
+
+      - name: Test Integration 🧪
+        run: pnpm test:integration
+
+      - name: Archive test reports 📦
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/index.html
 
       - name: Create Release Pull Request
         uses: changesets/action@v1
+        with:
+          commit: "chore(release): version package"
+          title: "chore(release): version package"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Ensure to have this set up under GitHub secrets
 
-#      - name: Link Supabase CLI to Prod
-#        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
-#
-#      - name: Push Supabase DB Changes
-#        run: supabase db push
-#
-#      - name: Pull Prod Env Variables
-#        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-#
-#      - name: Build Project Artifacts
-#        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-#
-#      - name: Deploy to Vercel
-#        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN}}
+      - name: Link Supabase CLI to Prod
+        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
+
+      - name: Push Supabase DB Changes
+        run: supabase db push
+
+      - name: Pull Prod Env Variables
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN}}
