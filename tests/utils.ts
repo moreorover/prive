@@ -32,7 +32,7 @@ export async function loginUser(page: Page, testUser: User) {
 	await loginForm.getByRole('button', { name: 'Login' }).click();
 
 	await expect(page).toHaveURL('/');
-	await expect(page.getByRole('button', { name: 'Account' })).toBeVisible();
+	await expect(page.getByTestId('user-dropdown')).toBeVisible();
 }
 
 export async function logoutUser(page: Page, testUser: User) {
