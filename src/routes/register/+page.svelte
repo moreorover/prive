@@ -11,11 +11,11 @@
 
 <div class="container">
 	<h1>Register</h1>
-	<Form.Root method="POST" {form} schema={registerSchema} let:config>
+	<Form.Root method="POST" {form} schema={registerSchema} let:config data-testid="register-form">
 		<Form.Field {config} name="full_name">
 			<Form.Item>
 				<Form.Label>Full Name</Form.Label>
-				<Form.Input />
+				<Form.Input data-testid="full_name" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
@@ -29,14 +29,14 @@
 		<Form.Field {config} name="password">
 			<Form.Item>
 				<Form.Label>Password</Form.Label>
-				<Form.Input type="password" />
+				<Form.Input type="password" data-testid="password" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
 		<Form.Field {config} name="passwordConfirm">
 			<Form.Item>
 				<Form.Label>Confirm Password</Form.Label>
-				<Form.Input type="password" />
+				<Form.Input type="password" data-testid="passwordConfirm" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>

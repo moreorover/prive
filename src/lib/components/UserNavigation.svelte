@@ -9,7 +9,12 @@
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
+		<Button
+			variant="ghost"
+			builders={[builder]}
+			class="relative h-8 w-8 rounded-full"
+			data-testid="user-dropdown"
+		>
 			<Avatar.Root class="h-8 w-8">
 				<Avatar.Image src="/user.png" alt="@shadcn" />
 				<Avatar.Fallback>{fullName.split(' ')[0][0] + fullName.split(' ')[1][0]}</Avatar.Fallback>
