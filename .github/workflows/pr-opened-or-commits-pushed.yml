@@ -10,9 +10,8 @@ env:
   SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize]
   workflow_dispatch:
 
 concurrency:
