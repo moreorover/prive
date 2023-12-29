@@ -8,9 +8,8 @@ export const loginSchema = z.object({
 export type LoginSchema = typeof loginSchema;
 
 export const registerSchema = z.object({
-	full_name: z.string().max(140).nullish(),
+	full_name: z.string().max(140),
 	email: z.string().email('Invalid email address'),
-	instagram: z.string().max(100).nullish(),
 	password: z
 		.string()
 		.min(6, 'Password must be at least 6 characters')
