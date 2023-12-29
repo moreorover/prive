@@ -2,7 +2,6 @@
 create table public.profiles(
     id uuid     unique references auth.users on delete cascade,
     full_name   text,
-    instagram   text,
     created_at  timestamp with time zone default now() not null,
     updated_at  timestamp with time zone default now() not null,
     primary key (id)
