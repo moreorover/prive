@@ -19,18 +19,25 @@
 
 <div class="container">
 	<h1>Login</h1>
-	<Form.Root method="POST" {options} {form} schema={loginSchema} let:config>
+	<Form.Root
+		method="POST"
+		{options}
+		{form}
+		schema={loginSchema}
+		let:config
+		data-testid="login-form"
+	>
 		<Form.Field {config} name="email">
 			<Form.Item>
 				<Form.Label>Email</Form.Label>
-				<Form.Input />
+				<Form.Input data-testid="email" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
 		<Form.Field {config} name="password">
 			<Form.Item>
 				<Form.Label>Password</Form.Label>
-				<Form.Input type="password" />
+				<Form.Input type="password" data-testid="password" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
