@@ -64,9 +64,6 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: LS
-        run: ls -ld .??*
-
       - name: Test Unit 🧪
         run: pnpm test:unit
 

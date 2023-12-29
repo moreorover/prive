@@ -1,4 +1,10 @@
 name: Release
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
 on:
   push:
     branches:
@@ -53,8 +59,11 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Test 🧪
-        run: pnpm test
+      - name: Test Unit 🧪
+        run: pnpm test:unit
+
+      - name: Test Integration 🧪
+        run: pnpm test:integration
 
       - name: Archive test reports 📦
         uses: actions/upload-artifact@v4

@@ -14,6 +14,24 @@ npm create svelte@latest
 npm create svelte@latest my-app
 ```
 
+## ENV
+
+```text
+PUBLIC_SUPABASE_ANON_KEY=""
+PUBLIC_SUPABASE_URL="http://localhost:54321"
+SUPABASE_DB_URL="postgresql://postgres:postgres@localhost:54322/postgres"
+GRAPHQL_URL="http://localhost:54321/graphql/v1"
+INBUCKET_URL="http://localhost:54324"
+JWT_SECRET="super-secret-jwt-token-with-at-least-32-characters-long"
+SUPABASE_SERVICE_ROLE_KEY=""
+STUDIO_URL="http://localhost:54323"
+
+STRIPE_SIGNING_SECRET=""
+STRIPE_SECRET_KEY=""
+
+PUBLIC_BASE_URL="http://localhost:5173"
+```
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
