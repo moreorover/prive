@@ -49,10 +49,10 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "billing_customers_user_id_fkey";
-						columns: ["user_id"];
-						referencedRelation: "users";
-						referencedColumns: ["id"];
+						foreignKeyName: 'billing_customers_user_id_fkey';
+						columns: ['user_id'];
+						referencedRelation: 'users';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -90,7 +90,7 @@ export interface Database {
 					id: string;
 					metadata: Json | null;
 					product_id: string;
-					status: Database["public"]["Enums"]["subscription_status"];
+					status: Database['public']['Enums']['subscription_status'];
 					trial_end: string | null;
 					trial_start: string | null;
 					user_id: string;
@@ -104,7 +104,7 @@ export interface Database {
 					id: string;
 					metadata?: Json | null;
 					product_id: string;
-					status: Database["public"]["Enums"]["subscription_status"];
+					status: Database['public']['Enums']['subscription_status'];
 					trial_end?: string | null;
 					trial_start?: string | null;
 					user_id: string;
@@ -118,29 +118,78 @@ export interface Database {
 					id?: string;
 					metadata?: Json | null;
 					product_id?: string;
-					status?: Database["public"]["Enums"]["subscription_status"];
+					status?: Database['public']['Enums']['subscription_status'];
 					trial_end?: string | null;
 					trial_start?: string | null;
 					user_id?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: "billing_subscriptions_customer_id_fkey";
-						columns: ["customer_id"];
-						referencedRelation: "billing_customers";
-						referencedColumns: ["id"];
+						foreignKeyName: 'billing_subscriptions_customer_id_fkey';
+						columns: ['customer_id'];
+						referencedRelation: 'billing_customers';
+						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: "billing_subscriptions_product_id_fkey";
-						columns: ["product_id"];
-						referencedRelation: "billing_products";
-						referencedColumns: ["id"];
+						foreignKeyName: 'billing_subscriptions_product_id_fkey';
+						columns: ['product_id'];
+						referencedRelation: 'billing_products';
+						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: "billing_subscriptions_user_id_fkey";
-						columns: ["user_id"];
-						referencedRelation: "users";
-						referencedColumns: ["id"];
+						foreignKeyName: 'billing_subscriptions_user_id_fkey';
+						columns: ['user_id'];
+						referencedRelation: 'users';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			clients: {
+				Row: {
+					created_at: string;
+					created_by: string;
+					email: string | null;
+					id: string;
+					instagram: string | null;
+					name: string;
+					phone: string | null;
+					updated_at: string;
+					updated_by: string | null;
+				};
+				Insert: {
+					created_at?: string;
+					created_by: string;
+					email?: string | null;
+					id?: string;
+					instagram?: string | null;
+					name: string;
+					phone?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Update: {
+					created_at?: string;
+					created_by?: string;
+					email?: string | null;
+					id?: string;
+					instagram?: string | null;
+					name?: string;
+					phone?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'clients_created_by_fkey';
+						columns: ['created_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'clients_updated_by_fkey';
+						columns: ['updated_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -177,22 +226,22 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "contacts_created_by_fkey";
-						columns: ["created_by"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'contacts_created_by_fkey';
+						columns: ['created_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: "contacts_deleted_by_fkey";
-						columns: ["deleted_by"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'contacts_deleted_by_fkey';
+						columns: ['deleted_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: "contacts_updated_by_fkey";
-						columns: ["updated_by"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'contacts_updated_by_fkey';
+						columns: ['updated_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -201,29 +250,26 @@ export interface Database {
 					created_at: string;
 					full_name: string | null;
 					id: string;
-					instagram: string | null;
 					updated_at: string;
 				};
 				Insert: {
 					created_at?: string;
 					full_name?: string | null;
 					id: string;
-					instagram?: string | null;
 					updated_at?: string;
 				};
 				Update: {
 					created_at?: string;
 					full_name?: string | null;
 					id?: string;
-					instagram?: string | null;
 					updated_at?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: "profiles_id_fkey";
-						columns: ["id"];
-						referencedRelation: "users";
-						referencedColumns: ["id"];
+						foreignKeyName: 'profiles_id_fkey';
+						columns: ['id'];
+						referencedRelation: 'users';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -272,16 +318,16 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "stock_created_by_fkey";
-						columns: ["created_by"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'stock_created_by_fkey';
+						columns: ['created_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: "stock_updated_by_fkey";
-						columns: ["updated_by"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'stock_updated_by_fkey';
+						columns: ['updated_by'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -315,16 +361,16 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "user_roles_mapping_role_name_fkey";
-						columns: ["role_name"];
-						referencedRelation: "user_roles";
-						referencedColumns: ["name"];
+						foreignKeyName: 'user_roles_mapping_role_name_fkey';
+						columns: ['role_name'];
+						referencedRelation: 'user_roles';
+						referencedColumns: ['name'];
 					},
 					{
-						foreignKeyName: "user_roles_mapping_user_id_fkey";
-						columns: ["user_id"];
-						referencedRelation: "profiles";
-						referencedColumns: ["id"];
+						foreignKeyName: 'user_roles_mapping_user_id_fkey';
+						columns: ['user_id'];
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -343,14 +389,14 @@ export interface Database {
 		};
 		Enums: {
 			subscription_status:
-				| "trialing"
-				| "active"
-				| "canceled"
-				| "incomplete"
-				| "incomplete_expired"
-				| "past_due"
-				| "unpaid"
-				| "paused";
+				| 'trialing'
+				| 'active'
+				| 'canceled'
+				| 'incomplete'
+				| 'incomplete_expired'
+				| 'past_due'
+				| 'unpaid'
+				| 'paused';
 		};
 		CompositeTypes: {
 			[_ in never]: never;
@@ -394,10 +440,10 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "buckets_owner_fkey";
-						columns: ["owner"];
-						referencedRelation: "users";
-						referencedColumns: ["id"];
+						foreignKeyName: 'buckets_owner_fkey';
+						columns: ['owner'];
+						referencedRelation: 'users';
+						referencedColumns: ['id'];
 					}
 				];
 			};
@@ -461,10 +507,10 @@ export interface Database {
 				};
 				Relationships: [
 					{
-						foreignKeyName: "objects_bucketId_fkey";
-						columns: ["bucket_id"];
-						referencedRelation: "buckets";
-						referencedColumns: ["id"];
+						foreignKeyName: 'objects_bucketId_fkey';
+						columns: ['bucket_id'];
+						referencedRelation: 'buckets';
+						referencedColumns: ['id'];
 					}
 				];
 			};

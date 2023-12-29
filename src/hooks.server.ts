@@ -1,7 +1,7 @@
-import type { UserRole } from "$lib/server/authorization";
-import { ENV } from "$lib/server/env";
-import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
-import type { Handle } from "@sveltejs/kit";
+import type { UserRole } from '$lib/server/authorization';
+import { ENV } from '$lib/server/env';
+import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createSupabaseServerClient({
@@ -28,9 +28,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		const { data: userRoles, error: userRolesError } = await event.locals.supabase
-			.from("user_roles_mapping")
-			.select("role_name")
-			.eq("user_id", session.user.id);
+			.from('user_roles_mapping')
+			.select('role_name')
+			.eq('user_id', session.user.id);
 
 		if (userRolesError) {
 			console.log({ userRolesError });
@@ -44,9 +44,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.getUserRolesWithPermissions = async (user_id: string): Promise<UserRole[]> => {
 		const { data: userRoles, error: userRolesError } = await event.locals.supabase
-			.from("user_roles_mapping")
-			.select("*")
-			.eq("user_id", user_id);
+			.from('user_roles_mapping')
+			.select('*')
+			.eq('user_id', user_id);
 
 		if (userRolesError) {
 			console.error(`Failed to get User roles for ${user_id}`);
@@ -59,7 +59,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
-			return name === "content-range";
+			return name === 'content-range';
 		}
 	});
 };

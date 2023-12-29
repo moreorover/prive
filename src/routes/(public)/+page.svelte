@@ -1,1 +1,4 @@
-<h1>Public Store</h1>
+<script lang="ts">
+</script>
+
+<h1>public root</h1>
