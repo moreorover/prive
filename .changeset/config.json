@@ -2,8 +2,10 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
   "changelog": ["@changesets/changelog-github", {"repo": "moreorover/prive"}],
   "commit": false,
-  "version": true,
-  "tag": true,
+  "privatePackages": {
+    "version": true,
+    "tag": true
+  },
   "fixed": [],
   "linked": [],
   "access": "restricted",
