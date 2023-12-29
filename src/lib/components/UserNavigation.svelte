@@ -16,7 +16,7 @@
 			data-testid="user-dropdown"
 		>
 			<Avatar.Root class="h-8 w-8">
-				<Avatar.Image src="/user.png" alt="@shadcn" />
+				<Avatar.Image src="/user.png" alt="@shadcn" data-testid="user-image" />
 				<Avatar.Fallback>{fullName.split(' ')[0][0] + fullName.split(' ')[1][0]}</Avatar.Fallback>
 			</Avatar.Root>
 		</Button>
@@ -47,7 +47,7 @@
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item>
 			<form action="/logout" method="POST">
-				<Button type="submit">Log out</Button>
+				<Button type="submit" data-testid="logout-button">Log out</Button>
 			</form>
 		</DropdownMenu.Item>
 	</DropdownMenu.Content>
