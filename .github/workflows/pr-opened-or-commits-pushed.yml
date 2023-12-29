@@ -68,8 +68,17 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Test 🧪
-        run: pnpm test
+      - name: LS
+        run: ls -l
+
+      - name: cat
+        run: cat .env.local
+
+      - name: Test Unit 🧪
+        run: pnpm test:unit
+
+      - name: Test Integration 🧪
+        run: pnpm test:integration
 
       - name: Archive test reports 📦
         uses: actions/upload-artifact@v4
