@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import ClientFormDialog from '$lib/components/ClientFormDialog.svelte';
+	import ClientCreateFormDialog from '$lib/components/ClientCreateFormDialog.svelte';
 
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
@@ -26,7 +26,7 @@
 			</div>
 			<div class="flex items-center space-x-2">
 				{#if data.roles.includes('Admin')}
-					<ClientFormDialog form={data.createClientForm} />
+					<ClientCreateFormDialog form={data.createClientForm} />
 				{/if}
 			</div>
 		</div>
