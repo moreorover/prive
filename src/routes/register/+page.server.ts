@@ -22,8 +22,7 @@ export const actions: Actions = {
 			password: form.data.password,
 			options: {
 				data: {
-					full_name: form.data.full_name ?? '',
-					instagram: form.data.instagram ?? ''
+					full_name: form.data.full_name ?? ''
 				}
 			}
 		});
