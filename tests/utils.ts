@@ -38,8 +38,8 @@ export async function loginUser(page: Page, testUser: User) {
 export async function logoutUser(page: Page, testUser: User) {
 	await loginUser(page, testUser);
 	await page.goto('/');
-	await page.getByRole('button', { name: 'account' }).click();
-	await expect(page.getByRole('button', { name: 'Sign out' })).toBeVisible();
-	await page.getByRole('button', { name: 'Sign out' }).click();
+	await page.getByTestId('user-image').click();
+	await expect(page.getByTestId('logout-button')).toBeVisible();
+	await page.getByTestId('logout-button').click();
 	await expect(page).toHaveURL('/login');
 }
