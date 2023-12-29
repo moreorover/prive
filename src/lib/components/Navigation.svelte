@@ -17,7 +17,7 @@
 	<div class="flex h-16 items-center justify-between px-4">
 		<!--		<div class="ml-auto flex items-center space-x-4" />-->
 		<a href="/" class="href">
-			<h2 class="text-3xl font-bold tracking-tight">Prive</h2>
+			<h1 class="text-3xl font-bold tracking-tight">Prive</h1>
 		</a>
 		<nav class={cn('flex items-center space-x-4 lg:space-x-6', className)}>
 			{#each routes as route}
