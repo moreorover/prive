@@ -79,7 +79,7 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # Ensure to have this set up under GitHub secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Ensure to have this set up under GitHub secrets
 
 #      - name: Link Supabase CLI to Prod
 #        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
