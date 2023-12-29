@@ -14,7 +14,8 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 	async function getClients() {
 		const { data: clients, error: clientsError } = await event.locals.supabase
 			.from('clients')
-			.select('*');
+			.select('*')
+			.order('created_at', { ascending: false });
 
 		if (clientsError) {
 			throw error(500, 'Error fetching clients, please try again later.');
