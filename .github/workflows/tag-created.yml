@@ -1,18 +1,14 @@
-name: Deploy 🚀
+name: 🏷️ Tag Created Pipeline
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
   SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-  PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
-  PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
-  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-  SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
   workflow_dispatch:
 
 concurrency:
@@ -24,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -32,7 +28,7 @@ jobs:
           version: 8
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
@@ -50,14 +46,37 @@ jobs:
       - name: Start Local Supabase
         run: supabase start -x imgproxy,studio,storage-api,realtime,inbucket,edge-runtime
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install Dependencies
         run: pnpm install
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Test 🧪
-        run: pnpm test
+      - name: Test Unit 🧪
+        run: pnpm test:unit
+
+      - name: Test Integration 🧪
+        run: pnpm test:integration
+
+      - name: Archive test reports 📦
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/index.html
 
       - name: Link Supabase CLI to Prod
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
