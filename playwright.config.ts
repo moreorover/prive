@@ -16,7 +16,8 @@ const config: PlaywrightTestConfig = {
 		}
 	],
 	globalSetup: resolve('tests/globalSetup.ts'),
-	globalTeardown: resolve('tests/globalSetup.ts')
+	globalTeardown: resolve('tests/globalSetup.ts'),
+	reporter: [['html', { open: 'never' }]]
 };
 
 export default config;
