@@ -22,14 +22,7 @@
 		<Form.Field {config} name="email">
 			<Form.Item>
 				<Form.Label>Email address</Form.Label>
-				<Form.Input />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-		<Form.Field {config} name="instagram">
-			<Form.Item>
-				<Form.Label>Instagram username</Form.Label>
-				<Form.Input />
+				<Form.Input data-testid="email" />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
