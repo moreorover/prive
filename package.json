@@ -2,6 +2,10 @@
 	"name": "prive",
 	"version": "0.0.6",
 	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/moreorover/prive.git"
+	},
 	"engines": {
 		"pnpm": "^8.0.0"
 	},
