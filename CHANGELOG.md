@@ -1,5 +1,15 @@
 # prive
 
+## 0.0.8
+
+### Patch Changes
+
+- Update release workflow with conditional deploy step ([#69](https://github.com/moreorover/prive/pull/69))
+
+- Use 'await' in superValidate method ([#67](https://github.com/moreorover/prive/pull/67))
+
+- fix couple imports ([#66](https://github.com/moreorover/prive/pull/66))
+
 ## 0.0.7
 
 ### Patch Changes
