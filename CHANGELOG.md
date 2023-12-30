@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.6
+
+### Patch Changes
+
+- [#59](https://github.com/moreorover/prive/pull/59) [`df6ea37`](https://github.com/moreorover/prive/commit/df6ea378f871b04379cb5314f8e1c064c8d74bdc) Thanks [@moreorover](https://github.com/moreorover)! - Change deployment trigger event from create to push
+
 ## 0.0.5
 
 ### Patch Changes
