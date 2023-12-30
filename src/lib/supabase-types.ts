@@ -28,122 +28,6 @@ export interface Database {
 	};
 	public: {
 		Tables: {
-			billing_customers: {
-				Row: {
-					email: string;
-					id: string;
-					metadata: Json | null;
-					user_id: string;
-				};
-				Insert: {
-					email: string;
-					id: string;
-					metadata?: Json | null;
-					user_id: string;
-				};
-				Update: {
-					email?: string;
-					id?: string;
-					metadata?: Json | null;
-					user_id?: string;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'billing_customers_user_id_fkey';
-						columns: ['user_id'];
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					}
-				];
-			};
-			billing_products: {
-				Row: {
-					active: boolean;
-					description: string;
-					id: string;
-					metadata: Json | null;
-					name: string;
-				};
-				Insert: {
-					active: boolean;
-					description: string;
-					id: string;
-					metadata?: Json | null;
-					name: string;
-				};
-				Update: {
-					active?: boolean;
-					description?: string;
-					id?: string;
-					metadata?: Json | null;
-					name?: string;
-				};
-				Relationships: [];
-			};
-			billing_subscriptions: {
-				Row: {
-					cancel_at_period_end: boolean | null;
-					created: string;
-					current_period_end: string;
-					current_period_start: string;
-					customer_id: string;
-					id: string;
-					metadata: Json | null;
-					product_id: string;
-					status: Database['public']['Enums']['subscription_status'];
-					trial_end: string | null;
-					trial_start: string | null;
-					user_id: string;
-				};
-				Insert: {
-					cancel_at_period_end?: boolean | null;
-					created: string;
-					current_period_end: string;
-					current_period_start: string;
-					customer_id: string;
-					id: string;
-					metadata?: Json | null;
-					product_id: string;
-					status: Database['public']['Enums']['subscription_status'];
-					trial_end?: string | null;
-					trial_start?: string | null;
-					user_id: string;
-				};
-				Update: {
-					cancel_at_period_end?: boolean | null;
-					created?: string;
-					current_period_end?: string;
-					current_period_start?: string;
-					customer_id?: string;
-					id?: string;
-					metadata?: Json | null;
-					product_id?: string;
-					status?: Database['public']['Enums']['subscription_status'];
-					trial_end?: string | null;
-					trial_start?: string | null;
-					user_id?: string;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'billing_subscriptions_customer_id_fkey';
-						columns: ['customer_id'];
-						referencedRelation: 'billing_customers';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'billing_subscriptions_product_id_fkey';
-						columns: ['product_id'];
-						referencedRelation: 'billing_products';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'billing_subscriptions_user_id_fkey';
-						columns: ['user_id'];
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					}
-				];
-			};
 			clients: {
 				Row: {
 					created_at: string;
@@ -182,64 +66,14 @@ export interface Database {
 					{
 						foreignKeyName: 'clients_created_by_fkey';
 						columns: ['created_by'];
+						isOneToOne: false;
 						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
 					},
 					{
 						foreignKeyName: 'clients_updated_by_fkey';
 						columns: ['updated_by'];
-						referencedRelation: 'profiles';
-						referencedColumns: ['id'];
-					}
-				];
-			};
-			contacts: {
-				Row: {
-					created_at: string;
-					created_by: string;
-					deleted_by: string | null;
-					id: string;
-					name: string | null;
-					phone: string | null;
-					updated_at: string;
-					updated_by: string | null;
-				};
-				Insert: {
-					created_at?: string;
-					created_by: string;
-					deleted_by?: string | null;
-					id?: string;
-					name?: string | null;
-					phone?: string | null;
-					updated_at?: string;
-					updated_by?: string | null;
-				};
-				Update: {
-					created_at?: string;
-					created_by?: string;
-					deleted_by?: string | null;
-					id?: string;
-					name?: string | null;
-					phone?: string | null;
-					updated_at?: string;
-					updated_by?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'contacts_created_by_fkey';
-						columns: ['created_by'];
-						referencedRelation: 'profiles';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'contacts_deleted_by_fkey';
-						columns: ['deleted_by'];
-						referencedRelation: 'profiles';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'contacts_updated_by_fkey';
-						columns: ['updated_by'];
+						isOneToOne: false;
 						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
 					}
@@ -268,65 +102,8 @@ export interface Database {
 					{
 						foreignKeyName: 'profiles_id_fkey';
 						columns: ['id'];
+						isOneToOne: true;
 						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					}
-				];
-			};
-			stock: {
-				Row: {
-					code: string | null;
-					colour: string | null;
-					created_at: string;
-					created_by: string | null;
-					description: string | null;
-					id: string;
-					length_cm: number;
-					purchased_at: string | null;
-					updated_at: string;
-					updated_by: string | null;
-					weight_expected_grams: number;
-					weight_received_grams: number;
-				};
-				Insert: {
-					code?: string | null;
-					colour?: string | null;
-					created_at?: string;
-					created_by?: string | null;
-					description?: string | null;
-					id?: string;
-					length_cm?: number;
-					purchased_at?: string | null;
-					updated_at?: string;
-					updated_by?: string | null;
-					weight_expected_grams?: number;
-					weight_received_grams?: number;
-				};
-				Update: {
-					code?: string | null;
-					colour?: string | null;
-					created_at?: string;
-					created_by?: string | null;
-					description?: string | null;
-					id?: string;
-					length_cm?: number;
-					purchased_at?: string | null;
-					updated_at?: string;
-					updated_by?: string | null;
-					weight_expected_grams?: number;
-					weight_received_grams?: number;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'stock_created_by_fkey';
-						columns: ['created_by'];
-						referencedRelation: 'profiles';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'stock_updated_by_fkey';
-						columns: ['updated_by'];
-						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
 					}
 				];
@@ -363,12 +140,14 @@ export interface Database {
 					{
 						foreignKeyName: 'user_roles_mapping_role_name_fkey';
 						columns: ['role_name'];
+						isOneToOne: false;
 						referencedRelation: 'user_roles';
 						referencedColumns: ['name'];
 					},
 					{
 						foreignKeyName: 'user_roles_mapping_user_id_fkey';
 						columns: ['user_id'];
+						isOneToOne: false;
 						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
 					}
@@ -388,15 +167,7 @@ export interface Database {
 			};
 		};
 		Enums: {
-			subscription_status:
-				| 'trialing'
-				| 'active'
-				| 'canceled'
-				| 'incomplete'
-				| 'incomplete_expired'
-				| 'past_due'
-				| 'unpaid'
-				| 'paused';
+			[_ in never]: never;
 		};
 		CompositeTypes: {
 			[_ in never]: never;
@@ -413,6 +184,7 @@ export interface Database {
 					id: string;
 					name: string;
 					owner: string | null;
+					owner_id: string | null;
 					public: boolean | null;
 					updated_at: string | null;
 				};
@@ -424,6 +196,7 @@ export interface Database {
 					id: string;
 					name: string;
 					owner?: string | null;
+					owner_id?: string | null;
 					public?: boolean | null;
 					updated_at?: string | null;
 				};
@@ -435,17 +208,11 @@ export interface Database {
 					id?: string;
 					name?: string;
 					owner?: string | null;
+					owner_id?: string | null;
 					public?: boolean | null;
 					updated_at?: string | null;
 				};
-				Relationships: [
-					{
-						foreignKeyName: 'buckets_owner_fkey';
-						columns: ['owner'];
-						referencedRelation: 'users';
-						referencedColumns: ['id'];
-					}
-				];
+				Relationships: [];
 			};
 			migrations: {
 				Row: {
@@ -477,6 +244,7 @@ export interface Database {
 					metadata: Json | null;
 					name: string | null;
 					owner: string | null;
+					owner_id: string | null;
 					path_tokens: string[] | null;
 					updated_at: string | null;
 					version: string | null;
@@ -489,6 +257,7 @@ export interface Database {
 					metadata?: Json | null;
 					name?: string | null;
 					owner?: string | null;
+					owner_id?: string | null;
 					path_tokens?: string[] | null;
 					updated_at?: string | null;
 					version?: string | null;
@@ -501,6 +270,7 @@ export interface Database {
 					metadata?: Json | null;
 					name?: string | null;
 					owner?: string | null;
+					owner_id?: string | null;
 					path_tokens?: string[] | null;
 					updated_at?: string | null;
 					version?: string | null;
@@ -509,6 +279,7 @@ export interface Database {
 					{
 						foreignKeyName: 'objects_bucketId_fkey';
 						columns: ['bucket_id'];
+						isOneToOne: false;
 						referencedRelation: 'buckets';
 						referencedColumns: ['id'];
 					}
@@ -582,3 +353,76 @@ export interface Database {
 		};
 	};
 }
+
+export type Tables<
+	PublicTableNameOrOptions extends
+		| keyof (Database['public']['Tables'] & Database['public']['Views'])
+		| { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+				Database[PublicTableNameOrOptions['schema']]['Views'])
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+			Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+			Row: infer R;
+	  }
+		? R
+		: never
+	: PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+			Database['public']['Views'])
+	? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
+			Row: infer R;
+	  }
+		? R
+		: never
+	: never;
+
+export type TablesInsert<
+	PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+			Insert: infer I;
+	  }
+		? I
+		: never
+	: PublicTableNameOrOptions extends keyof Database['public']['Tables']
+	? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+			Insert: infer I;
+	  }
+		? I
+		: never
+	: never;
+
+export type TablesUpdate<
+	PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+			Update: infer U;
+	  }
+		? U
+		: never
+	: PublicTableNameOrOptions extends keyof Database['public']['Tables']
+	? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+			Update: infer U;
+	  }
+		? U
+		: never
+	: never;
+
+export type Enums<
+	PublicEnumNameOrOptions extends keyof Database['public']['Enums'] | { schema: keyof Database },
+	EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+		: never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+	? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+	: PublicEnumNameOrOptions extends keyof Database['public']['Enums']
+	? Database['public']['Enums'][PublicEnumNameOrOptions]
+	: never;

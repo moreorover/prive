@@ -26,11 +26,6 @@ export async function clearSupabaseData() {
 	});
 	await client.connect();
 	await client.query('TRUNCATE auth.users CASCADE');
-	await client.query('TRUNCATE public.billing_customers CASCADE');
-	await client.query('TRUNCATE public.billing_products CASCADE');
-	await client.query('TRUNCATE public.billing_subscriptions CASCADE');
-	await client.query('TRUNCATE public.contacts CASCADE');
-	await client.query('TRUNCATE public.stock CASCADE');
 	await client.query('TRUNCATE public.clients CASCADE');
 	await client.query('TRUNCATE public.user_roles_mapping CASCADE');
 	// 	DO NOT TRUNCATE user_roles TABLE AS IT IS POPULATED BY MIGRATION

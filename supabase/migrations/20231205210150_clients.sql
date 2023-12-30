@@ -13,7 +13,7 @@ create table public.clients (
   updated_at    timestamp with time zone default now() not null,
   primary key (id)
 );
-comment on table public.contacts is 'Clients.';
+comment on table public.clients is 'Clients.';
 
 -- Row-Level Security and Policies for Profiles
 alter table public.clients enable row level security;
