@@ -1,5 +1,3 @@
-import { error, fail, redirect, type RequestEvent } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
 import { error, fail, redirect, type ServerLoadEvent } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
