@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.4
+
+### Patch Changes
+
+- [#35](https://github.com/moreorover/prive/pull/35) [`1013108`](https://github.com/moreorover/prive/commit/10131083530563f33336294f349daff1c020f3f8) Thanks [@moreorover](https://github.com/moreorover)! - Enabled atomatic TAG creation and deployment to Vercel
+
 ## 0.0.3
 
 ### Patch Changes
