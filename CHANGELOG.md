@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.9
+
+### Patch Changes
+
+- Deploy to Vercel production if TAG created ([#70](https://github.com/moreorover/prive/pull/70))
+
 ## 0.0.8
 
 ### Patch Changes
