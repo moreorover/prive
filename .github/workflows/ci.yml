@@ -67,6 +67,9 @@ jobs:
           name: playwright-report
           path: playwright-report/index.html
 
+      - name: Check if changeset is present
+        run: changeset status --since=main
+
   check:
     if: always()
     needs:
