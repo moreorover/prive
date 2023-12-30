@@ -3,12 +3,11 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { clientSchema, type ClientSchema } from '$lib/schema/clientSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import { type FormOptions } from 'formsnap';
+	import type { FormOptions } from 'formsnap';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import type { Validation } from 'sveltekit-superforms/index';
 
 	let openDialog: boolean = false;
-	export let data: Validation<ClientSchema>;
+	export let data: SuperValidated<ClientSchema>;
 
 	const options: FormOptions<typeof clientSchema> = {
 		validators: clientSchema,
