@@ -3,7 +3,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { clientSchema, type ClientSchema } from '$lib/schema/clientSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import { type FormOptions } from 'formsnap';
+	import type { FormOptions } from 'formsnap';
 	import { buttonVariants } from '$lib/components/ui/button';
 	export let form: SuperValidated<ClientSchema>;
 	let openDialog: boolean = false;
