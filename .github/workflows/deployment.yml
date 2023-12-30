@@ -7,9 +7,9 @@ env:
   SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
 on:
-  create: # This workflow will run whenever a tag, branch, or reference is created
+  push: # This workflow will run whenever a tag, branch, or reference is created
     tags:
-      - v* # This will only trigger the workflow for tags that start with "v"
+      - 'v*' # This will only trigger the workflow for tags that start with "v"
   workflow_dispatch:
 
 concurrency:
