@@ -26,6 +26,13 @@
 
 	const searchStore = createSearchStore(searchClients);
 
+	$: {
+		$searchStore.data = data.clients.map((client: Client) => ({
+			...client,
+			searchTerms: `${client.name} ${client.email} ${client.phone} ${client.instagram}`
+		}));
+	}
+
 	const unsubscribe = searchStore.subscribe((model) => searchHandler(model));
 
 	onDestroy(() => {
