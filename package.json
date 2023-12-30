@@ -20,7 +20,7 @@
 		"stripe:webhooks": "stripe listen --forward-to localhost:5173/api/stripe/webhook",
 		"supabase:status": "npx supabase status -o env",
 		"reset:local": "npx supabase db reset --debug && npm run seed && npm run gen:types",
-		"ci:publish": "pnpm publish -r",
+		"ci:publish": "changeset publish",
 		"ci:version": "changeset version"
 	},
 	"devDependencies": {
