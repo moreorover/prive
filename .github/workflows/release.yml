@@ -44,7 +44,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Ensure to have this set up under GitHub secrets
 
-      - name: Deploy if TAG created
+      - name: Install Vercel CLI
         if: steps.changesets.outputs.published == 'true'
-        # You can do something when a publish happens.
-        run: echo deploy
+        run: pnpm i -g vercel@canary
+
+      - name: Setup Supabase CLI
+        if: steps.changesets.outputs.published == 'true'
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link Supabase CLI to Prod
+        if: steps.changesets.outputs.published == 'true'
+        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
+
+      - name: Push Supabase DB Changes
+        if: steps.changesets.outputs.published == 'true'
+        run: supabase db push
+
+      - name: Pull Prod Env Variables
+        if: steps.changesets.outputs.published == 'true'
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        if: steps.changesets.outputs.published == 'true'
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        if: steps.changesets.outputs.published == 'true'
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN}}
