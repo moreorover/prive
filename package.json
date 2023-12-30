@@ -21,7 +21,9 @@
 		"seed": "tsx --tsconfig scripts/tsconfig.json scripts/seed.ts",
 		"stripe:webhooks": "stripe listen --forward-to localhost:5173/api/stripe/webhook",
 		"supabase:status": "npx supabase status -o env",
-		"reset:local": "npx supabase db reset --debug && npm run seed && npm run gen:types"
+		"reset:local": "npx supabase db reset --debug && npm run seed && npm run gen:types",
+		"ci:publish": "pnpm publish -r",
+		"ci:version": "pnpm version"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.5.0",
