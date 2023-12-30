@@ -89,8 +89,9 @@ jobs:
         with:
           commit: "chore(release): version package"
           title: "chore(release): version package"
-          version: "pnpm changeset version"
-          publish: 'pnpm changeset status --since=main && pnpm -r publish && changeset tag && git push --follow-tags'
+#          version: "pnpm changeset version"
+#          publish: 'pnpm changeset status --since=main && pnpm -r publish && changeset tag && git push --follow-tags'
+          version: 'pnpm changeset status --since=main && pnpm changeset version && pnpm -r publish && changeset tag && git push --follow-tags'
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Ensure to have this set up under GitHub secrets
