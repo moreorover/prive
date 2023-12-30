@@ -43,3 +43,8 @@ jobs:
           publish: "pnpm ci:publish"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Ensure to have this set up under GitHub secrets
+
+      - name: Deploy if TAG created
+        if: steps.changesets.outputs.published == 'true'
+        # You can do something when a publish happens.
+        run: echo deploy
