@@ -9,6 +9,7 @@
 	"engines": {
 		"pnpm": "^8.0.0"
 	},
+	"packageManager": "pnpm@8.13.1",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
