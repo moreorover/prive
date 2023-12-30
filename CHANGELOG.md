@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.5
+
+### Patch Changes
+
+- [#57](https://github.com/moreorover/prive/pull/57) [`9035131`](https://github.com/moreorover/prive/commit/903513113aca97ec862ca3d0082f1bd530c66e13) Thanks [@moreorover](https://github.com/moreorover)! - CICD deployment on TAG
+
 ## 0.0.4
 
 ### Patch Changes
