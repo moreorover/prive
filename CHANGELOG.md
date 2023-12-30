@@ -1,5 +1,17 @@
 # prive
 
+## 0.0.7
+
+### Patch Changes
+
+- Add repository information to package.json ([#63](https://github.com/moreorover/prive/pull/63))
+
+- Update package.json with packageManager property ([#64](https://github.com/moreorover/prive/pull/64))
+
+- Add pnpm version to package.json ([#61](https://github.com/moreorover/prive/pull/61))
+
+- Deleted redundant Supabase migrations ([#62](https://github.com/moreorover/prive/pull/62))
+
 ## 0.0.6
 
 ### Patch Changes
