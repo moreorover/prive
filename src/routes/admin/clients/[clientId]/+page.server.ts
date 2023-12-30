@@ -1,20 +1,19 @@
 import { error, fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
+import { error, fail, redirect, type ServerLoadEvent } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { handleLoginRedirect } from '$lib/helpers';
 import { clientSchema } from '$lib/schema/clientSchema';
 import type { Session } from '@supabase/supabase-js';
 
-export const load: PageServerLoad = async (event: RequestEvent) => {
+export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	const session: Session | null = await event.locals.getSession();
 	if (!session) {
 		throw redirect(302, handleLoginRedirect(event));
 	}
 
-	async function getClient(client_id: string | undefined) {
-		if (!client_id) {
-			return null;
-		}
+	async function getClient(client_id: string) {
 		const { error: contactError, data: contact } = await event.locals.supabase
 			.from('clients')
 			.select('*')
@@ -31,8 +30,11 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 		return contact;
 	}
 	return {
-		client: await getClient(event.params.clientId),
-		updateClientForm: superValidate(await getClient(event.params.clientId), clientSchema)
+		client: event.params.clientId ? await getClient(event.params.clientId) : null,
+		updateClientForm: await superValidate(
+			event.params.clientId ? await getClient(event.params.clientId) : null,
+			clientSchema
+		)
 	};
 };
 

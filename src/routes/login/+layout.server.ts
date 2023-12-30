@@ -9,6 +9,6 @@ export const load: PageServerLoad = async ({ locals }: PageServerLoadEvent) => {
 		throw redirect(302, '/');
 	}
 	return {
-		form: superValidate(loginSchema)
+		form: await superValidate(loginSchema)
 	};
 };
