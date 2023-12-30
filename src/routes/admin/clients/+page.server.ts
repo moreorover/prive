@@ -25,7 +25,7 @@ export const load: PageServerLoad = async (event: RequestEvent) => {
 
 	return {
 		clients: getClients(),
-		createClientForm: superValidate(clientSchema, {
+		createClientForm: await superValidate(clientSchema, {
 			id: 'createClient'
 		})
 	};
