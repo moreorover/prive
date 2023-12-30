@@ -1,5 +1,13 @@
 # prive
 
+## 0.0.10
+
+### Patch Changes
+
+- Add Vercel speed insights to project ([#72](https://github.com/moreorover/prive/pull/72))
+
+- fix clients page data reactivity ([#73](https://github.com/moreorover/prive/pull/73))
+
 ## 0.0.9
 
 ### Patch Changes
