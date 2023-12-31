@@ -49,10 +49,10 @@
 </script>
 
 <Card.Root>
-	<Card.Header>
+	<Card.Header data-testid="clients-header">
 		<div class="flex items-center justify-between space-y-2">
 			<div>
-				<Card.Title>Clients</Card.Title>
+				<Card.Title data-testid="clients-title">Clients</Card.Title>
 				<Card.Description>List of Clients</Card.Description>
 			</div>
 			<div class="flex items-center space-x-2">

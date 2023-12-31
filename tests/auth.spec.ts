@@ -16,5 +16,6 @@ test('user can login to their account', async ({ page }) => {
 });
 
 test('user can logout of an account', async ({ page }) => {
-	await logoutUser(page, testUser);
+	await loginUser(page, testUser);
+	await logoutUser(page);
 });
