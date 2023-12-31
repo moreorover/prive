@@ -41,7 +41,7 @@ test('admin user can view clients', async ({ page }) => {
 			await expect(clientsHeader.getByTestId('clients-title')).toHaveText('Clients');
 			const clients = page.getByTestId('client-rows');
 			await expect(clients).toBeVisible();
-			const clientRows = clients.getByTestId(/^client-row/);
+			const clientRows = clients.getByTestId(/^client-row-/);
 
 			for (const clientRow of await clientRows.all()) {
 				await expect(clientRow.getByTestId(/^client-name-/)).not.toBeEmpty();
@@ -129,12 +129,64 @@ test('admin creates client', async ({ page }) => {
 
 			await expect(page.getByTestId('create-client-dialog-title')).not.toBeVisible();
 
-			const clients = page.getByTestId('client-rows');
+			const clients = await page.getByTestId(/^client-row-/).all();
 
-			await expect(clients.getByTestId(/^client-name-/).first()).toHaveText(name);
-			await expect(clients.getByTestId(/^client-email-/).first()).toHaveText(email);
-			await expect(clients.getByTestId(/^client-phone-/).first()).toHaveText(phone);
-			await expect(clients.getByTestId(/^client-instagram-/).first()).toHaveText(instagram);
+			await expect(clients[0].getByTestId(/^client-name-/)).toHaveText(name);
+			await expect(clients[0].getByTestId(/^client-email-/)).toHaveText(email);
+			await expect(clients[0].getByTestId(/^client-phone-/)).toHaveText(phone);
+			await expect(clients[0].getByTestId(/^client-instagram-/)).toHaveText(instagram);
+			await logoutUser(page);
+		}
+	}
+});
+
+test('admin unable to create user without name', async ({ page }) => {
+	for (const testUser of testUsers) {
+		console.log(testUser);
+		if (testUser.roles.includes('Admin')) {
+			const firstName = faker.person.firstName();
+			const lastName = faker.person.lastName();
+			const name = `${firstName} ${lastName}`;
+			const email: string = faker.internet.email({ firstName, lastName });
+			const phone = faker.phone.number();
+			const instagram = faker.internet.userName({ firstName, lastName });
+
+			await loginUser(page, testUser);
+			await page.goto('/');
+			await page.getByRole('link', { name: 'Admin' }).click();
+			await page.getByRole('link', { name: 'Clients' }).click();
+			const clientsHeader = page.getByTestId('clients-header');
+			await expect(clientsHeader).toBeVisible();
+			await expect(clientsHeader.getByTestId('create-client')).toBeVisible();
+			await clientsHeader.getByTestId('create-client').click();
+			await expect(page.getByTestId('create-client-dialog-title')).toBeVisible();
+			await expect(page.getByTestId('create-client-dialog-title')).toHaveText('Create Client');
+
+			const loginForm = page.getByTestId('create-client-dialog-form');
+			// await loginForm.getByTestId('create-client-dialog-form-email').fill(email);
+			// await loginForm.getByTestId('create-client-dialog-form-phone').fill(phone);
+			// await loginForm.getByTestId('create-client-dialog-form-instagram').fill(instagram);
+			await loginForm.getByTestId('create-client-dialog-form-submit').click();
+
+			await expect(page.getByTestId('create-client-dialog-title')).toBeVisible();
+
+			await expect(
+				loginForm.getByTestId('create-client-dialog-form-name-validation')
+			).toBeVisible();
+			await expect(loginForm.getByTestId('create-client-dialog-form-name-validation')).toHaveText(
+				'String must contain at least 2 character(s)'
+			);
+
+			await loginForm.getByTestId('create-client-dialog-form-name').fill(name);
+			await loginForm.getByTestId('create-client-dialog-form-submit').click();
+
+			const clients = await page.getByTestId(/^client-row-/).all();
+
+			await expect(clients[0].getByTestId(/^client-name-/)).toBeVisible();
+			await expect(clients[0].getByTestId(/^client-name-/)).toHaveText(name);
+			await expect(clients[0].getByTestId(/^client-email-/)).not.toBeVisible();
+			await expect(clients[0].getByTestId(/^client-phone-/)).not.toBeVisible();
+			await expect(clients[0].getByTestId(/^client-instagram-/)).not.toBeVisible();
 			await logoutUser(page);
 		}
 	}

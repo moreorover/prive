@@ -49,7 +49,7 @@
 					<Form.Label>Full Name</Form.Label>
 					<Form.Input data-testid="create-client-dialog-form-name" />
 					<Form.Description>Clients full name. (required)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-name-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="email">
