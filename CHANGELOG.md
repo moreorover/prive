@@ -1,5 +1,15 @@
 # prive
 
+## 0.0.11
+
+### Patch Changes
+
+- added /admin/clients endpoint tests ([#77](https://github.com/moreorover/prive/pull/77))
+
+- added /admin endpoint access tests based on user roles ([#77](https://github.com/moreorover/prive/pull/77))
+
+- clean up hooks.server.ts ([#77](https://github.com/moreorover/prive/pull/77))
+
 ## 0.0.10
 
 ### Patch Changes
