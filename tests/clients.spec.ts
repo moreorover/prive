@@ -40,6 +40,16 @@ test('admin user can view clients', async ({ page }) => {
 			const clientsHeader = page.getByTestId('clients-header');
 			await expect(clientsHeader.getByTestId('clients-title')).toBeVisible();
 			await expect(clientsHeader.getByTestId('clients-title')).toHaveText('Clients');
+			const clients = page.getByTestId('client-rows');
+			await expect(clients).toBeVisible();
+			const clientRows = clients.getByTestId(/^client-row/);
+
+			for (const clientRow of await clientRows.all()) {
+				await expect(clientRow.getByTestId(/^client-name-/)).not.toBeEmpty();
+				await expect(clientRow.getByTestId(/^client-email-/)).not.toBeEmpty();
+				await expect(clientRow.getByTestId(/^client-instagram-/)).not.toBeEmpty();
+				await expect(clientRow.getByTestId(/^client-phone-/)).not.toBeEmpty();
+			}
 			await logoutUser(page);
 		}
 	}
