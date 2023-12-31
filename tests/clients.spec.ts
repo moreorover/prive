@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { loginUser, logoutUser } from './utils.js';
-// import { type SeedUser, testUsers } from "../scripts/seed";
 
 export const testUsers = [
 	{
@@ -31,7 +30,6 @@ export const testUsers = [
 
 test('admin user can view clients', async ({ page }) => {
 	for (const testUser of testUsers) {
-		console.log(testUser);
 		if (testUser.roles.includes('Admin')) {
 			await loginUser(page, testUser);
 			await page.goto('/');
@@ -50,6 +48,34 @@ test('admin user can view clients', async ({ page }) => {
 				await expect(clientRow.getByTestId(/^client-instagram-/)).not.toBeEmpty();
 				await expect(clientRow.getByTestId(/^client-phone-/)).not.toBeEmpty();
 			}
+			await logoutUser(page);
+		}
+	}
+});
+
+test('moderator user can not view clients', async ({ page }) => {
+	for (const testUser of testUsers) {
+		if (!testUser.roles.includes('Admin') && testUser.roles.includes('Moderator')) {
+			await loginUser(page, testUser);
+			await page.goto('/');
+			await expect(page.getByRole('link', { name: 'Admin' })).not.toBeVisible();
+			await page.goto('/admin/clients');
+			const clientsHeader = page.getByTestId('clients-header');
+			await expect(clientsHeader.getByTestId('clients-title')).not.toBeVisible();
+			await logoutUser(page);
+		}
+	}
+});
+
+test('guest user can not view clients', async ({ page }) => {
+	for (const testUser of testUsers) {
+		if (!testUser.roles.includes('Admin') && !testUser.roles.includes('Moderator')) {
+			await loginUser(page, testUser);
+			await page.goto('/');
+			await expect(page.getByRole('link', { name: 'Admin' })).not.toBeVisible();
+			await page.goto('/admin/clients');
+			const clientsHeader = page.getByTestId('clients-header');
+			await expect(clientsHeader.getByTestId('clients-title')).not.toBeVisible();
 			await logoutUser(page);
 		}
 	}
