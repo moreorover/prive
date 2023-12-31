@@ -54,3 +54,21 @@ test('admin user can view clients', async ({ page }) => {
 		}
 	}
 });
+
+test('admin user can create clients', async ({ page }) => {
+	for (const testUser of testUsers) {
+		console.log(testUser);
+		if (testUser.roles.includes('Admin')) {
+			await loginUser(page, testUser);
+			await page.goto('/');
+			await page.getByRole('link', { name: 'Admin' }).click();
+			await page.getByRole('link', { name: 'Clients' }).click();
+			const clientsHeader = page.getByTestId('clients-header');
+			await expect(clientsHeader).toBeVisible();
+			await expect(clientsHeader).toBeAttached();
+			await expect(clientsHeader.getByTestId('create-client')).toBeAttached();
+			await expect(clientsHeader.getByTestId('create-client')).toBeVisible();
+			await logoutUser(page);
+		}
+	}
+});
