@@ -35,8 +35,7 @@ export async function loginUser(page: Page, testUser: User) {
 	await expect(page.getByTestId('user-dropdown')).toBeVisible();
 }
 
-export async function logoutUser(page: Page, testUser: User) {
-	await loginUser(page, testUser);
+export async function logoutUser(page: Page) {
 	await page.goto('/');
 	await page.getByTestId('user-image').click();
 	await expect(page.getByTestId('logout-button')).toBeVisible();

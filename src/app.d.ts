@@ -11,7 +11,6 @@ declare global {
 			supabase: SupabaseClient<Database>;
 			getSession(): Promise<Session | null>;
 			getRoles(): Promise<UserRole[]>;
-			getUserRolesWithPermissions(user_id: string): Promise<UserRole[]>;
 		}
 		interface PageData {
 			session: Session | null;

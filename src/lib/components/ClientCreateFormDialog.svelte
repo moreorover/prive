@@ -26,48 +26,57 @@
 </script>
 
 <Dialog.Root bind:open={openDialog}>
-	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>Create Client</Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants({ variant: 'default' })} data-testid="create-client"
+		>Create Client</Dialog.Trigger
+	>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Create Client</Dialog.Title>
+			<Dialog.Title data-testid="create-client-dialog-title">Create Client</Dialog.Title>
 			<Dialog.Description>
 				Enter new Client details. Click save when you're done.
 			</Dialog.Description>
 		</Dialog.Header>
-		<Form.Root method="POST" {options} {form} schema={clientSchema} let:config>
+		<Form.Root
+			method="POST"
+			{options}
+			{form}
+			schema={clientSchema}
+			let:config
+			data-testid="create-client-dialog-form"
+		>
 			<Form.Field {config} name="name">
 				<Form.Item>
 					<Form.Label>Full Name</Form.Label>
-					<Form.Input />
+					<Form.Input data-testid="create-client-dialog-form-name" />
 					<Form.Description>Clients full name. (required)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-name-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="email">
 				<Form.Item>
 					<Form.Label>Email</Form.Label>
-					<Form.Input />
+					<Form.Input data-testid="create-client-dialog-form-email" />
 					<Form.Description>Clients email address. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-email-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="phone">
 				<Form.Item>
 					<Form.Label>Phone Number</Form.Label>
-					<Form.Input />
+					<Form.Input data-testid="create-client-dialog-form-phone" />
 					<Form.Description>Clients phone number. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-phone-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="instagram">
 				<Form.Item>
 					<Form.Label>Instagram</Form.Label>
-					<Form.Input />
+					<Form.Input data-testid="create-client-dialog-form-instagram" />
 					<Form.Description>Clients instagram tag. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-instagram-validation" />
 				</Form.Item>
 			</Form.Field>
-			<Form.Button>Submit</Form.Button>
+			<Form.Button data-testid="create-client-dialog-form-submit">Submit</Form.Button>
 		</Form.Root>
 	</Dialog.Content>
 </Dialog.Root>
