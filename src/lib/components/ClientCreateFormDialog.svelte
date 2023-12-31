@@ -57,7 +57,7 @@
 					<Form.Label>Email</Form.Label>
 					<Form.Input data-testid="create-client-dialog-form-email" />
 					<Form.Description>Clients email address. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-email-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="phone">
@@ -65,7 +65,7 @@
 					<Form.Label>Phone Number</Form.Label>
 					<Form.Input data-testid="create-client-dialog-form-phone" />
 					<Form.Description>Clients phone number. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-phone-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Field {config} name="instagram">
@@ -73,7 +73,7 @@
 					<Form.Label>Instagram</Form.Label>
 					<Form.Input data-testid="create-client-dialog-form-instagram" />
 					<Form.Description>Clients instagram tag. (optional)</Form.Description>
-					<Form.Validation />
+					<Form.Validation data-testid="create-client-dialog-form-instagram-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Button data-testid="create-client-dialog-form-submit">Submit</Form.Button>

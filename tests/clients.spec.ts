@@ -191,3 +191,55 @@ test('admin unable to create user without name', async ({ page }) => {
 		}
 	}
 });
+
+test('admin unable to create user with invalid email', async ({ page }) => {
+	for (const testUser of testUsers) {
+		console.log(testUser);
+		if (testUser.roles.includes('Admin')) {
+			const firstName = faker.person.firstName();
+			const lastName = faker.person.lastName();
+			const name = `${firstName} ${lastName}`;
+			const email: string = faker.internet.email({ firstName, lastName });
+			const phone = faker.phone.number();
+			const instagram = faker.internet.userName({ firstName, lastName });
+
+			await loginUser(page, testUser);
+			await page.goto('/');
+			await page.getByRole('link', { name: 'Admin' }).click();
+			await page.getByRole('link', { name: 'Clients' }).click();
+			const clientsHeader = page.getByTestId('clients-header');
+			await expect(clientsHeader).toBeVisible();
+			await expect(clientsHeader.getByTestId('create-client')).toBeVisible();
+			await clientsHeader.getByTestId('create-client').click();
+			await expect(page.getByTestId('create-client-dialog-title')).toBeVisible();
+			await expect(page.getByTestId('create-client-dialog-title')).toHaveText('Create Client');
+
+			const loginForm = page.getByTestId('create-client-dialog-form');
+			await loginForm.getByTestId('create-client-dialog-form-name').fill(name);
+			await loginForm.getByTestId('create-client-dialog-form-email').fill(name);
+			await loginForm.getByTestId('create-client-dialog-form-submit').click();
+
+			await expect(page.getByTestId('create-client-dialog-title')).toBeVisible();
+
+			await expect(
+				loginForm.getByTestId('create-client-dialog-form-email-validation')
+			).toBeVisible();
+			await expect(loginForm.getByTestId('create-client-dialog-form-email-validation')).toHaveText(
+				'Invalid email'
+			);
+
+			await loginForm.getByTestId('create-client-dialog-form-email').fill(email);
+			await loginForm.getByTestId('create-client-dialog-form-submit').click();
+
+			const clients = await page.getByTestId(/^client-row-/).all();
+
+			await expect(clients[0].getByTestId(/^client-name-/)).toBeVisible();
+			await expect(clients[0].getByTestId(/^client-name-/)).toHaveText(name);
+			await expect(clients[0].getByTestId(/^client-email-/)).toBeVisible();
+			await expect(clients[0].getByTestId(/^client-email-/)).toHaveText(email);
+			await expect(clients[0].getByTestId(/^client-phone-/)).not.toBeVisible();
+			await expect(clients[0].getByTestId(/^client-instagram-/)).not.toBeVisible();
+			await logoutUser(page);
+		}
+	}
+});
