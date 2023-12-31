@@ -42,21 +42,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return roles || [];
 	};
 
-	event.locals.getUserRolesWithPermissions = async (user_id: string): Promise<UserRole[]> => {
-		const { data: userRoles, error: userRolesError } = await event.locals.supabase
-			.from('user_roles_mapping')
-			.select('*')
-			.eq('user_id', user_id);
-
-		if (userRolesError) {
-			console.error(`Failed to get User roles for ${user_id}`);
-		}
-
-		const roles: UserRole[] | undefined = userRoles?.map((role) => role.role_name as UserRole);
-
-		return roles || [];
-	};
-
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
 			return name === 'content-range';
