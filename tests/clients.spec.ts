@@ -106,7 +106,7 @@ test('admin creates client', async ({ page }) => {
 			const lastName = faker.person.lastName();
 			const name = `${firstName} ${lastName}`;
 			const email: string = faker.internet.email({ firstName, lastName });
-			const phone = faker.phone.number();
+			const phone = faker.string.numeric({ length: 11 });
 			const instagram = faker.internet.userName({ firstName, lastName });
 
 			await loginUser(page, testUser);
@@ -148,7 +148,7 @@ test('admin unable to create user without name', async ({ page }) => {
 			const lastName = faker.person.lastName();
 			const name = `${firstName} ${lastName}`;
 			const email: string = faker.internet.email({ firstName, lastName });
-			const phone = faker.phone.number();
+			const phone = faker.string.numeric({ length: 11 });
 			const instagram = faker.internet.userName({ firstName, lastName });
 
 			await loginUser(page, testUser);
@@ -200,7 +200,7 @@ test('admin unable to create user with invalid email', async ({ page }) => {
 			const lastName = faker.person.lastName();
 			const name = `${firstName} ${lastName}`;
 			const email: string = faker.internet.email({ firstName, lastName });
-			const phone = faker.phone.number();
+			const phone = faker.string.numeric({ length: 11 });
 			const instagram = faker.internet.userName({ firstName, lastName });
 
 			await loginUser(page, testUser);

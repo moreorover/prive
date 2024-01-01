@@ -80,7 +80,7 @@ export async function createClient(user_id: string) {
 	const firstName = faker.person.firstName();
 	const lastName = faker.person.lastName();
 	const email: string = faker.internet.email({ firstName, lastName });
-	const phone = faker.phone.number();
+	const phone = faker.string.numeric({ length: 11 });
 	const instagram = faker.internet.userName({ firstName, lastName });
 
 	const client = {
