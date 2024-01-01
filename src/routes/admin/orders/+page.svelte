@@ -83,7 +83,7 @@
 					</div>
 					<Button
 						variant="secondary"
-						href={`/admin/order/${order.id}`}
+						href={`/admin/orders/${order.id}`}
 						data-testid="order-view-{order.id}">View</Button
 					>
 				</div>
