@@ -4,6 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import type { User } from '@supabase/gotrue-js/src/lib/types';
 	import { version } from '$app/environment';
+	import { dev } from '$app/environment';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -41,7 +42,9 @@
 				/>
 			{:else}
 				<Button href="/login">Login</Button>
-				<Button href="/register">Register</Button>
+				{#if dev}
+					<Button href="/register">Register</Button>
+				{/if}
 			{/if}
 		</nav>
 	</div>
