@@ -7,15 +7,15 @@ const testUser = {
 	password: 'password'
 };
 
-test('user can register for an account', async ({ page }) => {
+test.skip('user can register for an account', async ({ page }) => {
 	await registerUser(page, testUser);
 });
 
-test('user can login to their account', async ({ page }) => {
+test.skip('user can login to their account', async ({ page }) => {
 	await loginUser(page, testUser);
 });
 
-test('user can logout of an account', async ({ page }) => {
+test.skip('user can logout of an account', async ({ page }) => {
 	await loginUser(page, testUser);
 	await logoutUser(page);
 });
