@@ -1,5 +1,17 @@
 # prive
 
+## 0.0.12
+
+### Patch Changes
+
+- Skip auth related tests that require registering new account ([#82](https://github.com/moreorover/prive/pull/82))
+
+- Hide "Register" button on production ([#82](https://github.com/moreorover/prive/pull/82))
+
+- Change phone number generation within tests context to use numeric string to output constant 11 digits long string ([#82](https://github.com/moreorover/prive/pull/82))
+
+- Inject SpeedInsights only in production environment ([#82](https://github.com/moreorover/prive/pull/82))
+
 ## 0.0.11
 
 ### Patch Changes
