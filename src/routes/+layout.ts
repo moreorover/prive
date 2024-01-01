@@ -1,3 +1,6 @@
 import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+import { dev } from '$app/environment';
 
-injectSpeedInsights();
+if (!dev) {
+	injectSpeedInsights();
+}
