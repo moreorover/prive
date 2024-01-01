@@ -3,6 +3,7 @@ import type { z } from 'zod';
 import {
 	clearSupabaseData,
 	createClient,
+	createOrder,
 	// createStock,
 	createUser,
 	startSupabase
@@ -59,6 +60,7 @@ async function seed() {
 			if (testUser.roles.includes('Admin')) {
 				for (let i = 0; i < 4; i++) {
 					await createClient(user.id);
+					await createOrder(user.id);
 				}
 			}
 		}
@@ -68,4 +70,5 @@ async function seed() {
 	}
 	process.exit();
 }
-seed();
+
+await seed();

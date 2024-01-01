@@ -105,6 +105,32 @@ export async function createClient(user_id: string) {
 	return data;
 }
 
+export async function createOrder(user_id: string) {
+	const title = faker.word.noun();
+	const total = faker.number.float({ min: -110, max: 800 });
+	const completed = faker.datatype.boolean();
+
+	const order = {
+		title,
+		total,
+		completed
+	};
+
+	console.log(`Initiating process to create an order for User ID: ${user_id}`);
+
+	const { error, data } = await supabaseAdmin
+		.from('orders')
+		.insert({ ...order, created_by: user_id });
+
+	if (error) {
+		throw error;
+	}
+
+	console.log(`Order has been successfully generated for the User ID: ${user_id}`);
+
+	return data;
+}
+
 // export async function createContact(user_id: string) {
 // 	const firstName = faker.name.firstName();
 // 	const lastName = faker.name.lastName();

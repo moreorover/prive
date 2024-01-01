@@ -79,6 +79,64 @@ export interface Database {
 					}
 				];
 			};
+			orders: {
+				Row: {
+					client: string | null;
+					completed: boolean;
+					created_at: string;
+					created_by: string;
+					id: string;
+					title: string;
+					total: number | null;
+					updated_at: string;
+					updated_by: string | null;
+				};
+				Insert: {
+					client?: string | null;
+					completed?: boolean;
+					created_at?: string;
+					created_by: string;
+					id?: string;
+					title: string;
+					total?: number | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Update: {
+					client?: string | null;
+					completed?: boolean;
+					created_at?: string;
+					created_by?: string;
+					id?: string;
+					title?: string;
+					total?: number | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'orders_client_fkey';
+						columns: ['client'];
+						isOneToOne: false;
+						referencedRelation: 'clients';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'orders_created_by_fkey';
+						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'orders_updated_by_fkey';
+						columns: ['updated_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			profiles: {
 				Row: {
 					created_at: string;

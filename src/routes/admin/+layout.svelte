@@ -14,40 +14,8 @@
 			href: '/admin/clients'
 		},
 		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
-		},
-		{
-			title: 'Stock',
-			href: '/admin/stock'
+			title: 'Orders',
+			href: '/admin/orders'
 		}
 	];
 </script>
