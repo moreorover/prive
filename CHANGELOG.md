@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.13
+
+### Patch Changes
+
+- bump shadcn-svelte to `0.5.0` ([#85](https://github.com/moreorover/prive/pull/85))
+
 ## 0.0.12
 
 ### Patch Changes
