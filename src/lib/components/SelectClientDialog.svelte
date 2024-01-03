@@ -17,6 +17,7 @@
 	import { Check, ChevronsUpDown } from 'lucide-svelte';
 	export let form: SuperValidated<SelectClientSchema>;
 	export let clients: Client[];
+	export let disabled: boolean = false;
 
 	let openDialog: boolean = false;
 	let openPopover: boolean = false;
@@ -49,12 +50,14 @@
 </script>
 
 <Dialog.Root bind:open={openDialog}>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Edit Profile</Dialog.Trigger>
+	<Dialog.Trigger {disabled} class={buttonVariants({ variant: 'outline' })}
+		>Select Client</Dialog.Trigger
+	>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Edit profile</Dialog.Title>
+			<Dialog.Title>Select Client</Dialog.Title>
 			<Dialog.Description>
-				Make changes to your profile here. Click save when you're done.
+				Make changes to your order here. Click save when you're done.
 			</Dialog.Description>
 		</Dialog.Header>
 		<Form.Root
@@ -68,7 +71,7 @@
 		>
 			<Form.Field {config} name="id" let:setValue let:value>
 				<Form.Item class="flex flex-col">
-					<Form.Label>Language</Form.Label>
+					<Form.Label>Client</Form.Label>
 					<Popover.Root bind:open={openPopover} let:ids>
 						<Popover.Trigger asChild let:builder>
 							<Form.Control id={ids.trigger} let:attrs>
@@ -88,7 +91,7 @@
 						<Popover.Content class="w-[200px] p-0">
 							<Command.Root>
 								<Command.Input autofocus placeholder="Search language..." />
-								<Command.Empty>No language found.</Command.Empty>
+								<Command.Empty>No client found.</Command.Empty>
 								<Command.Group>
 									{#each clients as client}
 										<Command.Item
@@ -111,7 +114,7 @@
 							</Command.Root>
 						</Popover.Content>
 					</Popover.Root>
-					<Form.Description>This is the client that will be assigned to user.</Form.Description>
+					<Form.Description>This is the client that will be assigned to order.</Form.Description>
 					<Form.Validation />
 				</Form.Item>
 			</Form.Field>

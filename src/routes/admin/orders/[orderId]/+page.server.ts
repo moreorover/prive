@@ -2,7 +2,7 @@ import { error, fail, redirect, type ServerLoadEvent } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { handleLoginRedirect } from '$lib/helpers';
-import { selectClientSchema, orderSchema } from '$lib/schema/orderSchema';
+import { selectClientSchema, orderSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
 import type { Session } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async (event: ServerLoadEvent) => {
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	async function getOrder(order_id: string) {
 		const { error: orderError, data: order } = await event.locals.supabase
 			.from('orders')
-			.select('*, clients(id, name)')
+			.select('*, clients(id, name), created_by(full_name), updated_by(full_name)')
 			.eq('id', order_id)
 			.limit(1)
 			.maybeSingle();
@@ -52,6 +52,10 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 		updateOrderForm: await superValidate(
 			event.params.orderId ? await getOrder(event.params.orderId) : null,
 			orderSchema
+		),
+		setOrderStatusForm: await superValidate(
+			{ completed: event.params.orderId ? (await getOrder(event.params.orderId)).completed : true },
+			setOrderStatusSchema
 		)
 	};
 };
@@ -63,25 +67,25 @@ export const actions: Actions = {
 			throw error(401, 'Unauthorized');
 		}
 
-		const updateContactForm = await superValidate(event, orderSchema);
+		const updateOrderForm = await superValidate(event, orderSchema);
 
-		if (!updateContactForm.valid) {
+		if (!updateOrderForm.valid) {
 			return fail(400, {
-				updateContactForm
+				updateContactForm: updateOrderForm
 			});
 		}
 
-		const { error: updateContactError } = await event.locals.supabase
+		const { error: updateOrderError } = await event.locals.supabase
 			.from('orders')
-			.update(updateContactForm.data)
+			.update(updateOrderForm.data)
 			.eq('id', event.params.orderId);
 
-		if (updateContactError) {
-			return setError(updateContactForm, 'Error updating order, please try again later.');
+		if (updateOrderError) {
+			return setError(updateOrderForm, 'Error updating order, please try again later.');
 		}
 
 		return {
-			updateContactForm
+			updateOrderForm: updateOrderForm
 		};
 	},
 	selectClient: async (event) => {
@@ -100,7 +104,11 @@ export const actions: Actions = {
 
 		const { error: updateContactError } = await event.locals.supabase
 			.from('orders')
-			.update({ client: selectClientForm.data.id })
+			.update({
+				client: selectClientForm.data.id,
+				updated_at: new Date().toISOString(),
+				updated_by: session.user.id
+			})
 			.eq('id', event.params.orderId);
 
 		if (updateContactError) {
@@ -109,6 +117,37 @@ export const actions: Actions = {
 
 		return {
 			selectClientForm
+		};
+	},
+	setOrderStatus: async (event) => {
+		const session = await event.locals.getSession();
+		if (!session) {
+			throw error(401, 'Unauthorized');
+		}
+
+		const setOrderStatusForm = await superValidate(event, setOrderStatusSchema);
+
+		if (!setOrderStatusForm.valid) {
+			return fail(400, {
+				setOrderStatusForm: setOrderStatusForm
+			});
+		}
+
+		const { error: setOrderStatusError } = await event.locals.supabase
+			.from('orders')
+			.update({
+				completed: setOrderStatusForm.data.completed,
+				updated_at: new Date().toISOString(),
+				updated_by: session.user.id
+			})
+			.eq('id', event.params.orderId);
+
+		if (setOrderStatusError) {
+			return setError(setOrderStatusForm, 'Error updating order, please try again later.');
+		}
+
+		return {
+			setOrderStatusForm: setOrderStatusForm
 		};
 	}
 };

@@ -13,3 +13,8 @@ export const selectClientSchema = z.object({
 	id: z.optional(z.string().nullable()).nullable()
 });
 export type SelectClientSchema = typeof selectClientSchema;
+
+export const setOrderStatusSchema = z.object({
+	completed: z.boolean().default(false)
+});
+export type SetOrderStatusSchema = typeof setOrderStatusSchema;
