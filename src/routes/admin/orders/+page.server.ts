@@ -14,7 +14,7 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	async function getOrders() {
 		const { data: orders, error: ordersError } = await event.locals.supabase
 			.from('orders')
-			.select('*')
+			.select('*, clients(id, name)')
 			.order('created_at', { ascending: false });
 
 		if (ordersError) {

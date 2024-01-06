@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import OrderCreateFormDialog from '$lib/components/OrderCreateFormDialog.svelte';
+	import * as Table from '$lib/components/ui/table';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -58,36 +59,47 @@
 			</div>
 		</div>
 	</Card.Header>
-	<Card.Content class="grid gap-6" data-testid="order-rows">
-		{#each $searchStore.filtered as order}
-			<div class="space-y-8">
-				<div class="flex items-center justify-between">
-					<div class="space-y-1">
-						<div class="flex">
-							<p class="text-sm font-medium leading-none" data-testid="order-title">
-								{order.title}
-							</p>
-							{#if order.completed}
-								<span class="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs text-[#000000]"
-									>Completed</span
-								>
-							{:else}
-								<span class="ml-2 rounded-md bg-[#faad1d] px-1.5 py-0.5 text-xs text-[#000000]"
-									>In Progress</span
-								>
-							{/if}
-							<p class="ml-auto font-medium" data-testid="order-total">
-								{order.total ? `£${order.total}` : ''}
-							</p>
-						</div>
-					</div>
-					<Button
-						variant="secondary"
-						href={`/admin/orders/${order.id}`}
-						data-testid="order-view-{order.id}">View</Button
+
+	<Table.Root>
+		<Table.Caption>A list of your recent orders.</Table.Caption>
+		<Table.Header>
+			<Table.Row>
+				<Table.Head class="w-[100px]">Prder</Table.Head>
+				<Table.Head class="text-left">Status</Table.Head>
+				<Table.Head class="text-left">Client</Table.Head>
+				<Table.Head class="text-left">Amount</Table.Head>
+				<Table.Head class="text-right">View</Table.Head>
+			</Table.Row>
+		</Table.Header>
+		<Table.Body>
+			{#each $searchStore.filtered as invoice, i (i)}
+				<Table.Row>
+					<Table.Cell class="font-medium">{invoice.title}</Table.Cell>
+					<Table.Cell>
+						{#if invoice.completed}
+							<span class="rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs text-[#000000] text-nowrap"
+								>Completed</span
+							>
+						{:else}
+							<span class="rounded-md bg-[#faad1d] px-1.5 py-0.5 text-xs text-[#000000] text-nowrap"
+								>In Progress</span
+							>
+						{/if}
+					</Table.Cell>
+					<Table.Cell>{invoice.clients ? invoice.clients.name : ''}</Table.Cell>
+					<Table.Cell>£{invoice.total}</Table.Cell>
+					<Table.Cell class="text-right"
+						><Button
+							variant="secondary"
+							href={`/admin/orders/${invoice.id}`}
+							data-testid="order-view-{invoice.id}">View</Button
+						></Table.Cell
 					>
-				</div>
-			</div>
-		{/each}
-	</Card.Content>
+					<!--					<Table.Cell>{JSON.stringify(invoice)}</Table.Cell>-->
+					<!--					<Table.Cell>{invoice.paymentMethod}</Table.Cell>-->
+					<!--					<Table.Cell class="text-right">{invoice.totalAmount}</Table.Cell>-->
+				</Table.Row>
+			{/each}
+		</Table.Body>
+	</Table.Root>
 </Card.Root>
