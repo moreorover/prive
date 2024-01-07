@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import ClientCreateFormDialog from '$lib/components/ClientCreateFormDialog.svelte';
 
 	import * as Avatar from '$lib/components/ui/avatar';
@@ -9,7 +8,7 @@
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
 	import { onDestroy } from 'svelte';
 
-	export let data: PageData;
+	export let data;
 
 	type Client = {
 		id: string;

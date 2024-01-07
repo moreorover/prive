@@ -1,10 +1,9 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import { Plus } from 'lucide-svelte';
 
-	export let data: PageData;
+	export let data;
 
 	const courses = [
 		{ title: 'Course 1', description: 'Course 1 description', published: true },

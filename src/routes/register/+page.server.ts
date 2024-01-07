@@ -1,10 +1,9 @@
 import { fail } from '@sveltejs/kit';
-import type { Actions, RequestEvent } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { registerSchema } from '$lib/schema/loginSchema';
 
-export const actions: Actions = {
-	default: async (event: RequestEvent) => {
+export const actions = {
+	default: async (event) => {
 		const form = await superValidate(event, registerSchema);
 
 		if (!form.valid) {

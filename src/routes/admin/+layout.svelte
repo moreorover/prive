@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Navigation from '$lib/components/Navigation.svelte';
-	import type { PageData } from './$types';
 	import SideBarNavigation from '$lib/components/SideBarNavigation.svelte';
-	export let data: PageData;
+	export let data;
 
 	const sidebarNavItems = [
 		{

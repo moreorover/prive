@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import OrderCreateFormDialog from '$lib/components/OrderCreateFormDialog.svelte';
 	import * as Table from '$lib/components/ui/table';
 
@@ -9,7 +8,7 @@
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
 	import { onDestroy } from 'svelte';
 
-	export let data: PageData;
+	export let data;
 
 	type Order = {
 		id: string;

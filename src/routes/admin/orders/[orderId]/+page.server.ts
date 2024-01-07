@@ -1,11 +1,10 @@
-import { error, fail, redirect, type ServerLoadEvent } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { handleLoginRedirect } from '$lib/helpers';
 import { selectClientSchema, orderSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
 import type { Session } from '@supabase/supabase-js';
 
-export const load: PageServerLoad = async (event: ServerLoadEvent) => {
+export const load = async (event) => {
 	const session: Session | null = await event.locals.getSession();
 	if (!session) {
 		redirect(302, handleLoginRedirect(event));
@@ -60,7 +59,7 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	};
 };
 
-export const actions: Actions = {
+export const actions = {
 	updateOrder: async (event) => {
 		const session = await event.locals.getSession();
 		if (!session) {

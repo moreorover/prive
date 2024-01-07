@@ -1,10 +1,9 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import * as Form from '$lib/components/ui/form';
 	import { registerSchema, type RegisterSchema } from '$lib/schema/loginSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
-	export let data: PageData;
+	export let data;
 
 	let form: SuperValidated<RegisterSchema> = data.form;
 </script>

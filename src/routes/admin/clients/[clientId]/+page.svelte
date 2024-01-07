@@ -1,9 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import ClientUpdateFormDialog from '$lib/components/ClientUpdateFormDialog.svelte';
 
-	export let data: PageData;
+	export let data;
 </script>
 
 <Card.Root>

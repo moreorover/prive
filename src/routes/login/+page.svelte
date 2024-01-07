@@ -1,11 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import * as Form from '$lib/components/ui/form';
 	import { loginSchema, type LoginSchema } from '$lib/schema/loginSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { type FormOptions } from 'formsnap';
 
-	export let data: PageData;
+	export let data;
 
 	const options: FormOptions<typeof loginSchema> = {
 		validators: loginSchema,

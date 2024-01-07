@@ -1,11 +1,10 @@
 import { AuthError } from '@supabase/supabase-js';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, RequestEvent } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { loginSchema } from '$lib/schema/loginSchema';
 
-export const actions: Actions = {
-	default: async (event: RequestEvent) => {
+export const actions = {
+	default: async (event) => {
 		const redirectTo = event.url.searchParams.get('redirectTo');
 		const form = await superValidate(event, loginSchema);
 

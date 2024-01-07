@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import SelectClientDialog from '$lib/components/SelectClientDialog.svelte';
+	import SetOrderStatusDialog from '$lib/components/SetOrderStatusDialog.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
-	import SelectClientDialog from '$lib/components/SelectClientDialog.svelte';
 	import { utcToReadableDate } from '$lib/utils';
-	import SetOrderStatusDialog from '$lib/components/SetOrderStatusDialog.svelte';
 
-	export let data: PageData;
+	export let data;
 </script>
 
 <div class="grid lg:grid-cols-2">

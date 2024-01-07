@@ -1,6 +1,4 @@
-import type { PageServerLoad, PageServerLoadEvent } from './$types';
-
-export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
+export const load = async (event) => {
 	const session = await event.locals.getSession();
 	const roles = await event.locals.getRoles();
 

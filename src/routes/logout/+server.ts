@@ -1,7 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async (event) => {
+export const POST = async (event) => {
 	const { error: logoutError } = await event.locals.supabase.auth.signOut();
 
 	if (logoutError) {

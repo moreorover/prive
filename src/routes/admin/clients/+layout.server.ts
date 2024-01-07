@@ -1,7 +1,6 @@
-import type { PageServerLoad, PageServerLoadEvent } from './$types';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals }: PageServerLoadEvent) => {
+export const load = async ({ locals }) => {
 	const session = await locals.getSession();
 	const roles = await locals.getRoles();
 
