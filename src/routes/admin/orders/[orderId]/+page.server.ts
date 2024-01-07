@@ -8,7 +8,7 @@ import type { Session } from '@supabase/supabase-js';
 export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	const session: Session | null = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, handleLoginRedirect(event));
+		redirect(302, handleLoginRedirect(event));
 	}
 
 	async function getOrder(order_id: string) {
@@ -20,10 +20,10 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 			.maybeSingle();
 
 		if (orderError) {
-			throw error(500, 'Error fetching order. Please try again later.');
+			error(500, 'Error fetching order. Please try again later.');
 		}
 		if (!order) {
-			throw error(404, 'Contact not found.');
+			error(404, 'Contact not found.');
 		}
 		return order;
 	}
@@ -34,10 +34,10 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 			.select('id, name');
 
 		if (ClientsError) {
-			throw error(500, 'Error fetching clients. Please try again later.');
+			error(500, 'Error fetching clients. Please try again later.');
 		}
 		if (!clients) {
-			throw error(404, 'Clients not found.');
+			error(404, 'Clients not found.');
 		}
 		return [{ id: null, name: 'None Selected' }, ...clients];
 	}
@@ -64,7 +64,7 @@ export const actions: Actions = {
 	updateOrder: async (event) => {
 		const session = await event.locals.getSession();
 		if (!session) {
-			throw error(401, 'Unauthorized');
+			error(401, 'Unauthorized');
 		}
 
 		const updateOrderForm = await superValidate(event, orderSchema);
@@ -91,7 +91,7 @@ export const actions: Actions = {
 	selectClient: async (event) => {
 		const session = await event.locals.getSession();
 		if (!session) {
-			throw error(401, 'Unauthorized');
+			error(401, 'Unauthorized');
 		}
 
 		const selectClientForm = await superValidate(event, selectClientSchema);
@@ -122,7 +122,7 @@ export const actions: Actions = {
 	setOrderStatus: async (event) => {
 		const session = await event.locals.getSession();
 		if (!session) {
-			throw error(401, 'Unauthorized');
+			error(401, 'Unauthorized');
 		}
 
 		const setOrderStatusForm = await superValidate(event, setOrderStatusSchema);
