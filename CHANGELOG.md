@@ -1,5 +1,11 @@
 # prive
 
+## 0.0.14
+
+### Patch Changes
+
+- migration to SvelteKit 2 ([#87](https://github.com/moreorover/prive/pull/87))
+
 ## 0.0.13
 
 ### Patch Changes
