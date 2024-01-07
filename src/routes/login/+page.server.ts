@@ -26,9 +26,9 @@ export const actions: Actions = {
 		}
 
 		if (redirectTo) {
-			throw redirect(302, `/${redirectTo.slice(1)}`);
+			redirect(302, `/${redirectTo.slice(1)}`);
 		}
 
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };

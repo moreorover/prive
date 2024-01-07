@@ -8,7 +8,7 @@ import type { Session } from '@supabase/supabase-js';
 export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 	const session: Session | null = await event.locals.getSession();
 	if (!session) {
-		throw redirect(302, handleLoginRedirect(event));
+		redirect(302, handleLoginRedirect(event));
 	}
 
 	async function getClients() {
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async (event: ServerLoadEvent) => {
 			.order('created_at', { ascending: false });
 
 		if (clientsError) {
-			throw error(500, 'Error fetching clients, please try again later.');
+			error(500, 'Error fetching clients, please try again later.');
 		}
 		return clients;
 	}
@@ -35,7 +35,7 @@ export const actions: Actions = {
 	default: async (event) => {
 		const session = await event.locals.getSession();
 		if (!session) {
-			throw error(403, 'Unauthorized');
+			error(403, 'Unauthorized');
 		}
 		const createClientForm = await superValidate(event, clientSchema, { id: 'createClient' });
 		if (!createClientForm.valid) {

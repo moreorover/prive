@@ -6,11 +6,11 @@ import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async (event: PageServerLoadEvent) => {
 	if (!dev) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 	const session = await event.locals.getSession();
 	if (session) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 	return {
 		form: await superValidate(registerSchema)

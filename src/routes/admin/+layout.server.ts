@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ locals }: PageServerLoadEvent) => {
 	const roles = await locals.getRoles();
 
 	if (!roles.includes('Admin')) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 
 	return {
