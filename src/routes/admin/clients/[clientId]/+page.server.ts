@@ -1,15 +1,8 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { handleLoginRedirect } from '$lib/helpers';
 import { clientSchema } from '$lib/schema/clientSchema';
-import type { Session } from '@supabase/supabase-js';
 
 export const load = async (event) => {
-	const session: Session | null = await event.locals.getSession();
-	if (!session) {
-		redirect(302, handleLoginRedirect(event));
-	}
-
 	async function getClient(client_id: string) {
 		const { error: contactError, data: contact } = await event.locals.supabase
 			.from('clients')
@@ -37,11 +30,6 @@ export const load = async (event) => {
 
 export const actions = {
 	updateClient: async (event) => {
-		const session = await event.locals.getSession();
-		if (!session) {
-			error(401, 'Unauthorized');
-		}
-
 		const updateContactForm = await superValidate(event, clientSchema);
 
 		if (!updateContactForm.valid) {

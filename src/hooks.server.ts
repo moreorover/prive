@@ -1,9 +1,11 @@
+import { handleLoginRedirect } from '$lib/helpers';
 import type { UserRole } from '$lib/server/authorization';
 import { ENV } from '$lib/server/env';
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle: Handle = async ({ event, resolve }) => {
+async function supabase({ event, resolve }) {
 	event.locals.supabase = createSupabaseServerClient({
 		supabaseUrl: ENV.PUBLIC_SUPABASE_URL,
 		supabaseKey: ENV.PUBLIC_SUPABASE_ANON_KEY,
@@ -14,7 +16,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const {
 			data: { session }
 		} = await event.locals.supabase.auth.getSession();
-
 		return session;
 	};
 
@@ -47,4 +48,32 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return name === 'content-range';
 		}
 	});
-};
+}
+
+async function authorization({ event, resolve }) {
+	const session = await event.locals.getSession();
+
+	if (session && event.url.pathname.startsWith('/login')) {
+		redirect(303, '/');
+	}
+
+	if (!session && event.url.pathname.startsWith('/admin')) {
+		redirect(303, handleLoginRedirect(event));
+	}
+
+	if (session && event.url.pathname.startsWith('/admin')) {
+		const roles = await event.locals.getRoles();
+		if (!roles.includes('Admin')) {
+			// the user is not admin
+			redirect(303, '/');
+		}
+	}
+
+	if (!session && event.url.pathname.startsWith('/profile')) {
+		redirect(303, handleLoginRedirect(event));
+	}
+
+	return resolve(event);
+}
+
+export const handle: Handle = sequence(supabase, authorization);

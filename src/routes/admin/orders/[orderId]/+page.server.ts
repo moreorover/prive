@@ -1,15 +1,8 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { handleLoginRedirect } from '$lib/helpers';
 import { selectClientSchema, orderSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
-import type { Session } from '@supabase/supabase-js';
 
 export const load = async (event) => {
-	const session: Session | null = await event.locals.getSession();
-	if (!session) {
-		redirect(302, handleLoginRedirect(event));
-	}
-
 	async function getOrder(order_id: string) {
 		const { error: orderError, data: order } = await event.locals.supabase
 			.from('orders')
@@ -61,11 +54,6 @@ export const load = async (event) => {
 
 export const actions = {
 	updateOrder: async (event) => {
-		const session = await event.locals.getSession();
-		if (!session) {
-			error(401, 'Unauthorized');
-		}
-
 		const updateOrderForm = await superValidate(event, orderSchema);
 
 		if (!updateOrderForm.valid) {
@@ -89,9 +77,6 @@ export const actions = {
 	},
 	selectClient: async (event) => {
 		const session = await event.locals.getSession();
-		if (!session) {
-			error(401, 'Unauthorized');
-		}
 
 		const selectClientForm = await superValidate(event, selectClientSchema);
 
@@ -120,9 +105,6 @@ export const actions = {
 	},
 	setOrderStatus: async (event) => {
 		const session = await event.locals.getSession();
-		if (!session) {
-			error(401, 'Unauthorized');
-		}
 
 		const setOrderStatusForm = await superValidate(event, setOrderStatusSchema);
 
