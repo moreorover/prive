@@ -1,4 +1,5 @@
 <script lang="ts">
+	import HairCreateFormDialog from '$lib/components/HairCreateFormDialog.svelte';
 	import SelectClientDialog from '$lib/components/SelectClientDialog.svelte';
 	import SetOrderStatusDialog from '$lib/components/SetOrderStatusDialog.svelte';
 	import * as Card from '$lib/components/ui/card';
@@ -69,3 +70,22 @@
 		<!--	</Card.Footer>-->
 	</Card.Root>
 </div>
+
+<Card.Root>
+	<Card.Header data-testid="orders-header">
+		<div class="flex items-center justify-between space-y-2">
+			<div>
+				<Card.Title data-testid="orders-title">Hair</Card.Title>
+				<Card.Description>Add Hair to this order.</Card.Description>
+			</div>
+			<div class="flex items-center space-x-2">
+				{#if data.roles.includes('Admin')}
+					<HairCreateFormDialog form={data.createHairForm} />
+				{/if}
+			</div>
+		</div>
+	</Card.Header>
+	<Card.Content>
+		{JSON.stringify(data.order?.hair)}
+	</Card.Content>
+</Card.Root>

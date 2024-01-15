@@ -15,6 +15,10 @@
 		{
 			title: 'Orders',
 			href: '/admin/orders'
+		},
+		{
+			title: 'Hair',
+			href: '/admin/hair'
 		}
 	];
 </script>

@@ -79,6 +79,106 @@ export interface Database {
 					}
 				];
 			};
+			hair: {
+				Row: {
+					created_at: string;
+					created_by: string;
+					deleted: boolean;
+					deleted_at: string;
+					deleted_by: string | null;
+					description: string | null;
+					id: string;
+					length: number;
+					price: number;
+					title: string;
+					updated_at: string;
+					updated_by: string | null;
+					weight: number;
+				};
+				Insert: {
+					created_at?: string;
+					created_by: string;
+					deleted?: boolean;
+					deleted_at?: string;
+					deleted_by?: string | null;
+					description?: string | null;
+					id?: string;
+					length: number;
+					price?: number;
+					title: string;
+					updated_at?: string;
+					updated_by?: string | null;
+					weight: number;
+				};
+				Update: {
+					created_at?: string;
+					created_by?: string;
+					deleted?: boolean;
+					deleted_at?: string;
+					deleted_by?: string | null;
+					description?: string | null;
+					id?: string;
+					length?: number;
+					price?: number;
+					title?: string;
+					updated_at?: string;
+					updated_by?: string | null;
+					weight?: number;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'hair_created_by_fkey';
+						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'hair_deleted_by_fkey';
+						columns: ['deleted_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'hair_updated_by_fkey';
+						columns: ['updated_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			hair_order: {
+				Row: {
+					hair_id: string;
+					order_id: string;
+				};
+				Insert: {
+					hair_id: string;
+					order_id: string;
+				};
+				Update: {
+					hair_id?: string;
+					order_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'hair_order_hair_id_fkey';
+						columns: ['hair_id'];
+						isOneToOne: false;
+						referencedRelation: 'hair';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'hair_order_order_id_fkey';
+						columns: ['order_id'];
+						isOneToOne: false;
+						referencedRelation: 'orders';
+						referencedColumns: ['id'];
+					}
+				];
+			};
 			orders: {
 				Row: {
 					client: string | null;

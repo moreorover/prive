@@ -1,12 +1,13 @@
+import { hairSchema } from '$lib/schema/hairSchema.js';
+import { orderSchema, selectClientSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
 import { error, fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { selectClientSchema, orderSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
 
 export const load = async (event) => {
 	async function getOrder(order_id: string) {
 		const { error: orderError, data: order } = await event.locals.supabase
 			.from('orders')
-			.select('*, clients(id, name), created_by(full_name), updated_by(full_name)')
+			.select('*, clients(id, name), hair(*), created_by(full_name), updated_by(full_name)')
 			.eq('id', order_id)
 			.limit(1)
 			.maybeSingle();
@@ -48,7 +49,8 @@ export const load = async (event) => {
 		setOrderStatusForm: await superValidate(
 			{ completed: event.params.orderId ? (await getOrder(event.params.orderId)).completed : true },
 			setOrderStatusSchema
-		)
+		),
+		createHairForm: await superValidate(hairSchema, { id: 'createHair' })
 	};
 };
 
@@ -129,6 +131,42 @@ export const actions = {
 
 		return {
 			setOrderStatusForm: setOrderStatusForm
+		};
+	},
+	createHair: async (event) => {
+		const session = await event.locals.getSession();
+
+		const createHairForm = await superValidate(event, hairSchema);
+
+		if (!createHairForm.valid) {
+			return fail(400, {
+				setOrderStatusForm: createHairForm
+			});
+		}
+
+		const { data: createHairData, error: ceateHairError } = await event.locals.supabase
+			.from('hair')
+			.insert({
+				...createHairForm.data,
+				updated_at: new Date().toISOString(),
+				created_by: session.user.id
+			})
+			.select();
+
+		if (ceateHairError) {
+			return setError(createHairForm, 'Error creating hair on order, please try again later.');
+		}
+
+		const { error: createHairToOrderError } = await event.locals.supabase
+			.from('hair_order')
+			.insert({ hair_id: createHairData[0].id, order_id: event.params.orderId });
+
+		if (createHairToOrderError) {
+			return setError(createHairForm, 'Error creating hair on order, please try again later.');
+		}
+
+		return {
+			createHairForm: createHairForm
 		};
 	}
 };
