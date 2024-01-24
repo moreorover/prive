@@ -40,7 +40,7 @@
 		"@supabase/supabase-js": "^2.33.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-vercel": "^4.0.0",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/kit": "^2.4.3",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@svitejs/changesets-changelog-github-compact": "^1.1.0",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
