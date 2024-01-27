@@ -4,12 +4,12 @@ import { ENV } from '$lib/server/env';
 // import { stripe } from "$lib/server/stripe";
 import { supabaseAdmin } from '$lib/server/supabase-admin';
 // import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import type { User } from '@supabase/supabase-js';
 import { execSync } from 'child_process';
 import detect from 'detect-port';
 import pg from 'pg';
-import type { SeedUser } from './seed';
-import { faker } from '@faker-js/faker';
+import type { Product, SeedUser } from './seed';
 
 export async function startSupabase() {
 	const port = await detect(54322);
@@ -105,13 +105,28 @@ export async function createClient(user_id: string) {
 	return data;
 }
 
+export async function createSupplier(user_id: string, name: string, abbreviation: string) {
+	console.log(`Initiating process to create a supplier for User ID: ${user_id}`);
+
+	const { error, data } = await supabaseAdmin
+		.from('clients')
+		.insert({ name, abbreviation, created_by: user_id })
+		.select();
+
+	if (error) {
+		throw error;
+	}
+
+	console.log(`Supplier has been successfully generated for the User ID: ${user_id}`);
+
+	return data;
+}
+
 export async function createOrder(user_id: string) {
-	const title = faker.word.noun();
 	const total = faker.number.float({ min: -110, max: 800 });
 	const completed = faker.datatype.boolean();
 
 	const order = {
-		title,
 		total,
 		completed
 	};
@@ -120,13 +135,35 @@ export async function createOrder(user_id: string) {
 
 	const { error, data } = await supabaseAdmin
 		.from('orders')
-		.insert({ ...order, created_by: user_id });
+		.insert({ ...order, ordertype: 'productOrder', created_by: user_id });
 
 	if (error) {
 		throw error;
 	}
 
 	console.log(`Order has been successfully generated for the User ID: ${user_id}`);
+
+	return data;
+}
+
+export async function createProduct(
+	user_id: string,
+	supplier_id: string,
+	supplier_abbr: string,
+	product: Product
+) {
+	const { error, data } = await supabaseAdmin.from('products').insert({
+		title: product.description,
+		upc: `${supplier_abbr}${product.code}`,
+		price: product.price,
+		rrp: product.rrp,
+		created_by: user_id,
+		supplier: supplier_id
+	});
+
+	if (error) {
+		throw error;
+	}
 
 	return data;
 }

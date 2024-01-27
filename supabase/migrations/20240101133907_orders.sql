@@ -1,11 +1,14 @@
 create extension if not exists "uuid-ossp";
 
+-- Create an ENUM type for the 'orderType' column
+CREATE TYPE order_type AS ENUM ('hairOrder', 'productOrder');
+
 -- ORDERS
 create table public.orders (
   id            uuid not null default uuid_generate_v4(),
-  title         text not null,
-  total         decimal(10,2),
+  total         decimal(10,2) not null default 0.00,
   completed     boolean not null default false,
+  orderType     order_type NOT NULL,
   client        uuid references public.clients,
   created_by    uuid references public.profiles not null,
   updated_by    uuid references public.profiles,

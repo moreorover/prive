@@ -27,6 +27,19 @@ export const clientSchema = z.object({
 				return val;
 			})
 			.nullable()
+	),
+	abbreviation: z.optional(
+		z
+			.string()
+			.min(2)
+			.max(3)
+			.transform((val: string): string | null => {
+				if (!val || val.trim() === '') {
+					return null;
+				}
+				return val;
+			})
+			.nullable()
 	)
 });
 export type ClientSchema = typeof clientSchema;

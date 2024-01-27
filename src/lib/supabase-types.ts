@@ -30,6 +30,7 @@ export interface Database {
 		Tables: {
 			clients: {
 				Row: {
+					abbreviation: string | null;
 					created_at: string;
 					created_by: string;
 					email: string | null;
@@ -41,6 +42,7 @@ export interface Database {
 					updated_by: string | null;
 				};
 				Insert: {
+					abbreviation?: string | null;
 					created_at?: string;
 					created_by: string;
 					email?: string | null;
@@ -52,6 +54,7 @@ export interface Database {
 					updated_by?: string | null;
 				};
 				Update: {
+					abbreviation?: string | null;
 					created_at?: string;
 					created_by?: string;
 					email?: string | null;
@@ -87,7 +90,7 @@ export interface Database {
 					deleted_at: string;
 					deleted_by: string | null;
 					description: string | null;
-					id: string;
+					id: number;
 					length: number;
 					price: number;
 					title: string;
@@ -102,7 +105,7 @@ export interface Database {
 					deleted_at?: string;
 					deleted_by?: string | null;
 					description?: string | null;
-					id?: string;
+					id?: number;
 					length: number;
 					price?: number;
 					title: string;
@@ -117,7 +120,7 @@ export interface Database {
 					deleted_at?: string;
 					deleted_by?: string | null;
 					description?: string | null;
-					id?: string;
+					id?: number;
 					length?: number;
 					price?: number;
 					title?: string;
@@ -151,15 +154,15 @@ export interface Database {
 			};
 			hair_order: {
 				Row: {
-					hair_id: string;
+					hair_id: number;
 					order_id: string;
 				};
 				Insert: {
-					hair_id: string;
+					hair_id: number;
 					order_id: string;
 				};
 				Update: {
-					hair_id?: string;
+					hair_id?: number;
 					order_id?: string;
 				};
 				Relationships: [
@@ -186,8 +189,8 @@ export interface Database {
 					created_at: string;
 					created_by: string;
 					id: string;
-					title: string;
-					total: number | null;
+					ordertype: Database['public']['Enums']['order_type'];
+					total: number;
 					updated_at: string;
 					updated_by: string | null;
 				};
@@ -197,8 +200,8 @@ export interface Database {
 					created_at?: string;
 					created_by: string;
 					id?: string;
-					title: string;
-					total?: number | null;
+					ordertype: Database['public']['Enums']['order_type'];
+					total?: number;
 					updated_at?: string;
 					updated_by?: string | null;
 				};
@@ -208,8 +211,8 @@ export interface Database {
 					created_at?: string;
 					created_by?: string;
 					id?: string;
-					title?: string;
-					total?: number | null;
+					ordertype?: Database['public']['Enums']['order_type'];
+					total?: number;
 					updated_at?: string;
 					updated_by?: string | null;
 				};
@@ -233,6 +236,116 @@ export interface Database {
 						columns: ['updated_by'];
 						isOneToOne: false;
 						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			products: {
+				Row: {
+					created_at: string;
+					created_by: string;
+					deleted_at: string;
+					deleted_by: string | null;
+					description: string | null;
+					id: string;
+					price: number;
+					rrp: number;
+					stock: number;
+					supplier: string | null;
+					title: string;
+					upc: string | null;
+					updated_at: string;
+					updated_by: string | null;
+				};
+				Insert: {
+					created_at?: string;
+					created_by: string;
+					deleted_at?: string;
+					deleted_by?: string | null;
+					description?: string | null;
+					id?: string;
+					price?: number;
+					rrp?: number;
+					stock?: number;
+					supplier?: string | null;
+					title: string;
+					upc?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Update: {
+					created_at?: string;
+					created_by?: string;
+					deleted_at?: string;
+					deleted_by?: string | null;
+					description?: string | null;
+					id?: string;
+					price?: number;
+					rrp?: number;
+					stock?: number;
+					supplier?: string | null;
+					title?: string;
+					upc?: string | null;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'products_created_by_fkey';
+						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'products_deleted_by_fkey';
+						columns: ['deleted_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'products_supplier_fkey';
+						columns: ['supplier'];
+						isOneToOne: false;
+						referencedRelation: 'clients';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'products_updated_by_fkey';
+						columns: ['updated_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			products_order: {
+				Row: {
+					order_id: string;
+					products_id: string;
+				};
+				Insert: {
+					order_id: string;
+					products_id: string;
+				};
+				Update: {
+					order_id?: string;
+					products_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'products_order_order_id_fkey';
+						columns: ['order_id'];
+						isOneToOne: false;
+						referencedRelation: 'orders';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'products_order_products_id_fkey';
+						columns: ['products_id'];
+						isOneToOne: false;
+						referencedRelation: 'products';
 						referencedColumns: ['id'];
 					}
 				];
@@ -325,7 +438,7 @@ export interface Database {
 			};
 		};
 		Enums: {
-			[_ in never]: never;
+			order_type: 'hairOrder' | 'productOrder';
 		};
 		CompositeTypes: {
 			[_ in never]: never;

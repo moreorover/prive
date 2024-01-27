@@ -27,11 +27,11 @@
 
 <Dialog.Root bind:open={openDialog}>
 	<Dialog.Trigger class={buttonVariants({ variant: 'default' })} data-testid="create-hair"
-		>Create Client</Dialog.Trigger
+		>Add Hair</Dialog.Trigger
 	>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title data-testid="create-hair-dialog-title">Create Client</Dialog.Title>
+			<Dialog.Title data-testid="create-hair-dialog-title">Add Hair</Dialog.Title>
 			<Dialog.Description>
 				Enter new Client details. Click save when you're done.
 			</Dialog.Description>
