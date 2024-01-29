@@ -12,22 +12,23 @@
 
 	type Order = {
 		id: string;
-		title: string;
+		ordertype: string;
+		clients: string;
 		total: number | null;
 		completed: boolean;
 	};
 
-	const searchOrders: Order[] = data.orders.map((order: Order) => ({
+	const searchOrders: Order[] = data.orders.map((order) => ({
 		...order,
-		searchTerms: `${order.title}`
+		searchTerms: `${order.ordertype} ${order.completed ? 'completed' : 'in progress'}`
 	}));
 
 	const searchStore = createSearchStore(searchOrders);
 
 	$: {
-		$searchStore.data = data.orders.map((order: Order) => ({
+		$searchStore.data = data.orders.map((order) => ({
 			...order,
-			searchTerms: `${order.title}`
+			searchTerms: `${order.ordertype} ${order.completed ? 'completed' : 'in progress'}`
 		}));
 	}
 
@@ -63,7 +64,7 @@
 		<Table.Caption>A list of your recent orders.</Table.Caption>
 		<Table.Header>
 			<Table.Row>
-				<Table.Head class="w-[100px]">Prder</Table.Head>
+				<Table.Head class="w-[100px]">Type</Table.Head>
 				<Table.Head class="text-left">Status</Table.Head>
 				<Table.Head class="text-left">Client</Table.Head>
 				<Table.Head class="text-left">Amount</Table.Head>
@@ -73,14 +74,17 @@
 		<Table.Body>
 			{#each $searchStore.filtered as invoice, i (i)}
 				<Table.Row>
-					<Table.Cell class="font-medium">{invoice.title}</Table.Cell>
+					<Table.Cell class="font-medium">{invoice.ordertype}</Table.Cell>
 					<Table.Cell>
 						{#if invoice.completed}
-							<span class="rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs text-[#000000] text-nowrap"
-								>Completed</span
+							<span
+								class="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
 							>
+								Completed
+							</span>
 						{:else}
-							<span class="rounded-md bg-[#faad1d] px-1.5 py-0.5 text-xs text-[#000000] text-nowrap"
+							<span
+								class="ml-2 rounded-md bg-[#faad1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
 								>In Progress</span
 							>
 						{/if}

@@ -1,7 +1,7 @@
-import { setError, superValidate } from 'sveltekit-superforms/server';
 import { orderSchema } from '$lib/schema/orderSchema';
-import { fail, error } from '@sveltejs/kit';
 import type { Session } from '@supabase/supabase-js';
+import { error, fail } from '@sveltejs/kit';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 export const load = async (event) => {
 	const session: Session | null = await event.locals.getSession();
