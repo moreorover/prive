@@ -1,4 +1,4 @@
-import { hairSchema } from '$lib/schema/hairSchema.js';
+import { hairSchema, hairUpdateSchema } from '$lib/schema/hairSchema.js';
 import {
 	hairOrderSchema,
 	selectClientSchema,
@@ -23,6 +23,22 @@ export const load = async (event) => {
 		if (!order) {
 			error(404, 'Contact not found.');
 		}
+
+		await Promise.all(
+			order.hair.map(async (h) => {
+				h.updateForm = await superValidate(
+					{
+						hairId: h.id,
+						title: h.title,
+						description: h.description,
+						weight: h.weight,
+						length: h.length
+					},
+					hairUpdateSchema
+				);
+			})
+		);
+
 		return order;
 	}
 
@@ -279,6 +295,69 @@ export const actions = {
 
 		return {
 			createHairForm: createHairForm
+		};
+	},
+	updateHair: async (event) => {
+		const order_id = event.params.hairOrderId;
+		const session = await event.locals.getSession();
+
+		const updateHairForm = await superValidate(event, hairUpdateSchema);
+
+		if (!updateHairForm.valid) {
+			return fail(400, {
+				updateHairForm: updateHairForm
+			});
+		}
+
+		const { data: updateHairData, error: updateHairError } = await event.locals.supabase
+			.from('hair')
+			.update({
+				title: updateHairForm.data.title,
+				description: updateHairForm.data.description,
+				length: updateHairForm.data.length,
+				weight: updateHairForm.data.weight,
+				updated_at: new Date().toISOString(),
+				created_by: session.user.id
+			})
+			.eq('id', updateHairForm.data.hairId);
+
+		if (updateHairError) {
+			return setError(updateHairForm, 'Error creating hair on order, please try again later.');
+		}
+
+		const { data: allOrderHair, error: allOrderHairError } = await event.locals.supabase
+			.from('orders')
+			.select('total, hair(*)')
+			.eq('id', order_id)
+			.single();
+
+		if (allOrderHair?.total != 0) {
+			const total_weight = allOrderHair?.hair.reduce((a, c) => {
+				return a + c.weight;
+			}, 0);
+
+			const pricePerGram = allOrderHair?.total / total_weight;
+
+			for (const h of allOrderHair?.hair) {
+				const price = h.weight * pricePerGram;
+
+				const { error: updateHairError } = await event.locals.supabase
+					.from('hair')
+					.update({
+						price: price,
+						updated_at: new Date().toISOString(),
+						created_by: session.user.id
+					})
+					.eq('id', h.id);
+				if (updateHairError) {
+					console.error(`Error updating price for ${h.id}`);
+					console.error(`updateHairError`);
+				}
+			}
+		}
+
+		return {
+			createHairForm: updateHairForm
 		};
 	}
 };

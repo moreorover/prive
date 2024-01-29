@@ -1,15 +1,28 @@
 <script lang="ts">
 	import HairCreateFormDialog from '$lib/components/HairCreateFormDialog.svelte';
+	import HairUpdateFormDialog from '$lib/components/HairUpdateFormDialog.svelte';
 	import SelectClientDialog from '$lib/components/SelectClientDialog.svelte';
 	import SetOrderStatusDialog from '$lib/components/SetOrderStatusDialog.svelte';
 	import SetOrderTotalDialog from '$lib/components/SetOrderTotalDialog.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import * as Table from '$lib/components/ui/table';
+	import type { HairUpdateSchema } from '$lib/schema/hairSchema';
 	import { utcToReadableDate } from '$lib/utils';
+	import { Pencil } from 'lucide-svelte';
+	import type { SuperValidated } from 'sveltekit-superforms';
 
 	export let data;
+	let updateHairOpen = false;
+	let hairUpdate: SuperValidated<HairUpdateSchema>;
+
+	function handleHairUpdate(form: SuperValidated<HairUpdateSchema>) {
+		hairUpdate = form;
+		updateHairOpen = true;
+	}
 </script>
+
+<HairUpdateFormDialog form={hairUpdate} bind:openDialog={updateHairOpen} />
 
 <div class="grid lg:grid-cols-2">
 	<Card.Root>
@@ -104,6 +117,7 @@
 					<Table.Head class="w-[100px]">Weight</Table.Head>
 					<Table.Head class="w-[100px]">Length</Table.Head>
 					<Table.Head class="w-[100px]">Price</Table.Head>
+					<Table.Head class="w-[100px]">Action</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -114,6 +128,12 @@
 						<Table.Cell class="font-medium">{hair.weight} g</Table.Cell>
 						<Table.Cell class="font-medium">{hair.length} cm</Table.Cell>
 						<Table.Cell class="font-medium">£{hair.price}</Table.Cell>
+						<Table.Cell
+							class="font-medium hover:cursor-pointer"
+							on:click={() => handleHairUpdate(hair.updateForm)}
+						>
+							<Pencil />
+						</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>
