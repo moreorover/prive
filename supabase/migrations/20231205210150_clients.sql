@@ -7,7 +7,6 @@ create table public.clients (
   email         text,
   phone         text,
   instagram     text,
-  abbreviation  text,
   created_by    uuid references public.profiles not null,
   updated_by    uuid references public.profiles,
   created_at    timestamp with time zone default now() not null,

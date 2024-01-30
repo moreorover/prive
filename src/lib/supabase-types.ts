@@ -30,39 +30,39 @@ export interface Database {
 		Tables: {
 			clients: {
 				Row: {
-					abbreviation: string | null;
+					abbreviation: string;
 					created_at: string;
 					created_by: string;
-					email: string | null;
+					email: string;
 					id: string;
-					instagram: string | null;
+					instagram: string;
 					name: string;
-					phone: string | null;
-					updated_at: string;
+					phone: string;
+					updated_at: string | null;
 					updated_by: string | null;
 				};
 				Insert: {
-					abbreviation?: string | null;
+					abbreviation?: string;
 					created_at?: string;
 					created_by: string;
-					email?: string | null;
+					email?: string;
 					id?: string;
-					instagram?: string | null;
+					instagram?: string;
 					name: string;
-					phone?: string | null;
-					updated_at?: string;
+					phone: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Update: {
-					abbreviation?: string | null;
+					abbreviation?: string;
 					created_at?: string;
 					created_by?: string;
-					email?: string | null;
+					email?: string;
 					id?: string;
-					instagram?: string | null;
+					instagram?: string;
 					name?: string;
-					phone?: string | null;
-					updated_at?: string;
+					phone?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Relationships: [
@@ -87,46 +87,52 @@ export interface Database {
 					created_at: string;
 					created_by: string;
 					deleted: boolean;
-					deleted_at: string;
+					deleted_at: string | null;
 					deleted_by: string | null;
-					description: string | null;
+					description: string;
 					id: number;
 					length: number;
-					price: number;
+					purchase_price: number;
 					title: string;
-					updated_at: string;
+					upc: string;
+					updated_at: string | null;
 					updated_by: string | null;
-					weight: number;
+					weight_in_stock: number;
+					weight_purchased: number;
 				};
 				Insert: {
 					created_at?: string;
 					created_by: string;
 					deleted?: boolean;
-					deleted_at?: string;
+					deleted_at?: string | null;
 					deleted_by?: string | null;
-					description?: string | null;
+					description?: string;
 					id?: number;
-					length: number;
-					price?: number;
-					title: string;
-					updated_at?: string;
+					length?: number;
+					purchase_price?: number;
+					title?: string;
+					upc?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
-					weight: number;
+					weight_in_stock: number;
+					weight_purchased: number;
 				};
 				Update: {
 					created_at?: string;
 					created_by?: string;
 					deleted?: boolean;
-					deleted_at?: string;
+					deleted_at?: string | null;
 					deleted_by?: string | null;
-					description?: string | null;
+					description?: string;
 					id?: number;
 					length?: number;
-					price?: number;
+					purchase_price?: number;
 					title?: string;
-					updated_at?: string;
+					upc?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
-					weight?: number;
+					weight_in_stock?: number;
+					weight_purchased?: number;
 				};
 				Relationships: [
 					{
@@ -152,74 +158,226 @@ export interface Database {
 					}
 				];
 			};
-			hair_order: {
+			order_hair: {
 				Row: {
-					hair_id: number;
-					order_id: string;
+					client_id: string | null;
+					created_at: string;
+					created_by: string;
+					deleted_at: string | null;
+					deleted_by: string | null;
+					hair_id: number | null;
+					id: string;
+					order_id: string | null;
+					price: number | null;
+					updated_at: string | null;
+					updated_by: string | null;
+					weight: number | null;
 				};
 				Insert: {
-					hair_id: number;
-					order_id: string;
+					client_id?: string | null;
+					created_at?: string;
+					created_by: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
+					hair_id?: number | null;
+					id?: string;
+					order_id?: string | null;
+					price?: number | null;
+					updated_at?: string | null;
+					updated_by?: string | null;
+					weight?: number | null;
 				};
 				Update: {
-					hair_id?: number;
-					order_id?: string;
+					client_id?: string | null;
+					created_at?: string;
+					created_by?: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
+					hair_id?: number | null;
+					id?: string;
+					order_id?: string | null;
+					price?: number | null;
+					updated_at?: string | null;
+					updated_by?: string | null;
+					weight?: number | null;
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'hair_order_hair_id_fkey';
+						foreignKeyName: 'order_hair_client_id_fkey';
+						columns: ['client_id'];
+						isOneToOne: false;
+						referencedRelation: 'clients';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_hair_created_by_fkey';
+						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_hair_deleted_by_fkey';
+						columns: ['deleted_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_hair_hair_id_fkey';
 						columns: ['hair_id'];
 						isOneToOne: false;
 						referencedRelation: 'hair';
 						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: 'hair_order_order_id_fkey';
+						foreignKeyName: 'order_hair_order_id_fkey';
 						columns: ['order_id'];
 						isOneToOne: false;
 						referencedRelation: 'orders';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_hair_updated_by_fkey';
+						columns: ['updated_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					}
+				];
+			};
+			order_products: {
+				Row: {
+					client_id: string | null;
+					created_at: string;
+					created_by: string;
+					deleted_at: string | null;
+					deleted_by: string | null;
+					id: string;
+					order_id: string | null;
+					product_id: string | null;
+					quantity: number | null;
+					unit_price: number | null;
+					updated_at: string | null;
+					updated_by: string | null;
+				};
+				Insert: {
+					client_id?: string | null;
+					created_at?: string;
+					created_by: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
+					id?: string;
+					order_id?: string | null;
+					product_id?: string | null;
+					quantity?: number | null;
+					unit_price?: number | null;
+					updated_at?: string | null;
+					updated_by?: string | null;
+				};
+				Update: {
+					client_id?: string | null;
+					created_at?: string;
+					created_by?: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
+					id?: string;
+					order_id?: string | null;
+					product_id?: string | null;
+					quantity?: number | null;
+					unit_price?: number | null;
+					updated_at?: string | null;
+					updated_by?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: 'order_products_client_id_fkey';
+						columns: ['client_id'];
+						isOneToOne: false;
+						referencedRelation: 'clients';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_products_created_by_fkey';
+						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_products_deleted_by_fkey';
+						columns: ['deleted_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_products_order_id_fkey';
+						columns: ['order_id'];
+						isOneToOne: false;
+						referencedRelation: 'orders';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_products_product_id_fkey';
+						columns: ['product_id'];
+						isOneToOne: false;
+						referencedRelation: 'products';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'order_products_updated_by_fkey';
+						columns: ['updated_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
 					}
 				];
 			};
 			orders: {
 				Row: {
-					client: string | null;
-					completed: boolean;
+					client_id: string | null;
 					created_at: string;
 					created_by: string;
+					deleted_at: string | null;
+					deleted_by: string | null;
 					id: string;
-					ordertype: Database['public']['Enums']['order_type'];
-					total: number;
-					updated_at: string;
+					order_status: Database['public']['Enums']['order_status'];
+					order_type: Database['public']['Enums']['order_type'];
+					ordered_at: string;
+					updated_at: string | null;
 					updated_by: string | null;
 				};
 				Insert: {
-					client?: string | null;
-					completed?: boolean;
+					client_id?: string | null;
 					created_at?: string;
 					created_by: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
 					id?: string;
-					ordertype: Database['public']['Enums']['order_type'];
-					total?: number;
-					updated_at?: string;
+					order_status: Database['public']['Enums']['order_status'];
+					order_type: Database['public']['Enums']['order_type'];
+					ordered_at?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Update: {
-					client?: string | null;
-					completed?: boolean;
+					client_id?: string | null;
 					created_at?: string;
 					created_by?: string;
+					deleted_at?: string | null;
+					deleted_by?: string | null;
 					id?: string;
-					ordertype?: Database['public']['Enums']['order_type'];
-					total?: number;
-					updated_at?: string;
+					order_status?: Database['public']['Enums']['order_status'];
+					order_type?: Database['public']['Enums']['order_type'];
+					ordered_at?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'orders_client_fkey';
-						columns: ['client'];
+						foreignKeyName: 'orders_client_id_fkey';
+						columns: ['client_id'];
 						isOneToOne: false;
 						referencedRelation: 'clients';
 						referencedColumns: ['id'];
@@ -227,6 +385,13 @@ export interface Database {
 					{
 						foreignKeyName: 'orders_created_by_fkey';
 						columns: ['created_by'];
+						isOneToOne: false;
+						referencedRelation: 'profiles';
+						referencedColumns: ['id'];
+					},
+					{
+						foreignKeyName: 'orders_deleted_by_fkey';
+						columns: ['deleted_by'];
 						isOneToOne: false;
 						referencedRelation: 'profiles';
 						referencedColumns: ['id'];
@@ -244,49 +409,49 @@ export interface Database {
 				Row: {
 					created_at: string;
 					created_by: string;
-					deleted_at: string;
+					deleted_at: string | null;
 					deleted_by: string | null;
-					description: string | null;
+					description: string;
 					id: string;
-					price: number;
+					purchase_price: number;
 					rrp: number;
-					stock: number;
-					supplier: string | null;
+					supplier_id: string | null;
 					title: string;
-					upc: string | null;
-					updated_at: string;
+					units_in_stock: number;
+					upc: string;
+					updated_at: string | null;
 					updated_by: string | null;
 				};
 				Insert: {
 					created_at?: string;
 					created_by: string;
-					deleted_at?: string;
+					deleted_at?: string | null;
 					deleted_by?: string | null;
-					description?: string | null;
+					description?: string;
 					id?: string;
-					price?: number;
+					purchase_price?: number;
 					rrp?: number;
-					stock?: number;
-					supplier?: string | null;
+					supplier_id?: string | null;
 					title: string;
-					upc?: string | null;
-					updated_at?: string;
+					units_in_stock?: number;
+					upc?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Update: {
 					created_at?: string;
 					created_by?: string;
-					deleted_at?: string;
+					deleted_at?: string | null;
 					deleted_by?: string | null;
-					description?: string | null;
+					description?: string;
 					id?: string;
-					price?: number;
+					purchase_price?: number;
 					rrp?: number;
-					stock?: number;
-					supplier?: string | null;
+					supplier_id?: string | null;
 					title?: string;
-					upc?: string | null;
-					updated_at?: string;
+					units_in_stock?: number;
+					upc?: string;
+					updated_at?: string | null;
 					updated_by?: string | null;
 				};
 				Relationships: [
@@ -305,8 +470,8 @@ export interface Database {
 						referencedColumns: ['id'];
 					},
 					{
-						foreignKeyName: 'products_supplier_fkey';
-						columns: ['supplier'];
+						foreignKeyName: 'products_supplier_id_fkey';
+						columns: ['supplier_id'];
 						isOneToOne: false;
 						referencedRelation: 'clients';
 						referencedColumns: ['id'];
@@ -320,54 +485,24 @@ export interface Database {
 					}
 				];
 			};
-			products_order: {
-				Row: {
-					order_id: string;
-					products_id: string;
-				};
-				Insert: {
-					order_id: string;
-					products_id: string;
-				};
-				Update: {
-					order_id?: string;
-					products_id?: string;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'products_order_order_id_fkey';
-						columns: ['order_id'];
-						isOneToOne: false;
-						referencedRelation: 'orders';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'products_order_products_id_fkey';
-						columns: ['products_id'];
-						isOneToOne: false;
-						referencedRelation: 'products';
-						referencedColumns: ['id'];
-					}
-				];
-			};
 			profiles: {
 				Row: {
 					created_at: string;
 					full_name: string | null;
 					id: string;
-					updated_at: string;
+					updated_at: string | null;
 				};
 				Insert: {
 					created_at?: string;
 					full_name?: string | null;
 					id: string;
-					updated_at?: string;
+					updated_at?: string | null;
 				};
 				Update: {
 					created_at?: string;
 					full_name?: string | null;
 					id?: string;
-					updated_at?: string;
+					updated_at?: string | null;
 				};
 				Relationships: [
 					{
@@ -438,7 +573,8 @@ export interface Database {
 			};
 		};
 		Enums: {
-			order_type: 'hairOrder' | 'productOrder';
+			order_status: 'pending' | 'completed' | 'cancelled';
+			order_type: 'purchase' | 'sale';
 		};
 		CompositeTypes: {
 			[_ in never]: never;

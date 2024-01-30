@@ -110,7 +110,7 @@ export async function createSupplier(user_id: string, name: string, abbreviation
 
 	const { error, data } = await supabaseAdmin
 		.from('clients')
-		.insert({ name, abbreviation, created_by: user_id })
+		.insert({ name, abbreviation, phone: '', email: '', created_by: user_id })
 		.select();
 
 	if (error) {
@@ -122,26 +122,23 @@ export async function createSupplier(user_id: string, name: string, abbreviation
 	return data;
 }
 
-export async function createOrder(user_id: string) {
+export async function createOrder(created_by: string) {
 	const total = faker.number.float({ min: -110, max: 800 });
 	const completed = faker.datatype.boolean();
+	const order_type = faker.helpers.arrayElement(['purchase', 'sale']);
+	const order_status = faker.helpers.arrayElement(['pending', 'completed', 'cancelled']);
 
-	const order = {
-		total,
-		completed
-	};
-
-	console.log(`Initiating process to create an order for User ID: ${user_id}`);
+	console.log(`Initiating process to create an order for User ID: ${created_by}`);
 
 	const { error, data } = await supabaseAdmin
 		.from('orders')
-		.insert({ ...order, ordertype: 'productOrder', created_by: user_id });
+		.insert({ order_status, order_type, created_by });
 
 	if (error) {
 		throw error;
 	}
 
-	console.log(`Order has been successfully generated for the User ID: ${user_id}`);
+	console.log(`Order has been successfully generated for the User ID: ${created_by}`);
 
 	return data;
 }
@@ -149,16 +146,16 @@ export async function createOrder(user_id: string) {
 export async function createProduct(
 	user_id: string,
 	supplier_id: string,
-	supplier_abbr: string,
+	supplier_abbreviation: string,
 	product: Product
 ) {
 	const { error, data } = await supabaseAdmin.from('products').insert({
 		title: product.description,
-		upc: `${supplier_abbr}${product.code}`,
-		price: product.price,
+		upc: `${supplier_abbreviation}${product.code}`,
+		purchase_price: product.price * 1.2,
 		rrp: product.rrp,
 		created_by: user_id,
-		supplier: supplier_id
+		supplier_id: supplier_id
 	});
 
 	if (error) {

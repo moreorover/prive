@@ -76,7 +76,6 @@ async function seed() {
 				}
 				if (testUser.roles.length == 1 && !dd) {
 					const davinesSupplier = (await createSupplier(user.id, 'Davines', 'D_'))[0];
-					console.log(davinesSupplier);
 					for (const davines_product of davines_products) {
 						await createProduct(
 							user.id,
