@@ -1,4 +1,4 @@
-import { type PlaywrightTestConfig, devices } from '@playwright/test';
+import { devices, type PlaywrightTestConfig } from '@playwright/test';
 import { resolve } from 'path';
 
 const config: PlaywrightTestConfig = {
@@ -7,7 +7,7 @@ const config: PlaywrightTestConfig = {
 		port: 4173,
 		reuseExistingServer: true
 	},
-	testDir: 'tests',
+	testDir: 'tests/e2e',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	projects: [
 		{
@@ -15,8 +15,8 @@ const config: PlaywrightTestConfig = {
 			use: { ...devices['Desktop Chrome'] }
 		}
 	],
-	globalSetup: resolve('tests/globalSetup.ts'),
-	globalTeardown: resolve('tests/globalSetup.ts'),
+	globalSetup: resolve('tests/e2e/globalSetup.ts'),
+	globalTeardown: resolve('tests/e2e/globalSetup.ts'),
 	reporter: [['html', { open: 'never' }]]
 };
 
