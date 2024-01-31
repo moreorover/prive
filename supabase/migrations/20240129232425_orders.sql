@@ -291,7 +291,7 @@ BEGIN
 
     -- Update the units_in_stock for the product for a sale order
     UPDATE public.products
-    SET units_in_stock = units_in_stock - quantity_change
+    SET units_in_stock = units_in_stock + quantity_change
     WHERE id = NEW.product_id;
   END IF;
   RETURN NEW;
