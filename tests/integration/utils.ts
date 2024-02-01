@@ -45,7 +45,8 @@ export async function createOrderProduct(
 	order_id: string,
 	product_id: string,
 	created_by: string,
-	quantity: number
+	quantity: number,
+	unit_price: number
 ) {
 	const { data: orderProductData, error: orderProductError } = await supabaseAdmin
 		.from('order_products')
@@ -53,7 +54,8 @@ export async function createOrderProduct(
 			order_id,
 			product_id,
 			created_by,
-			quantity
+			quantity,
+			unit_price
 		})
 		.select('*')
 		.single();
@@ -61,16 +63,20 @@ export async function createOrderProduct(
 }
 
 // Function to update a product with an order in the order_products table
-export async function updateOrderProduct(order_product_id: string, quantity: number) {
+export async function updateOrderProduct(
+	order_product_id: string,
+	quantity: number,
+	unit_price: number
+) {
 	const { data: updatedProductData, error: updatedProductError } = await supabaseAdmin
 		.from('order_products')
 		.update({
-			quantity
+			quantity,
+			unit_price
 		})
 		.eq('id', order_product_id)
 		.select('*')
 		.single();
-
 	return updatedProductData;
 }
 
@@ -80,6 +86,8 @@ export async function deleteOrderProduct(order_product_id: string) {
 		.from('order_products')
 		.delete()
 		.eq('id', order_product_id);
+
+	console.log({ updatedProductData, updatedProductError });
 }
 
 // Function to delete a product in the products table
@@ -106,4 +114,14 @@ export async function fetchProduct(product_id: string) {
 		.eq('id', product_id)
 		.single();
 	return updatedProductData;
+}
+
+// Function to fetch and return updated order data
+export async function fetchOrder(order_id: string) {
+	const { data: orderData, error: orderError } = await supabaseAdmin
+		.from('orders')
+		.select('*')
+		.eq('id', order_id)
+		.single();
+	return orderData;
 }

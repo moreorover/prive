@@ -12,7 +12,7 @@
 
 	type Order = {
 		id: string;
-		ordertype: string;
+		order_type: string;
 		clients: string;
 		total: number | null;
 		completed: boolean;
@@ -20,7 +20,7 @@
 
 	const searchOrders: Order[] = data.orders.map((order) => ({
 		...order,
-		searchTerms: `${order.ordertype} ${order.completed ? 'completed' : 'in progress'}`
+		searchTerms: `${order.order_type} ${order.order_status}`
 	}));
 
 	const searchStore = createSearchStore(searchOrders);
@@ -74,18 +74,23 @@
 		<Table.Body>
 			{#each $searchStore.filtered as invoice, i (i)}
 				<Table.Row>
-					<Table.Cell class="font-medium">{invoice.ordertype}</Table.Cell>
+					<Table.Cell class="font-medium">{invoice.order_type}</Table.Cell>
 					<Table.Cell>
-						{#if invoice.completed}
-							<span
-								class="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
-							>
-								Completed
-							</span>
-						{:else}
+						{#if invoice.order_status == 'pending'}
 							<span
 								class="ml-2 rounded-md bg-[#faad1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
-								>In Progress</span
+							>
+								Pending
+							</span>
+						{:else if invoice.order_status == 'completed'}
+							<span
+								class="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
+								>Completed</span
+							>
+						{:else if invoice.order_status == 'cancelled'}
+							<span
+								class="ml-2 rounded-md bg-[#7372d8] px-1.5 py-0.5 text-xs leading-none text-[#ffffff] no-underline group-hover:no-underline"
+								>Cancelled</span
 							>
 						{/if}
 					</Table.Cell>

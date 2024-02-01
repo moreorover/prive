@@ -345,6 +345,7 @@ export interface Database {
 					order_status: Database['public']['Enums']['order_status'];
 					order_type: Database['public']['Enums']['order_type'];
 					ordered_at: string;
+					total: number | null;
 					updated_at: string | null;
 					updated_by: string | null;
 				};
@@ -358,6 +359,7 @@ export interface Database {
 					order_status: Database['public']['Enums']['order_status'];
 					order_type: Database['public']['Enums']['order_type'];
 					ordered_at?: string;
+					total?: number | null;
 					updated_at?: string | null;
 					updated_by?: string | null;
 				};
@@ -371,6 +373,7 @@ export interface Database {
 					order_status?: Database['public']['Enums']['order_status'];
 					order_type?: Database['public']['Enums']['order_type'];
 					ordered_at?: string;
+					total?: number | null;
 					updated_at?: string | null;
 					updated_by?: string | null;
 				};

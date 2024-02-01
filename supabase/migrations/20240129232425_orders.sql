@@ -96,6 +96,7 @@ create table public.orders (
   ordered_at        timestamp with time zone default now() not null,
   order_type        order_type not null,
   order_status      order_status not null,
+  total             numeric(10, 2) default 0,
   created_by        uuid references public.profiles not null,
   updated_by        uuid references public.profiles,
   deleted_by        uuid references public.profiles,
@@ -255,11 +256,21 @@ BEGIN
     UPDATE public.products
     SET units_in_stock = units_in_stock + NEW.quantity
     WHERE id = NEW.product_id;
+
+    -- Calculate and set the new total for the order for a purchase order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) - NEW.quantity * NEW.unit_price
+    WHERE id = NEW.order_id;
   ELSIF (SELECT order_type FROM public.orders WHERE id = NEW.order_id) = 'sale' THEN
     -- Calculate the new units_in_stock value for the product for a sale order
     UPDATE public.products
     SET units_in_stock = units_in_stock - NEW.quantity
     WHERE id = NEW.product_id;
+
+    -- Calculate and set the new total for the order for a sale order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) + NEW.quantity * NEW.unit_price
+    WHERE id = NEW.order_id;
   END IF;
   RETURN NEW;
 END;
@@ -276,6 +287,7 @@ CREATE OR REPLACE FUNCTION update_product_units_in_stock_on_update()
 RETURNS TRIGGER AS $$
 DECLARE
   quantity_change integer;
+  total_change    numeric(10, 2);
 BEGIN
   IF (SELECT order_type FROM public.orders WHERE id = NEW.order_id) = 'purchase' THEN
     -- Calculate the change in quantity for a purchase order
@@ -285,6 +297,13 @@ BEGIN
     UPDATE public.products
     SET units_in_stock = units_in_stock + quantity_change
     WHERE id = NEW.product_id;
+
+    total_change := (NEW.quantity * NEW.unit_price) - (OLD.quantity * OLD.unit_price);
+
+    -- Calculate and set the new total for the order for a sale order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) - total_change
+    WHERE id = NEW.order_id;
   ELSIF (SELECT order_type FROM public.orders WHERE id = NEW.order_id) = 'sale' THEN
     -- Calculate the change in quantity for a sale order
     quantity_change := OLD.quantity - NEW.quantity;
@@ -293,6 +312,13 @@ BEGIN
     UPDATE public.products
     SET units_in_stock = units_in_stock + quantity_change
     WHERE id = NEW.product_id;
+
+    total_change := (NEW.quantity * NEW.unit_price) - (OLD.quantity * OLD.unit_price);
+
+    -- Calculate and set the new total for the order for a sale order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) + total_change
+    WHERE id = NEW.order_id;
   END IF;
   RETURN NEW;
 END;
@@ -314,11 +340,21 @@ BEGIN
     UPDATE public.products
     SET units_in_stock = units_in_stock - OLD.quantity
     WHERE id = OLD.product_id;
+
+    -- Calculate and set the new total for the order for a sale order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) + (OLD.quantity * OLD.unit_price)
+    WHERE id = OLD.order_id;
   ELSIF (SELECT order_type FROM public.orders WHERE id = OLD.order_id) = 'sale' THEN
     -- Update the units_in_stock for the product for a sale order
     UPDATE public.products
     SET units_in_stock = units_in_stock + OLD.quantity
     WHERE id = OLD.product_id;
+
+    -- Calculate and set the new total for the order for a sale order
+    UPDATE public.orders
+    SET total = COALESCE(total, 0) - (OLD.quantity * OLD.unit_price)
+    WHERE id = OLD.order_id;
   END IF;
   RETURN OLD;
 END;
