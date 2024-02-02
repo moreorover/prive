@@ -416,7 +416,6 @@ export interface Database {
 					deleted_by: string | null;
 					description: string;
 					id: string;
-					purchase_price: number;
 					rrp: number;
 					supplier_id: string | null;
 					title: string;
@@ -432,7 +431,6 @@ export interface Database {
 					deleted_by?: string | null;
 					description?: string;
 					id?: string;
-					purchase_price?: number;
 					rrp?: number;
 					supplier_id?: string | null;
 					title: string;
@@ -448,7 +446,6 @@ export interface Database {
 					deleted_by?: string | null;
 					description?: string;
 					id?: string;
-					purchase_price?: number;
 					rrp?: number;
 					supplier_id?: string | null;
 					title?: string;

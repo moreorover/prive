@@ -1,5 +1,4 @@
 <script lang="ts">
-	import OrderCreateFormDialog from '$lib/components/OrderCreateFormDialog.svelte';
 	import * as Table from '$lib/components/ui/table';
 
 	import { Button } from '$lib/components/ui/button';
@@ -53,9 +52,6 @@
 					class="max-w-xs"
 					bind:value={$searchStore.search}
 				/>
-				{#if data.roles.includes('Admin')}
-					<OrderCreateFormDialog form={data.createOrderForm} />
-				{/if}
 			</div>
 		</div>
 	</Card.Header>

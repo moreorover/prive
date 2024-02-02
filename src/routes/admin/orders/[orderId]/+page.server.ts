@@ -7,7 +7,7 @@ export const load = async (event) => {
 	async function getOrder(order_id: string) {
 		const { error: orderError, data: order } = await event.locals.supabase
 			.from('orders')
-			.select('*, clients(id, name), hair(*), created_by(full_name), updated_by(full_name)')
+			.select('*, clients(id, name), created_by(full_name), updated_by(full_name)')
 			.eq('id', order_id)
 			.limit(1)
 			.maybeSingle();

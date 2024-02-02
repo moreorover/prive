@@ -49,7 +49,6 @@ create table public.products (
   title             text not null,
   description       text not null default '',
   supplier_id       uuid references public.clients,
-  purchase_price    numeric(10,2) not null default 0,
   rrp               numeric(10,2) not null default 0,
   units_in_stock    integer not null default 0,
   created_by        uuid references public.profiles not null,

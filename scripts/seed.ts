@@ -1,13 +1,13 @@
 import type { registerSchema } from '$lib/schema/loginSchema';
 import type { UserRole } from '$lib/server/authorization';
 import type { z } from 'zod';
-import { davines_products } from './seed-data';
 import {
 	clearSupabaseData,
 	createClient,
-	createOrder,
+	createOrderProduct,
 	createProduct,
-	createSupplier,
+	createPurchaseOrder,
+	createSaleOrder,
 	// createStock,
 	createUser,
 	startSupabase
@@ -51,8 +51,6 @@ const testUsers: SeedUser[] = [
 	}
 ];
 
-let dd: boolean = false;
-
 async function seed() {
 	try {
 		await startSupabase();
@@ -72,20 +70,36 @@ async function seed() {
 			if (testUser.roles.includes('Admin')) {
 				for (let i = 0; i < 4; i++) {
 					await createClient(user.id);
-					await createOrder(user.id);
+					// await createOrder(user.id);
+
+					const product1 = await createProduct(user.id, `Seed Product ${i + 1}`, 16.83);
+					const product2 = await createProduct(user.id, `Seed Product ${i + 2}`, 16.83);
+					const product3 = await createProduct(user.id, `Seed Product ${i + 3}`, 16.83);
+					const product4 = await createProduct(user.id, `Seed Product ${i + 4}`, 16.83);
+					const purchaseOrder = await createPurchaseOrder(user.id);
+					const saleOrder = await createSaleOrder(user.id);
+					await createOrderProduct(purchaseOrder?.id, product1?.id, user.id, 20, 9.99);
+					await createOrderProduct(purchaseOrder?.id, product2?.id, user.id, 20, 9.99);
+					await createOrderProduct(purchaseOrder?.id, product3?.id, user.id, 20, 9.99);
+					await createOrderProduct(purchaseOrder?.id, product4?.id, user.id, 20, 9.99);
+
+					await createOrderProduct(saleOrder?.id, product1?.id, user.id, 5, 16.83);
+					await createOrderProduct(saleOrder?.id, product2?.id, user.id, 5, 16.83);
+					await createOrderProduct(saleOrder?.id, product3?.id, user.id, 5, 16.83);
+					await createOrderProduct(saleOrder?.id, product4?.id, user.id, 5, 16.83);
 				}
-				if (testUser.roles.length == 1 && !dd) {
-					const davinesSupplier = (await createSupplier(user.id, 'Davines', 'D_'))[0];
-					for (const davines_product of davines_products) {
-						await createProduct(
-							user.id,
-							davinesSupplier.id,
-							davinesSupplier.abbreviation,
-							davines_product
-						);
-					}
-					dd = true;
-				}
+				// if (testUser.roles.length == 1 && !dd) {
+				// 	const davinesSupplier = (await createSupplier(user.id, 'Davines', 'D_'))[0];
+				// 	for (const davines_product of davines_products) {
+				// 		await createProduct(
+				// 			user.id,
+				// 			davinesSupplier.id,
+				// 			davinesSupplier.abbreviation,
+				// 			davines_product
+				// 		);
+				// 	}
+				// 	dd = true;
+				// }
 			}
 		}
 	} catch (err) {

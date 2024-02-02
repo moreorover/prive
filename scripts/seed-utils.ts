@@ -9,7 +9,7 @@ import type { User } from '@supabase/supabase-js';
 import { execSync } from 'child_process';
 import detect from 'detect-port';
 import pg from 'pg';
-import type { Product, SeedUser } from './seed';
+import type { SeedUser } from './seed';
 
 export async function startSupabase() {
 	const port = await detect(54322);
@@ -122,47 +122,52 @@ export async function createSupplier(user_id: string, name: string, abbreviation
 	return data;
 }
 
-export async function createOrder(created_by: string) {
-	const total = faker.number.float({ min: -110, max: 800 });
-	const completed = faker.datatype.boolean();
-	const order_type = faker.helpers.arrayElement(['purchase', 'sale']);
-	const order_status = faker.helpers.arrayElement(['pending', 'completed', 'cancelled']);
-
-	console.log(`Initiating process to create an order for User ID: ${created_by}`);
-
-	const { error, data } = await supabaseAdmin
+export async function createPurchaseOrder(created_by: string) {
+	const { data: orderData, error: orderError } = await supabaseAdmin
 		.from('orders')
-		.insert({ order_status, order_type, created_by });
-
-	if (error) {
-		throw error;
-	}
-
-	console.log(`Order has been successfully generated for the User ID: ${created_by}`);
-
-	return data;
+		.insert({ created_by, order_type: 'purchase', order_status: 'pending' })
+		.select('*')
+		.single();
+	return orderData;
 }
 
-export async function createProduct(
-	user_id: string,
-	supplier_id: string,
-	supplier_abbreviation: string,
-	product: Product
+export async function createSaleOrder(created_by: string) {
+	const { data: orderData, error: orderError } = await supabaseAdmin
+		.from('orders')
+		.insert({ created_by, order_type: 'sale', order_status: 'pending' })
+		.select('*')
+		.single();
+	return orderData;
+}
+
+export async function createProduct(created_by: string, title: string, rrp: number) {
+	const { data: productData, error: productError } = await supabaseAdmin
+		.from('products')
+		.insert({ created_by, title, rrp })
+		.select('*')
+		.single();
+	return productData;
+}
+
+export async function createOrderProduct(
+	order_id: string,
+	product_id: string,
+	created_by: string,
+	quantity: number,
+	unit_price: number
 ) {
-	const { error, data } = await supabaseAdmin.from('products').insert({
-		title: product.description,
-		upc: `${supplier_abbreviation}${product.code}`,
-		purchase_price: product.price * 1.2,
-		rrp: product.rrp,
-		created_by: user_id,
-		supplier_id: supplier_id
-	});
-
-	if (error) {
-		throw error;
-	}
-
-	return data;
+	const { data: orderProductData, error: orderProductError } = await supabaseAdmin
+		.from('order_products')
+		.insert({
+			order_id,
+			product_id,
+			created_by,
+			quantity,
+			unit_price
+		})
+		.select('*')
+		.single();
+	return orderProductData;
 }
 
 // export async function createContact(user_id: string) {
