@@ -13,14 +13,15 @@
 	type Client = {
 		id: string;
 		name: string;
-		email: string | null;
-		phone: string | null;
-		instagram: string | null;
+		email: string;
+		phone: string;
+		instagram: string;
+		abbreviation: string;
 	};
 
 	const searchClients: Client[] = data.clients.map((client: Client) => ({
 		...client,
-		searchTerms: `${client.name} ${client.email} ${client.phone} ${client.instagram}`
+		searchTerms: `${client.name} ${client.email} ${client.phone} ${client.instagram} ${client.abbreviation}`
 	}));
 
 	const searchStore = createSearchStore(searchClients);
@@ -28,7 +29,7 @@
 	$: {
 		$searchStore.data = data.clients.map((client: Client) => ({
 			...client,
-			searchTerms: `${client.name} ${client.email} ${client.phone} ${client.instagram}`
+			searchTerms: `${client.name} ${client.email} ${client.phone} ${client.instagram} ${client.abbreviation}`
 		}));
 	}
 
@@ -104,6 +105,14 @@
 								data-testid="client-phone-{client.phone.replace(' ', '-')}"
 							>
 								{client.phone}
+							</p>
+						{/if}
+						{#if client.abbreviation}
+							<p
+								class="text-sm text-muted-foreground"
+								data-testid="client-phone-{client.abbreviation.replace(' ', '-')}"
+							>
+								Abbreviation: {client.abbreviation}
 							</p>
 						{/if}
 					</div>

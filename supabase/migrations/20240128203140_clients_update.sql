@@ -6,12 +6,12 @@ alter table public.clients alter column abbreviation set not null;
 
 -- add default values to the email, phone, and instagram columns
 alter table public.clients alter column email set default '';
-alter table public.clients alter column phone set default null;
+alter table public.clients alter column phone set default '';
 alter table public.clients alter column instagram set default '';
 
 -- update existing rows to set the default values if the columns are currently null
 update public.clients set email = '' where email is null;
-update public.clients set phone = null where phone is null;
+update public.clients set phone = '' where phone is null;
 update public.clients set instagram = '' where instagram is null;
 
 -- modify the columns to be not null

@@ -49,7 +49,7 @@ export interface Database {
 					id?: string;
 					instagram?: string;
 					name: string;
-					phone: string;
+					phone?: string;
 					updated_at?: string | null;
 					updated_by?: string | null;
 				};

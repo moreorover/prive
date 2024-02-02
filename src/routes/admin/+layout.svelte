@@ -21,10 +21,6 @@
 			href: '/admin/hair'
 		},
 		{
-			title: 'Hair Orders',
-			href: '/admin/hair_orders'
-		},
-		{
 			title: 'Products',
 			href: '/admin/products'
 		}

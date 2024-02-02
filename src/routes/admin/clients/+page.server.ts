@@ -1,6 +1,6 @@
-import { setError, superValidate } from 'sveltekit-superforms/server';
 import { clientSchema } from '$lib/schema/clientSchema';
-import { fail, error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 export async function load(event) {
 	async function getClients() {
@@ -37,7 +37,7 @@ export const actions = {
 			.from('clients')
 			.insert({
 				...createClientForm.data,
-				created_by: session.user.id
+				created_by: session?.user.id
 			})
 			.select();
 		if (createClientError) {

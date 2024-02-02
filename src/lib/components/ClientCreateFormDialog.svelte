@@ -1,10 +1,10 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { clientSchema, type ClientSchema } from '$lib/schema/clientSchema';
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import type { FormOptions } from 'formsnap';
 	import { buttonVariants } from '$lib/components/ui/button';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Form from '$lib/components/ui/form';
+	import { clientSchema, type ClientSchema } from '$lib/schema/clientSchema';
+	import type { FormOptions } from 'formsnap';
+	import type { SuperValidated } from 'sveltekit-superforms';
 	export let form: SuperValidated<ClientSchema>;
 	let openDialog: boolean = false;
 
@@ -74,6 +74,14 @@
 					<Form.Input data-testid="create-client-dialog-form-instagram" />
 					<Form.Description>Clients instagram tag. (optional)</Form.Description>
 					<Form.Validation data-testid="create-client-dialog-form-instagram-validation" />
+				</Form.Item>
+			</Form.Field>
+			<Form.Field {config} name="abbreviation">
+				<Form.Item>
+					<Form.Label>Abbreviation</Form.Label>
+					<Form.Input data-testid="create-client-dialog-form-abbreviation" />
+					<Form.Description>Clients abbreviation. (optional)</Form.Description>
+					<Form.Validation data-testid="create-client-dialog-form-abbreviation-validation" />
 				</Form.Item>
 			</Form.Field>
 			<Form.Button data-testid="create-client-dialog-form-submit">Submit</Form.Button>
