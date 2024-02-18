@@ -1,5 +1,6 @@
 import { hairSchema } from '$lib/schema/hairSchema.js';
 import { orderSchema, selectClientSchema, setOrderStatusSchema } from '$lib/schema/orderSchema';
+import { productAddToOrderSchema } from '$lib/schema/productSchema';
 import { error, fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
@@ -24,17 +25,29 @@ export const load = async (event) => {
 	}
 
 	async function getClients() {
-		const { error: ClientsError, data: clients } = await event.locals.supabase
+		const { error: clientsError, data: clients } = await event.locals.supabase
 			.from('clients')
 			.select('id, name');
 
-		if (ClientsError) {
+		if (clientsError) {
 			error(500, 'Error fetching clients. Please try again later.');
 		}
 		if (!clients) {
 			error(404, 'Clients not found.');
 		}
 		return [{ id: null, name: 'None Selected' }, ...clients];
+	}
+
+	async function getProducts() {
+		const { error: productsError, data: products } = await event.locals.supabase
+			.from('products')
+			.select('id, title');
+
+		if (productsError) {
+			console.log({ productsError });
+			error(500, 'Error fetching products. Please try again later.');
+		}
+		return products;
 	}
 
 	return {
@@ -52,7 +65,9 @@ export const load = async (event) => {
 			{ completed: event.params.orderId ? (await getOrder(event.params.orderId)).completed : true },
 			setOrderStatusSchema
 		),
-		createHairForm: await superValidate(hairSchema, { id: 'createHair' })
+		createHairForm: await superValidate(hairSchema, { id: 'createHair' }),
+		products: await getProducts(),
+		productAddToOrderForm: await superValidate(productAddToOrderSchema)
 	};
 };
 
@@ -179,6 +194,53 @@ export const actions = {
 
 		return {
 			createHairForm: createHairForm
+		};
+	},
+	addProduct: async (event) => {
+		const session = await event.locals.getSession();
+
+		const addProductForm = await superValidate(event, productAddToOrderSchema);
+
+		console.log({ addProductForm });
+
+		if (!addProductForm.valid) {
+			return fail(400, {
+				setOrderStatusForm: addProductForm
+			});
+		}
+
+		// const { data: createHairData, error: ceateHairError } = await event.locals.supabase
+		// 	.from('hair')
+		// 	.insert({
+		// 		title: addProductForm.data.title,
+		// 		description: addProductForm.data.description,
+		// 		weight_purchased: addProductForm.data.weight_purchased,
+		// 		length: addProductForm.data.weight_purchased,
+		// 		weight_in_stock: addProductForm.data.weight_purchased,
+		// 		created_by: session.user.id
+		// 	})
+		// 	.select();
+
+		// if (ceateHairError) {
+		// 	console.log({ ceateHairError });
+		// 	return setError(addProductForm, 'Error creating hair on order, please try again later.');
+		// }
+
+		// const { error: createHairToOrderError } = await event.locals.supabase
+		// 	.from('order_hair')
+		// 	.insert({
+		// 		hair_id: createHairData[0].id,
+		// 		order_id: event.params.orderId,
+		// 		created_by: session.user.id
+		// 	});
+
+		// if (createHairToOrderError) {
+		// 	console.log({ createHairToOrderError });
+		// 	return setError(addProductForm, 'Error creating hair on order, please try again later.');
+		// }
+
+		return {
+			createHairForm: addProductForm
 		};
 	}
 };

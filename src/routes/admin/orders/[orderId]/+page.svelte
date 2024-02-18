@@ -1,5 +1,6 @@
 <script lang="ts">
 	import HairCreateFormDialog from '$lib/components/HairCreateFormDialog.svelte';
+	import ProductAddToOrderFormDialog from '$lib/components/ProductAddToOrderFormDialog.svelte';
 	import SelectClientDialog from '$lib/components/SelectClientDialog.svelte';
 	import SetOrderStatusDialog from '$lib/components/SetOrderStatusDialog.svelte';
 	import { Button } from '$lib/components/ui/button';
@@ -107,7 +108,7 @@
 			</div>
 			<div class="flex items-center space-x-2">
 				{#if data.roles.includes('Admin')}
-					<HairCreateFormDialog form={data.createHairForm} />
+					<ProductAddToOrderFormDialog form={data.productAddToOrderForm} products={data.products} />
 				{/if}
 			</div>
 		</div>
