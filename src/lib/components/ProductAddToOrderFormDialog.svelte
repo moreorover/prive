@@ -88,14 +88,14 @@
 								<Command.Group>
 									{#each products as product}
 										<Command.Item
-											value={product.id}
+											value={product.title}
 											onSelect={() => {
 												setValue(product.id);
 												closeAndFocusTrigger(ids.trigger);
 											}}
 										>
 											<Check
-												class={cn('mr-2 h-4 w-4', product.id !== value && 'text-transparent')}
+												class={cn('mr-2 h-4 w-4', product.title !== value && 'text-transparent')}
 											/>
 											{product.title}
 										</Command.Item>

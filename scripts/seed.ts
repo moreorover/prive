@@ -1,5 +1,6 @@
 import type { registerSchema } from '$lib/schema/loginSchema';
 import type { UserRole } from '$lib/server/authorization';
+import { faker } from '@faker-js/faker';
 import type { z } from 'zod';
 import {
 	clearSupabaseData,
@@ -72,10 +73,26 @@ async function seed() {
 					await createClient(user.id);
 					// await createOrder(user.id);
 
-					const product1 = await createProduct(user.id, `Seed Product ${i + 1}`, 16.83);
-					const product2 = await createProduct(user.id, `Seed Product ${i + 2}`, 16.83);
-					const product3 = await createProduct(user.id, `Seed Product ${i + 3}`, 16.83);
-					const product4 = await createProduct(user.id, `Seed Product ${i + 4}`, 16.83);
+					const product1 = await createProduct(
+						user.id,
+						faker.commerce.productAdjective() + ' ' + faker.commerce.product(),
+						16.83
+					);
+					const product2 = await createProduct(
+						user.id,
+						faker.commerce.productAdjective() + ' ' + faker.commerce.product(),
+						16.83
+					);
+					const product3 = await createProduct(
+						user.id,
+						faker.commerce.productAdjective() + ' ' + faker.commerce.product(),
+						16.83
+					);
+					const product4 = await createProduct(
+						user.id,
+						faker.commerce.productAdjective() + ' ' + faker.commerce.product(),
+						16.83
+					);
 					const purchaseOrder = await createPurchaseOrder(user.id);
 					const saleOrder = await createSaleOrder(user.id);
 					await createOrderProduct(purchaseOrder?.id, product1?.id, user.id, 20, 9.99);
