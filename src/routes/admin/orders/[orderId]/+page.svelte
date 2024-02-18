@@ -7,7 +7,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import * as Table from '$lib/components/ui/table';
-	import { utcToReadableDate } from '$lib/utils';
+	import { utcToReadableDate } from '$lib/helpers';
 
 	export let data;
 </script>

@@ -57,6 +57,7 @@
 			action="?/addProduct"
 			{options}
 			{form}
+			class="space-y-6"
 			schema={productAddToOrderSchema}
 			let:config
 			data-testid="create-product-dialog-form"
@@ -103,9 +104,7 @@
 							</Command.Root>
 						</Popover.Content>
 					</Popover.Root>
-					<Form.Description>
-						This is the product that will be used in the dashboard.
-					</Form.Description>
+					<Form.Description>This is the product that will be added to order.</Form.Description>
 					<Form.Validation />
 				</Form.Item>
 			</Form.Field>
