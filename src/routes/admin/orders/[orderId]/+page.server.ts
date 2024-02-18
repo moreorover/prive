@@ -7,7 +7,9 @@ export const load = async (event) => {
 	async function getOrder(order_id: string) {
 		const { error: orderError, data: order } = await event.locals.supabase
 			.from('orders')
-			.select('*, clients(id, name), created_by(full_name), updated_by(full_name)')
+			.select(
+				'*, clients(id, name), order_products(*, products(*)), order_hair(*, hair(*)), created_by(full_name), updated_by(full_name)'
+			)
 			.eq('id', order_id)
 			.limit(1)
 			.maybeSingle();
@@ -119,13 +121,14 @@ export const actions = {
 		const { error: setOrderStatusError } = await event.locals.supabase
 			.from('orders')
 			.update({
-				completed: setOrderStatusForm.data.completed,
+				order_status: setOrderStatusForm.data.completed ? 'completed' : 'pending',
 				updated_at: new Date().toISOString(),
 				updated_by: session.user.id
 			})
 			.eq('id', event.params.orderId);
 
 		if (setOrderStatusError) {
+			console.log({ setOrderStatusError });
 			return setError(setOrderStatusForm, 'Error updating order, please try again later.');
 		}
 
@@ -147,21 +150,30 @@ export const actions = {
 		const { data: createHairData, error: ceateHairError } = await event.locals.supabase
 			.from('hair')
 			.insert({
-				...createHairForm.data,
-				updated_at: new Date().toISOString(),
+				title: createHairForm.data.title,
+				description: createHairForm.data.description,
+				weight_purchased: createHairForm.data.weight_purchased,
+				length: createHairForm.data.weight_purchased,
+				weight_in_stock: createHairForm.data.weight_purchased,
 				created_by: session.user.id
 			})
 			.select();
 
 		if (ceateHairError) {
+			console.log({ ceateHairError });
 			return setError(createHairForm, 'Error creating hair on order, please try again later.');
 		}
 
 		const { error: createHairToOrderError } = await event.locals.supabase
-			.from('hair_order')
-			.insert({ hair_id: createHairData[0].id, order_id: event.params.orderId });
+			.from('order_hair')
+			.insert({
+				hair_id: createHairData[0].id,
+				order_id: event.params.orderId,
+				created_by: session.user.id
+			});
 
 		if (createHairToOrderError) {
+			console.log({ createHairToOrderError });
 			return setError(createHairForm, 'Error creating hair on order, please try again later.');
 		}
 

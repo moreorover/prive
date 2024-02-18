@@ -61,7 +61,7 @@
 					<Form.Validation data-testid="create-hair-dialog-form-email-validation" />
 				</Form.Item>
 			</Form.Field>
-			<Form.Field {config} name="weight">
+			<Form.Field {config} name="weight_purchased">
 				<Form.Item>
 					<Form.Label>Weight</Form.Label>
 					<Form.Input data-testid="create-hair-dialog-form-phone" />
